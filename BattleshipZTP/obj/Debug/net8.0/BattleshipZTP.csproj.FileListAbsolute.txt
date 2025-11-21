@@ -1,0 +1,14 @@
+H:\C#Projects\BattleshipZTP\BattleshipZTP\bin\Debug\net8.0\BattleshipZTP.exe
+H:\C#Projects\BattleshipZTP\BattleshipZTP\bin\Debug\net8.0\BattleshipZTP.deps.json
+H:\C#Projects\BattleshipZTP\BattleshipZTP\bin\Debug\net8.0\BattleshipZTP.runtimeconfig.json
+H:\C#Projects\BattleshipZTP\BattleshipZTP\bin\Debug\net8.0\BattleshipZTP.dll
+H:\C#Projects\BattleshipZTP\BattleshipZTP\bin\Debug\net8.0\BattleshipZTP.pdb
+H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\BattleshipZTP.GeneratedMSBuildEditorConfig.editorconfig
+H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\BattleshipZTP.AssemblyInfoInputs.cache
+H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\BattleshipZTP.AssemblyInfo.cs
+H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\BattleshipZTP.csproj.CoreCompileInputs.cache
+H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\BattleshipZTP.dll
+H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\refint\BattleshipZTP.dll
+H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\BattleshipZTP.pdb
+H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\BattleshipZTP.genruntimeconfig.cache
+H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\ref\BattleshipZTP.dll
