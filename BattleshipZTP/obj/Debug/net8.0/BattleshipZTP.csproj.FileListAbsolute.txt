@@ -12,3 +12,4 @@ H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\refint\BattleshipZTP.
 H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\BattleshipZTP.pdb
 H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\BattleshipZTP.genruntimeconfig.cache
 H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\ref\BattleshipZTP.dll
+H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\BattleshipZTP.sourcelink.json
