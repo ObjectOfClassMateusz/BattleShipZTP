@@ -19,9 +19,14 @@ namespace BattleshipZTP.UI
             {
                 _builder.SetPosition(whereX, WhereY);
                 _builder.SetSize();
-                _builder.ColorBorders(ConsoleColor.White, ConsoleColor.Red);
-                _builder.AddComponent(new Button(){ option = op });
+                _builder.ColorBorders(ConsoleColor.White, ConsoleColor.DarkBlue);
+                _builder.ColorHighlights(ConsoleColor.White,ConsoleColor.Green);
+                _builder.AddComponent(new Button(op));
             }
+        }
+        public void BuildMainMenu(int whereX, int WhereY, params string[] options)
+        {
+
         }
     }
 }
