@@ -13,20 +13,38 @@ namespace BattleshipZTP.UI
         {
             _builder = builder;
         }
-        public void StandardWindow(int whereX , int WhereY,params string[] options)
+        public void StandardWindowInit(int whereX , int WhereY,params string[] options)
         {
+            //build a standard window with automatic size and buttons with no margins
+            _builder.SetPosition(whereX, WhereY)
+            .SetSize()
+            .ColorBorders(ConsoleColor.White, ConsoleColor.DarkBlue)
+            .ColorHighlights(ConsoleColor.White, ConsoleColor.Green);
             foreach (string op in options)
             {
-                _builder.SetPosition(whereX, WhereY);
-                _builder.SetSize();
-                _builder.ColorBorders(ConsoleColor.White, ConsoleColor.DarkBlue);
-                _builder.ColorHighlights(ConsoleColor.White,ConsoleColor.Green);
                 _builder.AddComponent(new Button(op));
             }
         }
-        public void BuildMainMenu(int whereX, int WhereY, params string[] options)
+        public void MainMenuInit()
         {
-
+            _builder.SetPosition(65, 30)
+            .ColorBorders(ConsoleColor.Black, ConsoleColor.DarkGray)
+            .ColorHighlights(ConsoleColor.White, ConsoleColor.Green);
+            Button singleplayer = new Button("Singleplayer");
+            singleplayer.SetMargin(7);
+            _builder.AddComponent(singleplayer);
+            Button multiplayer = new Button("Multiplayer");
+            multiplayer.SetMargin(8);
+            _builder.AddComponent(multiplayer);
+            Button replay = new Button("Replay");
+            replay.SetMargin(10);
+            _builder.AddComponent(replay);
+            Button options = new Button("Options");
+            options.SetMargin(10);
+            _builder.AddComponent(options);
+            Button exit = new Button("Exit");
+            exit.SetMargin(11);
+            _builder.AddComponent(exit);
         }
     }
 }

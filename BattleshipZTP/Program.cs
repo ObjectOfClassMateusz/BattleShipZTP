@@ -1,47 +1,78 @@
-﻿using BattleshipZTP.UI;
+﻿using BattleshipZTP.GameAssets;
+using BattleshipZTP.UI;
+using BattleshipZTP.Utilities;
 using System;
+using System.Collections.Concurrent;
 using System.Text;
 
 namespace BattleshipZTP
 {
-    public static class Env
-    {
-        public static void SetColor(ConsoleColor Fcolor = ConsoleColor.White, ConsoleColor Bcolor = ConsoleColor.Black)
-        {
-            Console.ForegroundColor = Fcolor;
-            Console.BackgroundColor = Bcolor;
-        }
-        public static void CursorPos(int x=0, int y=0) {
-            Console.SetCursorPosition(x, y);
-        }
-    }
-
-
     class Program
     {
+        public static void MainMenu()
+        {
+            IWindowBuilder builder = new WindowBuilder();
+            UIDirector director = new UIDirector(builder);
+
+            director.MainMenuInit();
+            Window menu1 = builder.Build();
+            builder.ResetBuilder();
+
+            UIController controller = new UIController();
+            controller.AddWindow(menu1);
+            List<string> option = controller.DrawAndStart();
+        }
+
         public static void Main(string[] args)
         {
-            
-            IWindowBuilder builder = new WindowsBuilder();
+            Env.Wait(1000);
+            Env.SetColor();
+            //MainMenu();
+
+
+
+
+            IWindowBuilder builder = new WindowBuilder();
             UIDirector director = new UIDirector(builder);
-            director.StandardWindow(1, 1, "SingePlayer", "MultiPlayer", "Replay", "Options", "Exit");
+            director.StandardWindowInit(1, 1, "SingePlayer", "MultiPlayer", "Replay", "Options", "Exit");
             Window menu1 = builder.Build();
-            builder.ClearDataRef();
+            builder.ResetBuilder();
 
             builder.SetPosition(17, 5);
             builder.SetSize(19, 5);
             builder.ColorBorders(ConsoleColor.Yellow, ConsoleColor.Green);
-            builder.ColorHighlights(ConsoleColor.Green,ConsoleColor.Red);
+            builder.ColorHighlights(ConsoleColor.Green, ConsoleColor.Red);
             builder.AddComponent(new Button("Attack"));
-            builder.AddComponent(new Button("Move")  );
-            builder.AddComponent(new Button("etc")   );
+            builder.AddComponent(new CheckBox("Ok"));
+            builder.AddComponent(new CheckBox("etc"));
             Window menu2 = builder.Build();
-            builder.ClearDataRef();
+            builder.ResetBuilder();
 
             UIController controller = new UIController();
             controller.AddWindow(menu1);
             controller.AddWindow(menu2);
-            Console.WriteLine(controller.DrawAndStart());
+            var list = controller.DrawAndStart();
+            Console.Clear();
+
+            foreach (string option in list) {
+                Console.WriteLine(option);
+            }
+
+            /*BattleBoard board = new BattleBoard(1,1);
+            board.Display();
+            BattleBoard enemy_board = new BattleBoard(1, 20);
+            enemy_board.Display();
+            Env.CursorPos(1,39);
+            Env.SetColor(ConsoleColor.DarkMagenta, ConsoleColor.Gray);
+            Console.Write(" Action Points ");
+            Env.CursorPos(17, 39);
+            Env.SetColor(ConsoleColor.DarkBlue, ConsoleColor.DarkCyan);
+            Console.Write(" Requisition ");
+            Env.CursorPos(31, 39);
+            Env.SetColor(ConsoleColor.Green,ConsoleColor.DarkGreen);
+            Console.Write(" Energy ");*/
+
+            //Console.WriteLine(menu1.Width);
 
         }
     }
