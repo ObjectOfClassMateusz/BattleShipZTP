@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "YqX0+IPUxiQ=",
+  "dgSpecHash": "6Z4FDiynehE=",
   "success": true,
   "projectFilePath": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\BattleshipZTP.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\matit\\.nuget\\packages\\system.windows.extensions\\10.0.0\\system.windows.extensions.10.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

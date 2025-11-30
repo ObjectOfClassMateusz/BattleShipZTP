@@ -3,20 +3,24 @@
   "WorkspaceRootPath": "H:\\C#Projects\\BattleshipZTP\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\ui\\windowui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\ui\\windowui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\gameassets\\statbar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\gameassets\\statbar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\gameassets\\battleboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\gameassets\\battleboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\ui\\uidirector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\ui\\uidirector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\utilities\\env.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\utilities\\env.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\gameassets\\statbar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\gameassets\\statbar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\utilities\\drawing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\utilities\\drawing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -31,51 +35,62 @@
             {
               "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "Env.cs",
+              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Utilities\\Env.cs",
+              "RelativeDocumentMoniker": "BattleshipZTP\\Utilities\\Env.cs",
+              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Utilities\\Env.cs",
+              "RelativeToolTip": "BattleshipZTP\\Utilities\\Env.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-29T13:17:36.751Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Drawing.cs",
+              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Utilities\\Drawing.cs",
+              "RelativeDocumentMoniker": "BattleshipZTP\\Utilities\\Drawing.cs",
+              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Utilities\\Drawing.cs",
+              "RelativeToolTip": "BattleshipZTP\\Utilities\\Drawing.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-29T13:17:36.215Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "StatBar.cs",
               "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\GameAssets\\StatBar.cs",
               "RelativeDocumentMoniker": "BattleshipZTP\\GameAssets\\StatBar.cs",
               "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\GameAssets\\StatBar.cs",
               "RelativeToolTip": "BattleshipZTP\\GameAssets\\StatBar.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABkAAAApAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-20T12:40:22.158Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UIDirector.cs",
-              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\UI\\UIDirector.cs",
-              "RelativeDocumentMoniker": "BattleshipZTP\\UI\\UIDirector.cs",
-              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\UI\\UIDirector.cs",
-              "RelativeToolTip": "BattleshipZTP\\UI\\UIDirector.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T19:29:16.67Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "WindowUI.cs",
-              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\UI\\WindowUI.cs",
-              "RelativeDocumentMoniker": "BattleshipZTP\\UI\\WindowUI.cs",
-              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\UI\\WindowUI.cs",
-              "RelativeToolTip": "BattleshipZTP\\UI\\WindowUI.cs",
-              "ViewState": "AgIAABABAAAAAAAAAAAAACsBAAA3AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-20T12:23:57.715Z",
+              "WhenOpened": "2025-11-29T13:17:34.192Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "BattleBoard.cs",
+              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\GameAssets\\BattleBoard.cs",
+              "RelativeDocumentMoniker": "BattleshipZTP\\GameAssets\\BattleBoard.cs",
+              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\GameAssets\\BattleBoard.cs",
+              "RelativeToolTip": "BattleshipZTP\\GameAssets\\BattleBoard.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABkAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-29T13:17:33.772Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Program.cs",
               "RelativeDocumentMoniker": "BattleshipZTP\\Program.cs",
               "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Program.cs",
               "RelativeToolTip": "BattleshipZTP\\Program.cs",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAACsAAAA5AAAAAAAAAA==",
+              "ViewState": "AgIAACoAAAAAAAAAAAAAAC4AAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-20T00:48:07.853Z",
               "EditorCaption": ""

@@ -1,94 +1,122 @@
-﻿using BattleshipZTP.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
+﻿using BattleshipZTP.Utilities;
 
 namespace BattleshipZTP.UI
 {
     public interface IComponentUI
     {
-        void SetColors(ConsoleColor foreground, ConsoleColor background);
-        void SetSize(int width, int height);
-        void Print();
-        void Highlight(ConsoleColor foreground, ConsoleColor background);
+        void   SetMargin(int width);
+        int    GetMargin();
+        void   Print(int fulfilment=0);
         string Option();
+        string HandleKey(ConsoleKey key);
     }
+
     public class Button : IComponentUI
     {
-        private string _option {  get; set; }
+        private string _option { get; set; } = "";
         public Button(string opt)
         {
             _option = opt;
         }
-        public string Option() => _option;
-        private string _button = "";
-        
-        private (ConsoleColor, ConsoleColor) _colors;
-        public void SetColors(ConsoleColor foreground, ConsoleColor background)
+        public string Option()
         {
-            _colors.Item1 = foreground;
-            _colors.Item2 = background;
-        }
-        private int _width = 0;
-        private int _height = 0;
-        public void SetSize(int width, int height)
-        {
-            _width = width;
-            _height = height;
+            return _option;
         }
 
-        //public void Print((int,int) cursorOrigin = default)
-        public void Print()
+        public string HandleKey(ConsoleKey key)
         {
-            Console.Write(Option());
-            return;
-            /*
-             * TESTING
-             * 
-             * 
-             * if(_button != "")
-            {
-                Console.WriteLine(_button);
-            }
-            StringBuilder sb = new StringBuilder();
-            int totalWidth = _option.Length + 2 * _width;
-            for (int i = 0; i < _height; i++)
-            {
-                sb.Append(new string(' ', totalWidth));
-                sb.Append('\n');
-            }
-            Console.Write(sb.ToString());
-            sb = new StringBuilder();
-            Env.CursorPos(cursorOrigin.Item1, cursorOrigin.Item2+1);
-            sb.Append(new string(' ', _width));
-            sb.Append(_option);
-            sb.Append(new string(' ', _width));
-            sb.Append('\n');
-            Console.Write(sb.ToString());
-            sb = new StringBuilder();
-            Env.CursorPos(cursorOrigin.Item1, cursorOrigin.Item2+2);
-
-            for (int i = 0; i < _height; i++)
-            {
-                 sb.Append(new string(' ', totalWidth));
-                 sb.Append('\n');
-            }
-            Console.Write(sb.ToString());*/
-
+            return "";
         }
-        public void Highlight(ConsoleColor foreground, ConsoleColor background)
+
+        private int _margin = 0;
+        public void SetMargin(int width)
         {
-            Env.SetColor(foreground, background);
+            _margin = width;
+        }
+        public int GetMargin() => _margin;
+        public void Print(int fulfilment=0)
+        {
+            int k = 0;
+            for (int i=0; i< _margin; i++)
+            {
+                Console.Write(' ');k++;
+            }
+            Console.Write(Option()); 
+            k += Option().Length;
+            for (int i = 0; i < _margin; i++)
+            {
+                Console.Write(' ');k++;
+            }
+            int diff = (fulfilment - k)-1;
+            for(int i = 0; i < diff; i++)
+            {
+                Console.Write(' ');
+            }
         }
     }
 
-    //public class CheckBox : IComponentUI { }
+    public class CheckBox : IComponentUI
+    {
+        private int _margin = 0;
+        public void SetMargin(int width)
+        {
+            _margin = width;
+        }
+        public int GetMargin() => _margin;
+        public string Option() => "";
+
+        private string _booleanName;
+        public CheckBox(string boolName)
+        {
+            _booleanName = boolName;
+        }
+        private string _booleanBody = "[ ]";
+        private bool _value = false;
+
+        public void Print(int fulfilment = 0)
+        {
+            int k = 0;
+            for (int i = 0; i < _margin; i++)
+            {
+                Console.Write(' '); k++;
+            }
+            Console.Write(_booleanName+" "+_booleanBody);
+            k += _booleanName.Length+4;
+            for (int i = 0; i < _margin; i++)
+            {
+                Console.Write(' '); k++;
+            }
+            int diff = (fulfilment - k) - 1;
+            for (int i = 0; i < diff; i++)
+            {
+                Console.Write(' ');
+            }
+        }
+        
+        public string HandleKey(ConsoleKey key)
+        {
+            if (key == ConsoleKey.Enter) 
+            {
+                if (_value)
+                {
+                    _booleanBody = "[ ]";
+                    _value = false;
+                    return $"checkbox-{_booleanName}";
+                }
+                else 
+                {
+                    _booleanBody = "[X]";
+                    _value = true;
+                    return $"checkbox-{_booleanName}";
+                }
+            }
+            return "";
+        }
+    }
+
     //public class TextBox : IComponentUI { }
     //public class IntegerSideBar : IComponentUI { }
+    //public class TextInput
 
     public interface IWindowBuilder
     {
@@ -98,12 +126,12 @@ namespace BattleshipZTP.UI
         IWindowBuilder ColorHighlights(ConsoleColor foreground, ConsoleColor background);
         IWindowBuilder AddComponent(IComponentUI component);
         Window Build();
-        void ClearDataRef();
+        void ResetBuilder();
     }
-    public class WindowsBuilder : IWindowBuilder
+    public class WindowBuilder : IWindowBuilder
     {
         private Window _window;
-        public WindowsBuilder()
+        public WindowBuilder()
         {
             _window = new Window();
         }
@@ -133,7 +161,7 @@ namespace BattleshipZTP.UI
             return this;
         }
         public Window Build() => _window;
-        public void ClearDataRef()
+        public void ResetBuilder()
         {
             _window = new Window();
         }
@@ -148,18 +176,19 @@ namespace BattleshipZTP.UI
             int longest_string = 0;
             foreach (IComponentUI c in _components)
             {
-                if (c.Option().Length > longest_string)
+                if (c.Option().Length + c.GetMargin()*2 > longest_string)
                 {
-                    longest_string = c.Option().Length;
+                    longest_string = c.Option().Length + c.GetMargin()*2;
                 }
             }
-            this._width = (longest_string + 2 > _width) 
-                ? longest_string + 2 
+            this._width = (longest_string + 1 > _width) 
+                ? longest_string + 1 
                 : _width;
             this._height = this._components.Count + 1 > _height 
                 ? this._components.Count + 1 
                 : _height;
         }
+
         public IComponentUI GetComponent(int index) => _components[index];
         public int ComponentsLenght() => _components.Count;
         
@@ -204,100 +233,173 @@ namespace BattleshipZTP.UI
         }
 
         public Window(){}
-
         private string _selectedOption;
         public string SelectedOption() => this._selectedOption;
 
+        private int lastRemembered = 0;
+
         public string DrawAndStart()
         {
-            ConsoleKeyInfo klawisz;
-            int Selected = 0;
+            ConsoleKeyInfo klawisz;//user input key
+            int Selected = lastRemembered;
             while (true)
             {
+                //print highlighted option
                 Env.CursorPos(cornerX + 1, cornerY + 1 + Selected);
                 Env.SetColor(_highlightColor.Item1, _highlightColor.Item2);
-                _components[Selected].Print();
+                _components[Selected].Print(Width);
 
                 klawisz = Console.ReadKey(true);
+
+                //custom handler for components
+                string result = _components[Selected].HandleKey(klawisz.Key);
+                if (result != "")
+                {
+                    _selectedOption = result;
+                    Env.SetColor();
+                    return "r-handle";
+                }
+
                 if (klawisz.Key == ConsoleKey.UpArrow && Selected != 0)
                 {
+                    //downlight previous component
                     Env.CursorPos(cornerX + 1, cornerY + 1 + Selected);
                     Env.SetColor();
-                    _components[Selected].Print();
-                    Selected--;
+                    _components[Selected].Print(Width);
+                    Selected--;//Up
                 }
                 if (klawisz.Key == ConsoleKey.DownArrow && Selected < _components.Count - 1)
                 {
+                    //downlight previous component
                     Env.CursorPos(cornerX + 1, cornerY + 1 + Selected);
                     Env.SetColor();
-                    _components[Selected].Print();
-                    Selected++;
+                    _components[Selected].Print(Width);
+                    Selected++;//Down
                 }
                 if (klawisz.Key == ConsoleKey.Enter)
                 {
                     _selectedOption = _components[Selected].Option();
                     Env.SetColor();
-                    return "r";
+                    //Selected Option Respone, return Component option
+                    if(_selectedOption != "")
+                    {
+                        return "r";
+                    }
                 }
                 if (klawisz.Key == ConsoleKey.Tab)
                 {
                     Env.CursorPos(cornerX + 1, cornerY + 1 + Selected);
                     Env.SetColor();
-                    _components[Selected].Print();
+                    _components[Selected].Print(Width);
+                    //Empty Respone, take to the next Window
                     return "";
                 }
+                lastRemembered = Selected;
             }
         }
     };
 
     public class UIController
     {
-        protected List<Window> windows;
-        public UIController(){
+        protected List<Window> windows;//list of windows
+        public UIController(){//ctor
             windows = new List<Window>();
         }
         public void AddWindow(Window w)
         {
             windows.Add(w);
         }
-        public string SelectedOption()
+
+        private bool _valid = false;
+        private void OnceValidate()
         {
-            return "";
+            if (windows.Count == 0)
+            {
+                throw new Exception("No windows found for this controller");
+            }
+            if (windows[0].ComponentsLenght() == 0)
+            {
+                throw new Exception("No components found for this window");
+            }
+            _valid = true;
         }
-        public string DrawAndStart()
+        public List<string> DrawAndStart()
         {
+            if (!_valid)
+            {
+                OnceValidate();
+            }
             foreach (Window window in windows)
             {
+                //Do the draw
+
+                //color border and set cursor to start the drawing
                 Env.SetColor(window.GetBorderColors().Item1, window.GetBorderColors().Item2);
                 Env.CursorPos(window.GetCorner().X, window.GetCorner().Y);
+
+                // top border --------------------
                 for (int j = 0; j < window.Width + 1; j++)
                 { Console.Write("-"); }
+
+                // list of window components
+                //              ...
+                //          |component1 |
+                //          |component2 |
+                //              ...
                 for (int i = 1; i < window.Height; i++)
                 {
                     Env.CursorPos(window.GetCorner().X, window.GetCorner().Y + i);
-                    Console.Write("|");
+                    Console.Write("|");//left wall
+
                     if (i <= window.ComponentsLenght())
                     {
                         Env.SetColor();
-                        window.GetComponent(i - 1).Print();
+                        window.GetComponent(i - 1).Print(window.Width);//dispay component
                     }
+
                     Env.SetColor(window.GetBorderColors().Item1, window.GetBorderColors().Item2);
                     Env.CursorPos(window.GetCorner().X + window.Width, window.GetCorner().Y + i);
-                    Console.Write("|");
+                    Console.Write("|");//right wall
                 }
+                //bottom border --------------------
                 Env.CursorPos(window.GetCorner().X, window.GetCorner().Y + window.Height);
                 for (int j = 0; j < window.Width + 1; j++)
                 {
                     Console.Write("-");
                 }
             }
+
+            // Main navigation
+            List<string> OptionsReturns = new List<string>();
+
             for (int i = 0; true; i = (i + 1) % windows.Count)
             {
                 string respone = windows[i].DrawAndStart();
+
+                //if user pressed Enter for Button
                 if (respone == "r")
                 {
-                    Console.Clear();
-                    return windows[i].SelectedOption();
+                    OptionsReturns.Add(windows[i].SelectedOption());
+                    return OptionsReturns;//return component option as the string
+                }
+                //if user pressed handled key
+                if (respone == "r-handle")
+                {
+                    string optionHandlerString = windows[i].SelectedOption();
+                    /*
+                     * if checkbox-{name}           -> bla bla ...
+                     * if text-{input}              -> bla bla ...
+                     * if intSlider-{number}-{name} -> bla bla ...
+                     */
+                    if (!OptionsReturns.Contains(optionHandlerString))
+                    {
+                        OptionsReturns.Add(optionHandlerString);
+                    }
+                    else
+                    {
+                        OptionsReturns.Remove(optionHandlerString);
+                    }
+                    i--;
                 }
             }
         }

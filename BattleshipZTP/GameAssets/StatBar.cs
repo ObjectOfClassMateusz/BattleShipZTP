@@ -6,20 +6,21 @@ using System.Threading.Tasks;
 
 namespace BattleshipZTP.GameAssets
 {
+    //Statictic Bar
     public class StatBar
     {
-        protected int v { get; set; }
-        protected int curr_v { get; set; }
+        protected int value { get; set; }
+        protected int currentValue { get; set; }
 
-        ConsoleColor c { get; set; }
-        protected int l;
+        protected ConsoleColor color { get; set; }
+        protected int length;
 
         public StatBar(int value, ConsoleColor colour, int length)
         {
-            this.v = value;
-            this.c = colour;
-            this.l = length;
-            this.curr_v = value;
+            this.value = value;
+            this.color = colour;
+            this.length = length;
+            this.currentValue = value;
         }
         public void Show()
         {
@@ -31,29 +32,29 @@ namespace BattleshipZTP.GameAssets
                 return wynik;
             };
             //
-            double procent = (this.curr_v * 100) / this.v;
+            double procent = (this.currentValue * 100) / this.value;
             procent =
                 Math.Ceiling(
-                    (procent * (3 + (2 * this.l)
+                    (procent * (3 + (2 * this.length)
                     +
-                    (2 * num(this.v))))
+                    (2 * num(this.value))))
                 / 100);
             StringBuilder x = new StringBuilder();
-            if (procent == 0 && this.curr_v != 0) { procent++; }
+            if (procent == 0 && this.currentValue != 0) { procent++; }
             x.Append("[");
-            x.Append(' ', this.l);
-            for (int i = 0; i < num(this.v) - num(this.curr_v); i++)
-            { if (this.curr_v == 0) { i++; } x.Append(" "); }
-            x.Append(this.curr_v.ToString());
+            x.Append(' ', this.length);
+            for (int i = 0; i < num(this.value) - num(this.currentValue); i++)
+            { if (this.currentValue == 0) { i++; } x.Append(" "); }
+            x.Append(this.currentValue.ToString());
             x.Append("/");
-            x.Append(this.v.ToString());
-            x.Append(' ', this.l);
+            x.Append(this.value.ToString());
+            x.Append(' ', this.length);
             x.Append("]");
             for (int i = 0; i < x.Length; i++)
             {
                 if (procent != 0)
                 {
-                    Console.BackgroundColor = (ConsoleColor)this.c;
+                    Console.BackgroundColor = (ConsoleColor)this.color;
                     procent--;
                 }
                 else
@@ -66,18 +67,18 @@ namespace BattleshipZTP.GameAssets
         }
         public void Decrease(int decrease)
         {
-            this.curr_v -= decrease;
-            if (this.curr_v < 0)
+            this.currentValue -= decrease;
+            if (this.currentValue < 0)
             {
-                this.curr_v = 0;
+                this.currentValue = 0;
             }
         }
         public void Increase(int increase)
         {
-            this.curr_v += increase;
-            if (this.curr_v > this.v)
+            this.currentValue += increase;
+            if (this.currentValue > this.value)
             {
-                this.curr_v = this.v;
+                this.currentValue = this.value;
             }
         }
     }

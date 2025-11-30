@@ -13,3 +13,7 @@ H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\BattleshipZTP.pdb
 H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\BattleshipZTP.genruntimeconfig.cache
 H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\ref\BattleshipZTP.dll
 H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\BattleshipZTP.sourcelink.json
+H:\C#Projects\BattleshipZTP\BattleshipZTP\bin\Debug\net8.0\System.Windows.Extensions.dll
+H:\C#Projects\BattleshipZTP\BattleshipZTP\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Windows.Extensions.dll
+H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\BattleshipZTP.csproj.AssemblyReference.cache
+H:\C#Projects\BattleshipZTP\BattleshipZTP\obj\Debug\net8.0\Battlesh.1AEB4EFA.Up2Date
