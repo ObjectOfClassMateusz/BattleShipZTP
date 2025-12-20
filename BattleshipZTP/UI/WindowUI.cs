@@ -6,48 +6,47 @@ namespace BattleshipZTP.UI
     {
         void   SetMargin(int width);
         int    GetMargin();
-        void   Print(int fulfilment=0);
-        string Option();
+        void   Print(int rigthMarginFullfilment = 0);
+        string GetOption();
         string HandleKey(ConsoleKey key);
     }
 
     public class Button : IComponentUI
     {
-        private string _option { get; set; } = "";
-        public Button(string opt)
+        string _option { get; set; } = "";
+        public Button(string option)
         {
-            _option = opt;
+            _option = option;
         }
-        public string Option()
+        public string GetOption()
         {
             return _option;
         }
-
         public string HandleKey(ConsoleKey key)
         {
             return "";
         }
 
-        private int _margin = 0;
+        int _margin = 0;
         public void SetMargin(int width)
         {
             _margin = width;
         }
         public int GetMargin() => _margin;
-        public void Print(int fulfilment=0)
+        public void Print(int rigthMarginFullfilment=0)
         {
             int k = 0;
             for (int i=0; i< _margin; i++)
             {
                 Console.Write(' ');k++;
             }
-            Console.Write(Option()); 
-            k += Option().Length;
+            Console.Write(GetOption()); 
+            k += GetOption().Length;
             for (int i = 0; i < _margin; i++)
             {
                 Console.Write(' ');k++;
             }
-            int diff = (fulfilment - k)-1;
+            int diff = (rigthMarginFullfilment - k)-1;
             for(int i = 0; i < diff; i++)
             {
                 Console.Write(' ');
@@ -57,23 +56,22 @@ namespace BattleshipZTP.UI
 
     public class CheckBox : IComponentUI
     {
-        private int _margin = 0;
+        string _booleanBody = "[ ]";
+        bool _value = false;
+        int _margin = 0;
+        string _booleanName;
+        public CheckBox(string boolName)
+        {
+            _booleanName = boolName;
+        }
+
         public void SetMargin(int width)
         {
             _margin = width;
         }
         public int GetMargin() => _margin;
-        public string Option() => "";
-
-        private string _booleanName;
-        public CheckBox(string boolName)
-        {
-            _booleanName = boolName;
-        }
-        private string _booleanBody = "[ ]";
-        private bool _value = false;
-
-        public void Print(int fulfilment = 0)
+        public string GetOption() => "";
+        public void Print(int rigthMarginFullfilment = 0)
         {
             int k = 0;
             for (int i = 0; i < _margin; i++)
@@ -86,7 +84,7 @@ namespace BattleshipZTP.UI
             {
                 Console.Write(' '); k++;
             }
-            int diff = (fulfilment - k) - 1;
+            int diff = (rigthMarginFullfilment - k) - 1;
             for (int i = 0; i < diff; i++)
             {
                 Console.Write(' ');
@@ -130,7 +128,7 @@ namespace BattleshipZTP.UI
     }
     public class WindowBuilder : IWindowBuilder
     {
-        private Window _window;
+        Window _window;
         public WindowBuilder()
         {
             _window = new Window();
@@ -169,16 +167,17 @@ namespace BattleshipZTP.UI
 
     public class Window
     {
-        private readonly List<IComponentUI> _components = new List<IComponentUI>();
+        readonly List<IComponentUI> _components = new List<IComponentUI>();
+
         public void Add(IComponentUI component)
         {
             _components.Add(component);
             int longest_string = 0;
             foreach (IComponentUI c in _components)
             {
-                if (c.Option().Length + c.GetMargin()*2 > longest_string)
+                if (c.GetOption().Length + c.GetMargin()*2 > longest_string)
                 {
-                    longest_string = c.Option().Length + c.GetMargin()*2;
+                    longest_string = c.GetOption().Length + c.GetMargin()*2;
                 }
             }
             this._width = (longest_string + 1 > _width) 
@@ -192,8 +191,8 @@ namespace BattleshipZTP.UI
         public IComponentUI GetComponent(int index) => _components[index];
         public int ComponentsLenght() => _components.Count;
         
-        private int cornerX;
-        private int cornerY;
+        int cornerX;
+        int cornerY;
         public void SetPosition(int startPlaceX , int startPlaceY)
         {
             this.cornerX = startPlaceX;
@@ -201,8 +200,8 @@ namespace BattleshipZTP.UI
         }
         public (int X, int Y) GetCorner() => (cornerX, cornerY);
 
-        private int _width { get; set; }
-        private int _height { get; set; }
+        int _width { get; set; }
+        int _height { get; set; }
         public int Width { get { return _width; } }
         public int Height { get { return _height; } }
         public void SetSize(int width = 0, int height = 0)
@@ -211,7 +210,7 @@ namespace BattleshipZTP.UI
             this._height = height;
         }
 
-        private (ConsoleColor, ConsoleColor) _borderColor;
+          (ConsoleColor, ConsoleColor) _borderColor;
         public (ConsoleColor, ConsoleColor) GetBorderColors()
         {
             return _borderColor;
@@ -221,7 +220,7 @@ namespace BattleshipZTP.UI
             this._borderColor.Item1 = foregroundColor;
             this._borderColor.Item2 = backgroundColor;
         }
-        private (ConsoleColor, ConsoleColor) _highlightColor;
+          (ConsoleColor, ConsoleColor) _highlightColor;
         public (ConsoleColor, ConsoleColor) GetHighColors()
         {
             return _highlightColor;
@@ -233,10 +232,10 @@ namespace BattleshipZTP.UI
         }
 
         public Window(){}
-        private string _selectedOption;
+          string _selectedOption;
         public string SelectedOption() => this._selectedOption;
 
-        private int lastRemembered = 0;
+          int lastRemembered = 0;
 
         public string DrawAndStart()
         {
@@ -278,7 +277,7 @@ namespace BattleshipZTP.UI
                 }
                 if (klawisz.Key == ConsoleKey.Enter)
                 {
-                    _selectedOption = _components[Selected].Option();
+                    _selectedOption = _components[Selected].GetOption();
                     Env.SetColor();
                     //Selected Option Respone, return Component option
                     if(_selectedOption != "")
@@ -310,8 +309,8 @@ namespace BattleshipZTP.UI
             windows.Add(w);
         }
 
-        private bool _valid = false;
-        private void OnceValidate()
+        bool _valid = false;
+        void OnceValidate()
         {
             if (windows.Count == 0)
             {
