@@ -18,7 +18,7 @@ namespace BattleshipZTP.UI
             //build a standard window with automatic size and buttons with no margins
             _builder.SetPosition(whereX, whereY)
             .SetSize()
-            .ColorBorders(ConsoleColor.White, ConsoleColor.DarkBlue)
+            .ColorBorders(ConsoleColor.Black, ConsoleColor.DarkGray)
             .ColorHighlights(ConsoleColor.White, ConsoleColor.Green);
             foreach (string op in options)
             {
@@ -42,6 +42,9 @@ namespace BattleshipZTP.UI
             Button options = new Button("Options");
             options.SetMargin(10);
             _builder.AddComponent(options);
+            Button authors = new Button("Authors");
+            authors.SetMargin(10);
+            _builder.AddComponent(authors);
             Button exit = new Button("Exit");
             exit.SetMargin(11);
             _builder.AddComponent(exit);

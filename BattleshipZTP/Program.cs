@@ -1,4 +1,5 @@
 ﻿using BattleshipZTP.GameAssets;
+using BattleshipZTP.Scenarios;
 using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
 using System;
@@ -9,48 +10,41 @@ namespace BattleshipZTP
 {
     class Program
     {
-        public static void MainMenu()
-        {
-            Drawing.DrawASCII("mainMenuShip.txt", 41, 15);
-            //Przykładowy scenariusz
-            IWindowBuilder builder = new WindowBuilder();
-            UIDirector director = new UIDirector(builder);
-
-            director.MainMenuInit();
-            Window menu1 = builder.Build();
-            builder.ResetBuilder();
-
-            UIController controller = new UIController();
-            controller.AddWindow(menu1);
-            List<string> option = controller.DrawAndStart();
-
-            //
-        }
-
         public static void Main(string[] args)
         {
-            Console.OutputEncoding = Encoding.Unicode;
-            Env.Wait(200);
-            Env.SetColor();
-            Env.Wait(200);
-            Drawing.AddASCII("mainMenuShip.txt");
-            MainMenu();
+            /*Drawing.AddASCII("mainMenuShip");
+            Drawing.AddASCII("mainMenuTitle");
+            Drawing.AddASCII("gameModeShip");
+            Drawing.AddASCII("optionImg");
+            AudioManager audio = new AudioManager();
+            //audio.Play("2-02 - Dark Calculation");
+            IScenario main = new MainMenuScenario(
+            new List<string>()
+            {
 
-            /*
+            });
+            main.Act();*/
+
+            Console.OutputEncoding = Encoding.Unicode;
             IWindowBuilder builder = new WindowBuilder();
             UIDirector director = new UIDirector(builder);
             director.StandardWindowInit(1, 1, "SingePlayer", "MultiPlayer", "Replay", "Options", "Exit");
             Window menu1 = builder.Build();
             builder.ResetBuilder();
+            builder.SetSize(19);
             builder.SetPosition(17, 5);
-            builder.SetSize(19, 5);
-            builder.ColorBorders(ConsoleColor.Yellow, ConsoleColor.Green);
-            builder.ColorHighlights(ConsoleColor.Green, ConsoleColor.Red);
+            builder.ColorBorders(ConsoleColor.Black, ConsoleColor.DarkGray);
+            builder.ColorHighlights(ConsoleColor.Black, ConsoleColor.White);
             builder.AddComponent(new Button("Attack"));
+            builder.AddComponent(new TextBox("Name",5));
+            builder.AddComponent(new TextBox("Surname", 9));
             builder.AddComponent(new CheckBox("Ok"));
             builder.AddComponent(new CheckBox("etc"));
+            builder.AddComponent(new IntegerSideBar("Volume"));
+            builder.AddComponent(new IntegerSideBar("Cash"));
             Window menu2 = builder.Build();
             builder.ResetBuilder();
+
             UIController controller = new UIController();
             controller.AddWindow(menu1);
             controller.AddWindow(menu2);
@@ -58,7 +52,7 @@ namespace BattleshipZTP
             Console.Clear();
             foreach (string option in list) {
                 Console.WriteLine(option);
-            }*/
+            }
             
 
 
@@ -92,9 +86,6 @@ namespace BattleshipZTP
             bar.Decrease(297);
             bar.Show();*/
 
-
-
-            Console.ReadKey();
         }
     }
 }

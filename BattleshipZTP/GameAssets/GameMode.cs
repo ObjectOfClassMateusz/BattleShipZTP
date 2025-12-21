@@ -25,10 +25,12 @@ namespace BattleshipZTP.GameAssets
         { 
             return new BattleBoard();
         }
-        public bool remeberArrowHit() {
+        public bool remeberArrowHit() 
+        {
             return true;
         }
-        public (int, int) assignResources() {
+        public (int, int) assignResources() 
+        {
             return (0, 0);
         }
     }
@@ -55,9 +57,9 @@ namespace BattleshipZTP.GameAssets
     }
 
 
-    public class HardcoreGameMode : IGameMode
+    public class WarhammerGameMode : IGameMode
     {
-        public HardcoreGameMode() { }
+        public WarhammerGameMode() { }
         public List<string> insertShips(string ships)
         {
             return new List<string>();
@@ -75,7 +77,6 @@ namespace BattleshipZTP.GameAssets
             return (0, 0);
         }
     }
-
 
 
     public abstract class GameModeFactory
@@ -99,12 +100,12 @@ namespace BattleshipZTP.GameAssets
             return new DuelGameMode();
         }
     }
-    public class HardcoreFactory : GameModeFactory
+    public class WarhammerFactory : GameModeFactory
     {
         protected override IGameMode GetGameMode()
         {
             //battleship40k
-            return new HardcoreGameMode();
+            return new WarhammerGameMode();
         }
     }
 }

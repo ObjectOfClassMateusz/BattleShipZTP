@@ -1,4 +1,6 @@
 ﻿using BattleshipZTP.Utilities;
+using Microsoft.VisualBasic.FileIO;
+using System.Linq;
 
 namespace BattleshipZTP.UI
 {
@@ -13,6 +15,7 @@ namespace BattleshipZTP.UI
 
     public class Button : IComponentUI
     {
+        //Button component that return an string option result
         string _option { get; set; } = "";
         public Button(string option)
         {
@@ -24,6 +27,7 @@ namespace BattleshipZTP.UI
         }
         public string HandleKey(ConsoleKey key)
         {
+            //Skip other handlers for other keys
             return "";
         }
 
@@ -56,6 +60,7 @@ namespace BattleshipZTP.UI
 
     public class CheckBox : IComponentUI
     {
+        //Checkbox component that return boolean result
         string _booleanBody = "[ ]";
         bool _value = false;
         int _margin = 0;
@@ -64,7 +69,6 @@ namespace BattleshipZTP.UI
         {
             _booleanName = boolName;
         }
-
         public void SetMargin(int width)
         {
             _margin = width;
@@ -97,24 +101,216 @@ namespace BattleshipZTP.UI
             {
                 if (_value)
                 {
-                    _booleanBody = "[ ]";
+                    _booleanBody = "[ ]";//Uncheck
                     _value = false;
                     return $"checkbox-{_booleanName}";
                 }
                 else 
                 {
-                    _booleanBody = "[X]";
+                    _booleanBody = "[✓]";//Check
                     _value = true;
                     return $"checkbox-{_booleanName}";
                 }
             }
+            return "";//Skip
+        }
+    }
+
+    public class TextBox : IComponentUI
+    {
+        //Editable user input that returns string result
+        string _value = "";
+        string _enterTextMark = "➤ ";
+        string _option;
+        int _charLimit = 5;
+        public TextBox(string option, int charLimit=5)
+        {
+            if(charLimit < 0)
+            {
+                throw new ArgumentOutOfRangeException("");
+            }
+            _charLimit = charLimit;
+            _option = option;
+        }
+        int _margin = 0;
+        public void SetMargin(int width)
+        {
+            _margin = width;
+        }
+        public int GetMargin() => _margin;
+        public string GetOption()
+        {
+            return _value;
+        }
+        public void Print(int rigthMarginFullfilment = 0)
+        {
+            int k = 0;
+            for (int i = 0; i < _margin; i++)
+            {
+                Console.Write(' '); k++;
+            }
+            Console.Write(_enterTextMark);
+            Console.Write(GetOption());
+            k += GetOption().Length+2;
+            for (int i = 0; i < _margin; i++)
+            {
+                Console.Write(' '); k++;
+            }
+            int diff = (rigthMarginFullfilment - k) - 1;
+            for (int i = 0; i < diff; i++)
+            {
+                Console.Write(' ');
+            }
+        }
+        public string HandleKey(ConsoleKey key)
+        {
+            if (key == ConsoleKey.Enter)
+                return "none";//Skip
+            if (key == ConsoleKey.Backspace)
+            {
+                //Erase last character
+                if (!string.IsNullOrEmpty(_value))
+                    _value = _value[..^1];
+                return $"input-{_option}#:{_value}";
+            }
+            if (_value.Length >= _charLimit)
+            {
+                //Character limit reached
+                return "";
+            }
+            if(key == ConsoleKey.Spacebar)
+            {
+                _value += " ";
+                return $"input-{_option}#:{_value}";
+            }
+            // Letters
+            if (key >= ConsoleKey.A && key <= ConsoleKey.Z)
+            {
+                _value += key.ToString();
+                return $"input-{_option}#:{_value}";
+            }
+            // Digits
+            else if (key >= ConsoleKey.D0 && key <= ConsoleKey.D9)
+            {
+                _value += (char)('0' + (key - ConsoleKey.D0));
+                return $"input-{_option}#:{_value}";
+            }
+            // Numpad digits
+            else if (key >= ConsoleKey.NumPad0 && key <= ConsoleKey.NumPad9)
+            {
+                _value += (char)('0' + (key - ConsoleKey.NumPad0));
+                return $"input-{_option}#:{_value}";
+            }
+            return "";//Skip
+        }
+    }
+
+    public class IntegerSideBar : IComponentUI 
+    {
+        char _mark = '█';
+        string _option;
+        int _value = 0;
+        public IntegerSideBar(string name)
+        {
+            _option = name;
+        }
+        int _margin = 0;
+        public void SetMargin(int width)
+        {
+            _margin = width;
+        }
+        public int GetMargin() => _margin;
+        public string GetOption()
+        {
+            return _option;
+        }
+        public void Print(int rigthMarginFullfilment = 0)
+        {
+            int k = 0;
+            for (int i = 0; i < _margin; i++)
+            {
+                Console.Write(' '); k++;
+            }
+            Console.Write(GetOption());
+            for(int i=0; i<=10; i++)
+            {
+                if(i == _value / 10)
+                {
+                    Console.Write(_mark);
+                }
+                else { Console.Write('-'); }
+            }
+            k += GetOption().Length + 11;
+            for (int i = 0; i < _margin; i++)
+            {
+                Console.Write(' '); k++;
+            }
+            int diff = (rigthMarginFullfilment - k) - 1;
+            for (int i = 0; i < diff; i++)
+            {
+                Console.Write(' ');
+            }
+        }
+        public string HandleKey(ConsoleKey key)
+        {
+            if(key == ConsoleKey.LeftArrow && _value!=0)
+            {
+                _value -= 10;
+                return $"slider-{_option}#:{_value}";
+            }
+            if (key == ConsoleKey.RightArrow && _value!=100) {
+                _value += 10;
+                return $"slider-{_option}#:{_value}";
+            }
+            //Skip other handlers for other keys
             return "";
         }
     }
 
-    //public class TextBox : IComponentUI { }
-    //public class IntegerSideBar : IComponentUI { }
-    //public class TextInput
+    public class TextOutput : IComponentUI 
+    {
+        //Block of text
+        private string _text;
+        int _margin = 0;
+        public TextOutput(string content)
+        {
+            _text = content;
+        }
+        public string GetOption()
+        {
+            return _text;
+        }
+        public string HandleKey(ConsoleKey key)
+        {
+            if (key == ConsoleKey.Enter)
+                return "none";//Do none
+            return "";//Skip
+        }
+        public void SetMargin(int width)
+        {
+            _margin = width;
+        }
+        public int GetMargin() => _margin;
+        public void Print(int rigthMarginFullfilment = 0)
+        {
+            int k = 0;
+            for (int i = 0; i < _margin; i++)
+            {
+                Console.Write(' '); k++;
+            }
+            Console.Write(GetOption());
+            k += GetOption().Length;
+            for (int i = 0; i < _margin; i++)
+            {
+                Console.Write(' '); k++;
+            }
+            int diff = (rigthMarginFullfilment - k) - 1;
+            for (int i = 0; i < diff; i++)
+            {
+                Console.Write(' ');
+            }
+        }
+    }
 
     public interface IWindowBuilder
     {
@@ -210,7 +406,7 @@ namespace BattleshipZTP.UI
             this._height = height;
         }
 
-          (ConsoleColor, ConsoleColor) _borderColor;
+        (ConsoleColor, ConsoleColor) _borderColor;
         public (ConsoleColor, ConsoleColor) GetBorderColors()
         {
             return _borderColor;
@@ -220,7 +416,7 @@ namespace BattleshipZTP.UI
             this._borderColor.Item1 = foregroundColor;
             this._borderColor.Item2 = backgroundColor;
         }
-          (ConsoleColor, ConsoleColor) _highlightColor;
+        (ConsoleColor, ConsoleColor) _highlightColor;
         public (ConsoleColor, ConsoleColor) GetHighColors()
         {
             return _highlightColor;
@@ -232,7 +428,7 @@ namespace BattleshipZTP.UI
         }
 
         public Window(){}
-          string _selectedOption;
+        string _selectedOption;
         public string SelectedOption() => this._selectedOption;
 
           int lastRemembered = 0;
@@ -247,7 +443,6 @@ namespace BattleshipZTP.UI
                 Env.CursorPos(cornerX + 1, cornerY + 1 + Selected);
                 Env.SetColor(_highlightColor.Item1, _highlightColor.Item2);
                 _components[Selected].Print(Width);
-
                 klawisz = Console.ReadKey(true);
 
                 //custom handler for components
@@ -258,7 +453,6 @@ namespace BattleshipZTP.UI
                     Env.SetColor();
                     return "r-handle";
                 }
-
                 if (klawisz.Key == ConsoleKey.UpArrow && Selected != 0)
                 {
                     //downlight previous component
@@ -301,7 +495,7 @@ namespace BattleshipZTP.UI
     public class UIController
     {
         protected List<Window> windows;//list of windows
-        public UIController(){//ctor
+        public UIController(){
             windows = new List<Window>();
         }
         public void AddWindow(Window w)
@@ -360,6 +554,7 @@ namespace BattleshipZTP.UI
                     Env.CursorPos(window.GetCorner().X + window.Width, window.GetCorner().Y + i);
                     Console.Write("|");//right wall
                 }
+
                 //bottom border --------------------
                 Env.CursorPos(window.GetCorner().X, window.GetCorner().Y + window.Height);
                 for (int j = 0; j < window.Width + 1; j++)
@@ -367,22 +562,19 @@ namespace BattleshipZTP.UI
                     Console.Write("-");
                 }
             }
-
             // Main navigation
             List<string> OptionsReturns = new List<string>();
-
             for (int i = 0; true; i = (i + 1) % windows.Count)
             {
                 string respone = windows[i].DrawAndStart();
-
-                //if user pressed Enter for Button
-                if (respone == "r")
+                
+                if (respone == "r")//if user pressed Enter for Button
                 {
                     OptionsReturns.Add(windows[i].SelectedOption());
                     return OptionsReturns;//return component option as the string
                 }
-                //if user pressed handled key
-                if (respone == "r-handle")
+                
+                if (respone == "r-handle")//if user pressed handled key
                 {
                     string optionHandlerString = windows[i].SelectedOption();
                     /*
@@ -390,13 +582,54 @@ namespace BattleshipZTP.UI
                      * if text-{input}              -> bla bla ...
                      * if intSlider-{number}-{name} -> bla bla ...
                      */
-                    if (!OptionsReturns.Contains(optionHandlerString))
+
+                    if(optionHandlerString.Contains("input-"))//Handle TextBox user inputs
                     {
-                        OptionsReturns.Add(optionHandlerString);
+                        string inputId = optionHandlerString.Split(new[] { "#:" }, StringSplitOptions.None)[0];
+                        string value = optionHandlerString.Split(new[] { "#:" }, StringSplitOptions.None)[1];
+                        if (!OptionsReturns.Any(s => s.Contains(inputId)))
+                        {
+                            OptionsReturns.Add($"{inputId}#:{value}");
+                        }
+                        else
+                        {
+                            int index = OptionsReturns.FindIndex(s => s.Contains(inputId));
+                            OptionsReturns[index] = $"{inputId}#:{value}";
+                        }
+                        if(value == "")
+                        {
+                            OptionsReturns.Remove(optionHandlerString);
+                        }
+                    }
+                    else if (optionHandlerString.Contains("slider-"))
+                    {
+                        string inputId = optionHandlerString.Split(new[] { "#:" }, StringSplitOptions.None)[0];
+                        string value = optionHandlerString.Split(new[] { "#:" }, StringSplitOptions.None)[1];
+                        if (!OptionsReturns.Any(s => s.Contains(inputId)))
+                        {
+                            OptionsReturns.Add($"{inputId}#:{value}");
+                        }
+                        else
+                        {
+                            int index = OptionsReturns.FindIndex(s => s.Contains(inputId));
+                            OptionsReturns[index] = $"{inputId}#:{value}";
+                        }
+                        if (value == "0")
+                        {
+                            OptionsReturns.Remove(optionHandlerString);
+                        }
                     }
                     else
                     {
-                        OptionsReturns.Remove(optionHandlerString);
+                        //Handle CheckBox user inputs
+                        if (!OptionsReturns.Contains(optionHandlerString) && optionHandlerString != "none")
+                        {
+                            OptionsReturns.Add(optionHandlerString);
+                        }
+                        else
+                        {
+                            OptionsReturns.Remove(optionHandlerString);
+                        }
                     }
                     i--;
                 }

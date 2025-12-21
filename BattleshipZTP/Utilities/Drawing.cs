@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Formats.Tar;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,7 +45,32 @@ namespace BattleshipZTP.Utilities
                 pixels = new List<string>();
                 try
                 {
-                    StreamReader reader = new StreamReader("img//" + filename);
+
+                    
+                    string content = File.ReadAllText("img//" + filename +"//"+filename+".txt");
+                    StringBuilder result = new StringBuilder();
+                    foreach (char c in content)
+                    {
+                        if (c == ' ')
+                        {
+                            result.Append('!');
+                        }
+                        else if (c == '\n' || c == '\r')
+                        {
+                            result.Append(c); // zachowaj nowe linie
+                        }
+                        else
+                        {
+                            result.Append(' ');
+                        }
+                    }
+                    File.WriteAllText("img//" + filename +"//"+"colorDoesntCount.txt", result.ToString());
+                    //delete soon
+
+
+
+
+                    StreamReader reader = new StreamReader("img//"+filename+"//"+filename+".txt");
                     while (!reader.EndOfStream)
                     {
                         string line = reader.ReadLine();
@@ -54,12 +80,13 @@ namespace BattleshipZTP.Utilities
                 }
                 catch (Exception ex)
                 {
-                    StreamReader reader = new StreamReader("img//_.txt");
+                    StreamReader reader = new StreamReader("img//error.txt");
                     while (!reader.EndOfStream)
                     {
                         string line = reader.ReadLine();
                         pixels.Add(line);
                     }
+                    pixels.Add(ex.Message);
                     reader.Close();
                 }
             }
@@ -69,18 +96,49 @@ namespace BattleshipZTP.Utilities
         {
             _images [filename] = new ASCIIImage(filename);
         }
-        public static void DrawASCII(string key ,
-            int x , int y ,
-            ConsoleColor foreground=ConsoleColor.White , ConsoleColor background=ConsoleColor.Black)
+
+        public static void DrawASCII(
+        string key,
+        int x,
+        int y,
+        ConsoleColor foreground = ConsoleColor.White,
+        ConsoleColor background = ConsoleColor.Black)
         {
-            int i = 0;
-            Env.SetColor(foreground,background);
-            foreach (string k in _images[key].pixels)
+            //Draw the image normally
+            Env.SetColor(foreground, background);
+            for (int i = 0; i < _images[key].pixels.Count; i++)
             {
                 Console.SetCursorPosition(x, y + i);
-                i++;
-                Console.Write(k);
+                Console.Write(_images[key].pixels[i]);
             }
+
+            Env.SetColor();
+            using StreamReader reader =new StreamReader($"img/{key}/colorDoesntCount.txt");
+            int row = 0;
+
+            //Apply mask in string runs
+            while (!reader.EndOfStream)
+            {
+                string maskLine = reader.ReadLine();
+                int col = 0;
+                while (col < maskLine.Length)
+                {
+                    if (maskLine[col] != '!')
+                    {
+                        col++;
+                        continue;
+                    }
+                    int start = col;
+                    while (col < maskLine.Length && maskLine[col] == '!')
+                        col++;
+
+                    int length = col - start;
+                    Console.SetCursorPosition(x + start, y + row);
+                    Console.Write(new string(' ', length));
+                }
+                row++;
+            }
+            Env.SetColor();
         }
     }
 }
