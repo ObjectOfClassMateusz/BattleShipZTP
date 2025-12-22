@@ -119,7 +119,7 @@ namespace BattleshipZTP.UI
     public class TextBox : IComponentUI
     {
         //Editable user input that returns string result
-        string _value = "";
+        string _value;
         string _enterTextMark = "➤ ";
         string _option;
         int _charLimit = 5;
@@ -131,6 +131,7 @@ namespace BattleshipZTP.UI
             }
             _charLimit = charLimit;
             _option = option;
+            _value = "";
         }
         int _margin = 0;
         public void SetMargin(int width)
@@ -253,7 +254,9 @@ namespace BattleshipZTP.UI
         }
         public string HandleKey(ConsoleKey key)
         {
-            if(key == ConsoleKey.LeftArrow && _value!=0)
+            if (key == ConsoleKey.Enter)
+                return "none";//Skip
+            if (key == ConsoleKey.LeftArrow && _value!=0)
             {
                 _value -= 10;
                 return $"slider-{_option}#:{_value}";

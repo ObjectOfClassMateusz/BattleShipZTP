@@ -5,12 +5,14 @@ public abstract class BaseShip : IShip
     protected int size { get; private set; } 
     private List<Point> hits;
     private List<Point> placement;
-    
+    protected List<(string, int)> _body;
+
     public BaseShip(int size, List<Point> initialPlacement)
     {
         this.size = size;
         this.placement = initialPlacement;
         this.hits = new List<Point>();
+        _body = new List<(string, int)>();
     }
 
     public int GetSize()

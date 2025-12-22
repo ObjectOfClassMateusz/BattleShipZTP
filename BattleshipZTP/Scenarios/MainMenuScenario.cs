@@ -15,12 +15,12 @@ namespace BattleshipZTP.Scenarios
         public MainMenuScenario(List<string> bringedOptions) : base() 
         { 
             _optionsSet = bringedOptions;
+            _scenarios.Add("Options", new OptionsScenario());
         }
         public override void Act()
         {
             base.Act();
-            Console.OutputEncoding = Encoding.Unicode;
-
+            
             Drawing.DrawASCII("mainMenuTitle", 20, 1, ConsoleColor.DarkGray);
             Drawing.DrawASCII("mainMenuShip", 41, 15, background: ConsoleColor.DarkGreen);
 
@@ -33,6 +33,13 @@ namespace BattleshipZTP.Scenarios
 
             UIController controller = new UIController();
             controller.AddWindow(menu1);
+            Env.CursorPos();
+
+            string? volume = _optionsSet.FirstOrDefault(s => s.Contains("Music volume"));
+            string value = volume?.Split(new[] { "#:" }, StringSplitOptions.None)[1] ?? "0";
+            int v = Convert.ToInt32(value);
+            AudioManager.Instance.ChangeVolume("2-02 - Dark Calculation", v);
+
             List<string> option = controller.DrawAndStart();
             IScenario scenario;
 
@@ -47,8 +54,7 @@ namespace BattleshipZTP.Scenarios
                 case "Replay":
                     break;
                 case "Options":
-                    scenario = new OptionsScenario();
-                    scenario.Act();
+                    _scenarios[option.LastOrDefault()].Act();
                     break;
                 case "Authors":
                     break;

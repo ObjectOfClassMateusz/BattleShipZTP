@@ -30,7 +30,7 @@ namespace BattleshipZTP.GameAssets
         public (ConsoleColor, ConsoleColor) colors = (ConsoleColor.White, ConsoleColor.Black);
 
         public bool ArrowHit {  get; set; }
-        //public IShip ShipReference {get;set;}
+        public IShip ShipReference {get;set;}
 
         public Field(char character, int x, int y)
         {
@@ -59,12 +59,13 @@ namespace BattleshipZTP.GameAssets
         public int cornerX;
         public int cornerY;
         Field[,] _field;//[y,x]
-        public int width = 90;
-        public int height = 16;
+        public int width;
+        public int height;
 
-        //public BattleBoard(int width=90 , int height = 16)
-        public BattleBoard(int cornerLeft=0 , int cornerUp=0)
+        public BattleBoard(int cornerLeft=0 , int cornerUp=0, int width = 90, int height = 16)
         {
+            this.width = width;
+            this.height = height;
             cornerX = cornerLeft;
             cornerY = cornerUp;
         }
@@ -75,7 +76,7 @@ namespace BattleshipZTP.GameAssets
             {
                 for (int j = 0; j < width; j++)
                 {
-                    char blankspace = ' ';//'ඞ';
+                    char blankspace = ' ';
                     _field[i, j] = new Field(blankspace, j, i);
                 }
             }
@@ -107,15 +108,12 @@ namespace BattleshipZTP.GameAssets
                 {
                     //Env.SetColor(_field[i,j].colors.Item1 , _field[i, j].colors.Item2);
                     //Console.Write(_field[i,j].Character);
-
                     str.Append(_field[i, j].Character);
-
                 }
-                Console.Write(str.ToString());//instant kurde
+                Console.Write(str.ToString());//instant
                 //Env.Wait(500);
                 Env.CursorPos(cornerX+1, cornerY+i+2);
             }
-            
         }
 
         public void PlaceShip()
@@ -157,7 +155,6 @@ namespace BattleshipZTP.GameAssets
                 }
                 return history;
             };
-
             int x = 0;
             int y = 0;
             List<(int,int)> history = new List<(int, int)>();
@@ -175,13 +172,13 @@ namespace BattleshipZTP.GameAssets
                         foreach (var point in pointsToRestore)
                         {
                             Env.CursorPos(point.Item1, point.Item2);
-                            Console.WriteLine(_field[point.Item2 - this.cornerY - 1, point.Item1 - this.cornerX - 1]);
+                            Console.Write(_field[point.Item2 - this.cornerY - 1, point.Item1 - this.cornerX - 1]);
                         }
                     }
                 }
                 if (klawisz.Key == ConsoleKey.DownArrow)
                 {
-                    if (y < 16-Ship.Count())
+                    if (y < this.height-Ship.Count())
                     {
                         y++;
                         var new_history = action(x, y);
@@ -189,7 +186,7 @@ namespace BattleshipZTP.GameAssets
                         foreach (var point in pointsToRestore)
                         {
                             Env.CursorPos(point.Item1, point.Item2);
-                            Console.WriteLine(_field[point.Item2 - this.cornerY - 1, point.Item1 - this.cornerX - 1]);
+                            Console.Write(_field[point.Item2 - this.cornerY - 1, point.Item1 - this.cornerX - 1]);
                         }
                     }
                 }
@@ -203,13 +200,13 @@ namespace BattleshipZTP.GameAssets
                         foreach (var point in pointsToRestore)
                         {
                             Env.CursorPos(point.Item1, point.Item2);
-                            Console.WriteLine(_field[point.Item2 - this.cornerY-1, point.Item1 - this.cornerX-1]);
+                            Console.Write(_field[point.Item2 - this.cornerY-1, point.Item1 - this.cornerX-1]);
                         }
                     }
                 }
                 if (klawisz.Key == ConsoleKey.RightArrow)
                 {
-                    if(x < 90 - shipMostWidth)
+                    if(x < width - shipMostWidth)
                     {
                         x++;
                         var new_history = action(x, y);
@@ -217,7 +214,7 @@ namespace BattleshipZTP.GameAssets
                         foreach (var point in pointsToRestore)
                         {
                             Env.CursorPos(point.Item1, point.Item2);
-                            Console.WriteLine(_field[point.Item2 - this.cornerY - 1, point.Item1 - this.cornerX - 1]);
+                            Console.Write(_field[point.Item2 - this.cornerY - 1, point.Item1 - this.cornerX - 1]);
                         }
                     }
                 }
@@ -303,14 +300,12 @@ namespace BattleshipZTP.GameAssets
                 _topLeftX,
                 _topLeftY + 1 + _board.height);
             Env.CursorPos(_topLeftX + 1, _topLeftY + 1);
-
             for (int i = 0; i < _board.height; i++)
             {
                 StringBuilder str = new StringBuilder();
                 for (int j = 0; j < _board.width; j++)
                 {
                     str.Append(' ');
-
                 }
                 Console.Write(str.ToString());
                 Env.CursorPos(_topLeftX+1, _topLeftY+i+2);
@@ -322,80 +317,3 @@ namespace BattleshipZTP.GameAssets
         }
     }
 }
-
-//
-
-
-/*
- using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BattleshipZTP.GameAssets
-{
-    public class Field
-    {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public char Character { get; set; }
-        public (ConsoleColor, ConsoleColor) colors;
-        public Field(char character , int x , int y)
-        {
-            this.Character = character;
-            this.X = x;
-            this.Y = y;
-            colors.Item1 = ConsoleColor.White;
-            colors.Item2 = ConsoleColor.Black;
-        }
-        public override string ToString()
-        {
-            Env.SetColor(colors.Item1,colors.Item2);
-            return this.Character.ToString();
-        }
-    }
-
-    internal class BattleBoard
-    {
-        private int cornerX;
-        private int cornerY;
-        private Field[,] _board;//[y,x]
-        public BattleBoard(int x=0 , int y=0)
-        {
-            cornerX = x;
-            cornerY = y;
-            _board = new Field[16,64];
-            for (int i = 0; i < 16; i++) {
-                for (int j = 0; j < 64; j++) {
-                    _board[i, j] = new Field('-', j, i);
-                }
-            }
-        }
-        
-        public void Display()
-        {
-            Env.CursorPos(cornerX, cornerY);
-            for (int i = 0; i < 66; i++)
-            {
-                Console.Write("#");
-            }
-            Env.CursorPos(cornerX+1, cornerY+1);
-            for (int i = 0; i < 16; i++)
-            {
-                for (int j = 0; j < 64; j++) 
-                {
-                    Console.Write(_board[i,j]);
-                }
-                Env.CursorPos(cornerX+1, cornerY+i+2);
-            }
-            Env.CursorPos(cornerX, cornerY + 17);
-            for (int i = 0; i < 66; i++)
-            {
-                Console.Write("#");
-            }
-        }
-    }
-}
-
- */

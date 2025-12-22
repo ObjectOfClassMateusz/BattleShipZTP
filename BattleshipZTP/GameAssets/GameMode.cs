@@ -3,56 +3,52 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace BattleshipZTP.GameAssets
 {
     public interface IGameMode
     {
-        List<string> insertShips(string ships);
-        BattleBoard createBoard();
+        BattleBoard createBoard(int x , int y);
         bool remeberArrowHit();
-        (int, int) assignResources();
+        Dictionary<string, int> assignResources();
     }
 
     public class ClassicGameMode : IGameMode
     {
         public ClassicGameMode() { }
-        public List<string> insertShips(string ships)
-        {
-            return new List<string>();
-        }
-        public BattleBoard createBoard() 
+        public BattleBoard createBoard(int x , int y) 
         { 
-            return new BattleBoard();
-        }
-        public bool remeberArrowHit() 
-        {
-            return true;
-        }
-        public (int, int) assignResources() 
-        {
-            return (0, 0);
-        }
-    }
-
-    public class DuelGameMode : IGameMode
-    {
-        public DuelGameMode() { }
-        public List<string> insertShips(string ships)
-        {
-            return new List<string>();
-        }
-        public BattleBoard createBoard()
-        {
-            return new BattleBoard();
+            return new BattleBoard(x,y,12,12);
         }
         public bool remeberArrowHit()
         {
             return true;
         }
-        public (int, int) assignResources()
+        public Dictionary<string, int> assignResources() 
         {
-            return (0, 0);
+            return null;
+        }
+    }
+
+    public class DuelGameMode : IGameMode
+    {
+        private ShipType _shipType;
+        public DuelGameMode(ShipType type)
+        { 
+            _shipType = type;
+        }
+        public BattleBoard createBoard(int x , int y)
+        {
+            return new BattleBoard(x,y,12,12);
+        }
+        public bool remeberArrowHit()
+        {
+            return false;
+        }
+        public Dictionary<string, int> assignResources()
+        {
+            return null;
         }
     }
 
@@ -60,49 +56,49 @@ namespace BattleshipZTP.GameAssets
     public class WarhammerGameMode : IGameMode
     {
         public WarhammerGameMode() { }
-        public List<string> insertShips(string ships)
+        public BattleBoard createBoard(int x , int y)
         {
-            return new List<string>();
-        }
-        public BattleBoard createBoard()
-        {
-            return new BattleBoard();
+            return new BattleBoard(x,y,90,16);
         }
         public bool remeberArrowHit()
         {
-            return true;
+            return false;
         }
-        public (int, int) assignResources()
+        public Dictionary<string, int> assignResources()
         {
-            return (0, 0);
+            Dictionary<string,int> resources = new Dictionary<string,int>();
+            resources.Add("Energy",200);
+            resources.Add("Requisition", 1150);
+            resources.Add("Action Points", 2);
+            return resources;
         }
     }
 
 
     public abstract class GameModeFactory
     {
-        protected abstract IGameMode GetGameMode();
+        public abstract IGameMode GetGameMode();
     }
 
-    public class ClassicFactory : GameModeFactory 
+    public class ClassicModeFactory : GameModeFactory 
     {
-        protected override IGameMode GetGameMode()
+        public override IGameMode GetGameMode()
         { 
             //set standart gamemode
             return new ClassicGameMode();
         }
     }
-    public class DuelFactory : GameModeFactory
+    public class DuelModeFactory : GameModeFactory
     {
-        protected override IGameMode GetGameMode()
+        public override IGameMode GetGameMode()
         {
             //One ship 1v1
-            return new DuelGameMode();
+            return new DuelGameMode(ShipType.Carrier);
         }
     }
-    public class WarhammerFactory : GameModeFactory
+    public class WarhammerModeFactory : GameModeFactory
     {
-        protected override IGameMode GetGameMode()
+        public override IGameMode GetGameMode()
         {
             //battleship40k
             return new WarhammerGameMode();

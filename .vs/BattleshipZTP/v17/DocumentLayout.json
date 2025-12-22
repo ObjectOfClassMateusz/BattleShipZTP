@@ -3,12 +3,28 @@
   "WorkspaceRootPath": "H:\\C#Projects\\BattleshipZTP\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\ship\\baseship.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\ship\\baseship.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\ui\\windowui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\ui\\windowui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\ship\\shipfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\ship\\shipfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\scenarios\\singleplayerscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\scenarios\\singleplayerscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\ship\\shiptype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\ship\\shiptype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\ship\\point.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\ship\\point.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\ship\\iship.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\ship\\iship.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,32 +34,84 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "WindowUI.cs",
-              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\UI\\WindowUI.cs",
-              "RelativeDocumentMoniker": "BattleshipZTP\\UI\\WindowUI.cs",
-              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\UI\\WindowUI.cs",
-              "RelativeToolTip": "BattleshipZTP\\UI\\WindowUI.cs",
-              "ViewState": "AgIAAGACAAAAAAAAAAAQwG8CAAA1AAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "SingleplayerScenario.cs",
+              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
+              "RelativeDocumentMoniker": "BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
+              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
+              "RelativeToolTip": "BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAACsAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-21T11:57:12.872Z",
+              "WhenOpened": "2025-12-22T20:16:00.627Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ShipFactory.cs",
+              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Ship\\ShipFactory.cs",
+              "RelativeDocumentMoniker": "BattleshipZTP\\Ship\\ShipFactory.cs",
+              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Ship\\ShipFactory.cs",
+              "RelativeToolTip": "BattleshipZTP\\Ship\\ShipFactory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-22T20:15:43.668Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ShipType.cs",
+              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Ship\\ShipType.cs",
+              "RelativeDocumentMoniker": "BattleshipZTP\\Ship\\ShipType.cs",
+              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Ship\\ShipType.cs",
+              "RelativeToolTip": "BattleshipZTP\\Ship\\ShipType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-22T20:15:43.058Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Point.cs",
+              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Ship\\Point.cs",
+              "RelativeDocumentMoniker": "BattleshipZTP\\Ship\\Point.cs",
+              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Ship\\Point.cs",
+              "RelativeToolTip": "BattleshipZTP\\Ship\\Point.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-22T20:15:41.762Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Program.cs",
-              "RelativeDocumentMoniker": "BattleshipZTP\\Program.cs",
-              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Program.cs",
-              "RelativeToolTip": "BattleshipZTP\\Program.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAAwCkAAAA2AAAAAAAAAA==",
+              "Title": "BaseShip.cs",
+              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Ship\\BaseShip.cs",
+              "RelativeDocumentMoniker": "BattleshipZTP\\Ship\\BaseShip.cs",
+              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Ship\\BaseShip.cs",
+              "RelativeToolTip": "BattleshipZTP\\Ship\\BaseShip.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-30T13:36:25.209Z",
+              "WhenOpened": "2025-12-22T19:43:52.603Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "IShip.cs",
+              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Ship\\IShip.cs",
+              "RelativeDocumentMoniker": "BattleshipZTP\\Ship\\IShip.cs",
+              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Ship\\IShip.cs",
+              "RelativeToolTip": "BattleshipZTP\\Ship\\IShip.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-22T19:43:31.052Z",
               "EditorCaption": ""
             }
           ]
