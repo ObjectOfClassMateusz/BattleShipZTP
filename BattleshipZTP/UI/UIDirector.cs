@@ -49,5 +49,12 @@ namespace BattleshipZTP.UI
             exit.SetMargin(11);
             _builder.AddComponent(exit);
         }
+        
+        public void AuthorsInit()
+        {
+            _builder.SetPosition(20, 2)
+                .ColorBorders(ConsoleColor.Black, ConsoleColor.DarkGray)
+                .ColorHighlights(ConsoleColor.White, ConsoleColor.Green);
+        }
     }
 }
