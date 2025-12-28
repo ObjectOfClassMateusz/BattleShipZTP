@@ -42,7 +42,7 @@ namespace BattleshipZTP.Scenarios
 
             IShip ship = ShipFactory.CreateShip(ShipType.Destroyer);
             
-            proxy.PlaceShip(ship);
+           // proxy.PlaceShip(ship);
             proxy.Display();
         }
     }

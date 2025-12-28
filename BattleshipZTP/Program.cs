@@ -13,7 +13,7 @@ namespace BattleshipZTP
         public static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.Unicode;
-            /*Drawing.AddASCII("mainMenuShip");
+            Drawing.AddASCII("mainMenuShip");
             Drawing.AddASCII("mainMenuTitle");
             Drawing.AddASCII("gameModeShip");
             Drawing.AddASCII("optionImg");
@@ -24,12 +24,12 @@ namespace BattleshipZTP
             {
                 "Music volume#:100"
             });
-            main.Act();*/
-
+            main.Act();
+            /*
             GameModeFactory gameModeFactory = new ClassicModeFactory();
             IScenario scenario = new SingleplayerScenario(gameModeFactory.GetGameMode());
             scenario.Act();
-
+            */
             /*StatBar bar = new StatBar(500, ConsoleColor.Red, 3);
             bar.Show();
             Console.WriteLine();
