@@ -34,7 +34,7 @@ public abstract class BaseShip : IShip
         hits.Add(coords); 
         if (IsSunk())
         {
-            return HitResult.Sunk; // jesli statek jest zatopiony
+            return HitResult.HitAndSunk; // jesli statek jest zatopiony
         }
         return HitResult.Hit; // jesli statek jest trafiony ale nie zatopiony
     }

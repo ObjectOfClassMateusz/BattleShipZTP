@@ -42,3 +42,9 @@ H:\C#Projects\BattleshipZTP\BattleshipZTP\bin\Debug\net8.0\NAudio.Core.dll
 H:\C#Projects\BattleshipZTP\BattleshipZTP\bin\Debug\net8.0\NAudio.Midi.dll
 H:\C#Projects\BattleshipZTP\BattleshipZTP\bin\Debug\net8.0\NAudio.Wasapi.dll
 H:\C#Projects\BattleshipZTP\BattleshipZTP\bin\Debug\net8.0\NAudio.WinMM.dll
+C:\Users\Admin\RiderProjects\BattleShipZTP\BattleshipZTP\bin\Debug\net8.0\NAudio.dll
+C:\Users\Admin\RiderProjects\BattleShipZTP\BattleshipZTP\bin\Debug\net8.0\NAudio.Asio.dll
+C:\Users\Admin\RiderProjects\BattleShipZTP\BattleshipZTP\bin\Debug\net8.0\NAudio.Core.dll
+C:\Users\Admin\RiderProjects\BattleShipZTP\BattleshipZTP\bin\Debug\net8.0\NAudio.Midi.dll
+C:\Users\Admin\RiderProjects\BattleShipZTP\BattleshipZTP\bin\Debug\net8.0\NAudio.Wasapi.dll
+C:\Users\Admin\RiderProjects\BattleShipZTP\BattleshipZTP\bin\Debug\net8.0\NAudio.WinMM.dll

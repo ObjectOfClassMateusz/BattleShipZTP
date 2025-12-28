@@ -17,9 +17,9 @@ namespace BattleshipZTP.GameAssets
         //void UpdateField(int x, int y, char character, ConsoleColor foreground, ConsoleColor background);
         //Field GetField(int x, int y)
 
-        void PlaceShip();
+        void PlaceShip(IShip ship);
         //(int, int) PlaceCursor(CursorBody cursor);
-        //void AttackPoint();
+        HitResult AttackPoint(Point target);
     }
 
     public class Field
@@ -115,8 +115,8 @@ namespace BattleshipZTP.GameAssets
                 Env.CursorPos(cornerX+1, cornerY+i+2);
             }
         }
-
-        public void PlaceShip()
+        
+        public void PlaceShip(IShip ship)
         {
             List<(string, int)> Ship = new List<(string, int)>()
             {
@@ -230,9 +230,9 @@ namespace BattleshipZTP.GameAssets
             }
 
             StringBuilder stringBuilder = new StringBuilder();
-            foreach(var ship in Ship)
+            foreach(var s in Ship)
             {
-                foreach(char character in ship.Item1)
+                foreach(char character in s.Item1)
                 {
                     stringBuilder.Append(character);
                 }
@@ -245,8 +245,33 @@ namespace BattleshipZTP.GameAssets
                 y = h.Item2 - this.cornerY - 1;
                 x = h.Item1 - this.cornerX - 1;
                 _field[y, x].Character = shipValue[shipIterator];
+                
+                _field [y, x].ShipReference = ship;
+                
                 shipIterator++;
             }
+        }
+        public HitResult AttackPoint(Point target)
+        {
+            if (target.X >= 0 && target.X < width && target.Y >= 0 && target.Y < height)
+            {
+                Field field = _field[target.Y, target.X];
+                
+                if (field.ShipReference != null)
+                {
+                    HitResult result = field.ShipReference.TakeHit(target);
+                    field.Character = 'X';
+                    field.colors = (ConsoleColor.Red, ConsoleColor.Black);
+                    return result;
+                }
+                else
+                {
+                    field.Character = '•';
+                    field.colors = (ConsoleColor.Blue, ConsoleColor.Black);
+                    return HitResult.Miss;
+                }
+            }
+            return HitResult.Miss;
         }
     }
 
@@ -277,11 +302,16 @@ namespace BattleshipZTP.GameAssets
 
        // }
 
-        public void PlaceShip()//(IShip ship)
+        public void PlaceShip(IShip ship) //(IShip ship)
         //Pełnomocnik może przekazać żądanie obiektowi usługi tylko wtedy,
         //gdy klient przedstawi odpowiednie poświadczenia.
         {
-            _board.PlaceShip();
+            _board.PlaceShip(ship);
+        }
+
+        public HitResult AttackPoint(Point target)
+        {
+            return _board.AttackPoint(target);
         }
 
         public void Display()

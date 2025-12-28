@@ -20,7 +20,6 @@ public class AuthorsScenario : Scenario
     public override void Act()
     {
         base.Act();
-
         Drawing.DrawASCII("Authors", 5,1);
 
         IWindowBuilder builder = new WindowBuilder();
