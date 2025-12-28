@@ -57,6 +57,8 @@ namespace BattleshipZTP.Scenarios
                     _scenarios[option.LastOrDefault()].Act();
                     break;
                 case "Authors":
+                    scenario = new AuthorsScenario();
+                    scenario.Act();
                     break;
                 case "Exit":
                     break;
