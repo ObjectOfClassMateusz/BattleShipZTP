@@ -11,6 +11,7 @@ public class ShipFactory
             ShipType.Carrier => new CarrierShip(emptyPlacement),
             ShipType.Battleship => new BattleshipShip(emptyPlacement),
             ShipType.Destroyer => new DestroyerShip(emptyPlacement),
+            ShipType.Submarine => new SubmarineShip(emptyPlacement),
             _=> throw new ArgumentException("Invalid ship type"), // _=> dla wszystkich innych przypadków 
         };
     }

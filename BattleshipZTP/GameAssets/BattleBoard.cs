@@ -12,14 +12,16 @@ namespace BattleshipZTP.GameAssets
     public interface IBattleBoard
     {
         void Display();
-        //void DisplayField(int x , int y);
+        void DisplayField(int x, int y);
+
+        void PlaceShip(IShip ship);
+        //void PlaceCommand(ICommand command);
+        //AttackCommand
+        //PlaceShipCommand
+
 
         //void UpdateField(int x, int y, char character, ConsoleColor foreground, ConsoleColor background);
         //Field GetField(int x, int y)
-
-        void PlaceShip();
-        //(int, int) PlaceCursor(CursorBody cursor);
-        //void AttackPoint();
     }
 
     public class Field
@@ -58,7 +60,7 @@ namespace BattleshipZTP.GameAssets
     {
         public int cornerX;
         public int cornerY;
-        Field[,] _field;//[y,x]
+        Field[,]? _field;//[y,x]
         public int width;
         public int height;
 
@@ -69,8 +71,10 @@ namespace BattleshipZTP.GameAssets
             cornerX = cornerLeft;
             cornerY = cornerUp;
         }
+
         public void FieldsInitialization()
         {
+            //Lazy initialization
             _field = new Field[height, width];
             for (int i = 0; i < height; i++)
             {
@@ -81,6 +85,7 @@ namespace BattleshipZTP.GameAssets
                 }
             }
         }
+
         public bool IsFieldsSet()
         {
             return _field!=null;
@@ -93,7 +98,7 @@ namespace BattleshipZTP.GameAssets
             {
                 for(int j=0; j<width; j++)
                 {
-                    copy[i,j]= _field[i,j];
+                    copy[i,j] = _field[i,j];
                 }
             }
             return new BattleBoardMemento(copy);
@@ -106,8 +111,6 @@ namespace BattleshipZTP.GameAssets
                 StringBuilder str = new StringBuilder();
                 for (int j = 0; j < width; j++) 
                 {
-                    //Env.SetColor(_field[i,j].colors.Item1 , _field[i, j].colors.Item2);
-                    //Console.Write(_field[i,j].Character);
                     str.Append(_field[i, j].Character);
                 }
                 Console.Write(str.ToString());//instant
@@ -116,33 +119,74 @@ namespace BattleshipZTP.GameAssets
             }
         }
 
-        public void PlaceShip()
+        public void DisplayField(int x, int y)
         {
-            List<(string, int)> Ship = new List<(string, int)>()
-            {
-                ("٨",2),
-                ("༺☫༻",1),
-                ("☽=☾",1),
-                ("◿═══◺",0)
-            };
-            int shipMostWidth = 5;
-            bool canPlace = true;
-            //
+            Env.CursorPos(cornerX + 1 + x, cornerY + 1 + y);
+            Console.WriteLine(_field[y,x]);
+        }
 
-            Func<int,int,List<(int, int)>> action = (int x, int y) =>
+        private List<(string text, int offset)> RotateShipment
+            (List<(string text, int offset)> ship)
+        {
+            List<string> lines = ship
+                .Select(x => new string(' ', x.offset) + x.text)
+                .ToList();
+            int maxWidth = lines.Max(l => l.Length);
+            lines = lines
+                .Select(l => l.PadRight(maxWidth, ' '))
+                .ToList();
+            int height = lines.Count;
+            int width = maxWidth;
+            List<(string text, int offset)> result = new();
+            for (int x = 0; x < width; x++)
             {
-                List<(int, int)> history = new List<(int, int)>();
+                StringBuilder sb = new();
+                for (int y = height - 1; y >= 0; y--)
+                {
+                    sb.Append(lines[y][x]);
+                }
+                result.Add((sb.ToString().TrimEnd(), 0));
+            }
+            return result;
+        }
+
+
+
+
+        
+
+        public void PlaceShip(IShip ship)
+        {
+            //List<(string text, int offset)> Ship = ship.GetBody();
+            List<(string text, int offset)> Ship = new()
+            {
+                ("٨", 2),
+                     ("༺☫༻", 1),
+                ("☽=☾", 1),
+                ("◿═══◺", 0)
+            };
+            bool canPlace = true;
+            int shipMostWidth = 1;
+            int shipMostHeight = Ship.Count;
+
+            foreach (var shipSlice in Ship) 
+                if(shipSlice.text.Length > shipMostWidth)
+                    shipMostWidth = shipSlice.text.Length;
+            //
+            Func<int,int,List<(int x, int y)>> fieldHistoryOn = (int x, int y) =>
+            {
+                List<(int x, int y)> history = new List<(int x, int y)>();
                 Env.SetColor();
                 ConsoleColor placementAvaible = ConsoleColor.Green;
                 canPlace = true;
                 foreach (var s in Ship)
                 {
-                    int cursorPosX = cornerX + 1 + s.Item2 + x;
+                    int cursorPosX = cornerX + 1 + s.offset + x;
                     int cursorPosY = cornerY + 1 + y;
-                    for (int k = 0; k < s.Item1.Length; k++)
+                    for (int k = 0; k < s.text.Length; k++)
                     {
                         history.Add((cursorPosX + k, cursorPosY));
-                        if (_field[y, x + k + s.Item2].Character != ' ')
+                        if (_field[y, x + k + s.offset].Character != ' ')
                         {
                             placementAvaible = ConsoleColor.Red;
                             canPlace = false;
@@ -150,89 +194,70 @@ namespace BattleshipZTP.GameAssets
                     }
                     Env.CursorPos(cursorPosX, cursorPosY);
                     Env.SetColor(placementAvaible);
-                    Console.Write(s.Item1);
+                    Console.Write(s.text);
                     y++;
                 }
                 return history;
             };
-            int x = 0;
-            int y = 0;
-            List<(int,int)> history = new List<(int, int)>();
+            //
+            int localX = 0;
+            int localY = 0;
+            List<(int x, int y)> history = new List<(int x, int y)>();
             while (true)
             {
-                history = action(x, y);
-                ConsoleKeyInfo klawisz  = Console.ReadKey();
-                if (klawisz.Key == ConsoleKey.UpArrow)
-                {
-                    if (y > 0)
-                    {
-                        y--;
-                        var new_history = action(x, y);
-                        var pointsToRestore = history.Except(new_history);
-                        foreach (var point in pointsToRestore)
-                        {
-                            Env.CursorPos(point.Item1, point.Item2);
-                            Console.Write(_field[point.Item2 - this.cornerY - 1, point.Item1 - this.cornerX - 1]);
-                        }
-                    }
-                }
-                if (klawisz.Key == ConsoleKey.DownArrow)
-                {
-                    if (y < this.height-Ship.Count())
-                    {
-                        y++;
-                        var new_history = action(x, y);
-                        var pointsToRestore = history.Except(new_history);
-                        foreach (var point in pointsToRestore)
-                        {
-                            Env.CursorPos(point.Item1, point.Item2);
-                            Console.Write(_field[point.Item2 - this.cornerY - 1, point.Item1 - this.cornerX - 1]);
-                        }
-                    }
-                }
-                if (klawisz.Key == ConsoleKey.LeftArrow)
-                {
-                    if (x > 0)
-                    {
-                        x--;
-                        var new_history = action(x, y);
-                        var pointsToRestore = history.Except(new_history);
-                        foreach (var point in pointsToRestore)
-                        {
-                            Env.CursorPos(point.Item1, point.Item2);
-                            Console.Write(_field[point.Item2 - this.cornerY-1, point.Item1 - this.cornerX-1]);
-                        }
-                    }
-                }
-                if (klawisz.Key == ConsoleKey.RightArrow)
-                {
-                    if(x < width - shipMostWidth)
-                    {
-                        x++;
-                        var new_history = action(x, y);
-                        var pointsToRestore = history.Except(new_history);
-                        foreach (var point in pointsToRestore)
-                        {
-                            Env.CursorPos(point.Item1, point.Item2);
-                            Console.Write(_field[point.Item2 - this.cornerY - 1, point.Item1 - this.cornerX - 1]);
-                        }
-                    }
-                }
+                history = fieldHistoryOn(localX, localY);
+                ConsoleKeyInfo klawisz  = Console.ReadKey(true);
                 //
-                if(klawisz.Key == ConsoleKey.Enter)
+                if (klawisz.Key == ConsoleKey.Enter)//Placement condition
                 {
-                    //warunek umieszczenia
-
-                    //tu nie można budowac
-                    if(canPlace)
+                    if (canPlace)
                         break;
+                    continue;
+                }
+                else if (klawisz.Key == ConsoleKey.Tab //Rotation
+                    && localX - 1 < this.width - shipMostHeight
+                    && localY - 1 < this.height - shipMostWidth)
+                {
+                    Ship = this.RotateShipment(Ship);
+                    shipMostHeight = Ship.Count;
+                    shipMostWidth = 1;
+                    foreach (var shipSlice in Ship)
+                        if (shipSlice.text.Length > shipMostWidth)
+                            shipMostWidth = shipSlice.text.Length;
+                }
+                else if(klawisz.Key == ConsoleKey.UpArrow && localY > 0)
+                {
+                    localY--;
+                }
+                else if(klawisz.Key == ConsoleKey.DownArrow && localY < this.height - shipMostHeight)
+                {
+                    localY++;
+                }
+                else if(klawisz.Key == ConsoleKey.LeftArrow && localX > 0)
+                {
+                    localX--;
+                }
+                else if(klawisz.Key == ConsoleKey.RightArrow && localX < this.width - shipMostWidth)
+                {
+                    localX++;
+                }
+                else
+                {
+                    continue;
+                }
+                List<(int x, int y)> new_history = fieldHistoryOn(localX, localY);
+                IEnumerable<(int x, int y)> pointsToRestore = history.Except(new_history);
+                foreach (var point in pointsToRestore)
+                {
+                    Env.CursorPos(point.x, point.y);
+                    Console.Write(_field[point.y - this.cornerY - 1, point.x - this.cornerX - 1]);
                 }
             }
-
+            //
             StringBuilder stringBuilder = new StringBuilder();
-            foreach(var ship in Ship)
+            foreach(var _ship in Ship)
             {
-                foreach(char character in ship.Item1)
+                foreach(char character in _ship.Item1)
                 {
                     stringBuilder.Append(character);
                 }
@@ -242,9 +267,10 @@ namespace BattleshipZTP.GameAssets
             
             foreach((int,int) h in history) 
             {
-                y = h.Item2 - this.cornerY - 1;
-                x = h.Item1 - this.cornerX - 1;
-                _field[y, x].Character = shipValue[shipIterator];
+                localY = h.Item2 - this.cornerY - 1;
+                localX = h.Item1 - this.cornerX - 1;
+                _field[localY, localX].Character = shipValue[shipIterator];
+                DisplayField(localX, localY);
                 shipIterator++;
             }
         }
@@ -277,11 +303,11 @@ namespace BattleshipZTP.GameAssets
 
        // }
 
-        public void PlaceShip()//(IShip ship)
+        public void PlaceShip(IShip ship)
         //Pełnomocnik może przekazać żądanie obiektowi usługi tylko wtedy,
         //gdy klient przedstawi odpowiednie poświadczenia.
         {
-            _board.PlaceShip();
+            _board.PlaceShip(ship);
         }
 
         public void Display()
@@ -314,6 +340,10 @@ namespace BattleshipZTP.GameAssets
             {
                 _board.Display();
             }
+        }
+        public void DisplayField(int x, int y)
+        {
+            _board.DisplayField (x, y);
         }
     }
 }

@@ -10,15 +10,15 @@ namespace BattleshipZTP.Utilities
 {
     public class Drawing
     {
-        private static (ConsoleColor, ConsoleColor) _colors;
+        private static (ConsoleColor foreground, ConsoleColor background) _colors;
         public static void SetColors(ConsoleColor foreground, ConsoleColor background)
         {
-            _colors.Item1 = foreground;
-            _colors.Item2 = background;
+            _colors.foreground = foreground;
+            _colors.background = background;
         }
         public static void DrawRight(char character, int count , int x , int y)
         {
-            Env.SetColor(_colors.Item1,_colors.Item2);
+            Env.SetColor(_colors.foreground, _colors.background);
             Env.CursorPos(x, y);
             for (int i = 0; i < count; i++)
             {
@@ -28,7 +28,7 @@ namespace BattleshipZTP.Utilities
         }
         public static void DrawDown(char character, int count, int x, int y)
         {
-            Env.SetColor(_colors.Item1, _colors.Item2);
+            Env.SetColor(_colors.foreground, _colors.background);
             for (int i = 0;i < count; i++)
             {
                 Env.CursorPos(x, y + i);
@@ -45,8 +45,6 @@ namespace BattleshipZTP.Utilities
                 pixels = new List<string>();
                 try
                 {
-
-                    
                     string content = File.ReadAllText("img//" + filename +"//"+filename+".txt");
                     StringBuilder result = new StringBuilder();
                     foreach (char c in content)

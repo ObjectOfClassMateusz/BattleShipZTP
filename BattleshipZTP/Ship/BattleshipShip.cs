@@ -7,5 +7,8 @@ public class BattleshipShip : BaseShip
     public BattleshipShip(List<Point> initialPlacement) 
         : base(BattleshipSize, initialPlacement)
     {
+        StreamReader file = new StreamReader($"data/ships/classic/battleship/model.txt");
+        string reader = file.ReadLine();
+        _body.Add((reader, 0));
     }
 }

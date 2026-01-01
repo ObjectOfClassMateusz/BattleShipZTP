@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,23 +13,29 @@ namespace BattleshipZTP.GameAssets
         BattleBoard createBoard(int x , int y);
         bool remeberArrowHit();
         Dictionary<string, int> assignResources();
+
+        List<IShip> ShipmentDelivery();
     }
 
     public class ClassicGameMode : IGameMode
     {
-        public ClassicGameMode() { }
         public BattleBoard createBoard(int x , int y) 
-        { 
-            return new BattleBoard(x,y,12,12);
-        }
-        public bool remeberArrowHit()
-        {
-            return true;
-        }
+            => new BattleBoard(x,y,12,12);
+
+        public bool remeberArrowHit() 
+            => true;
+
         public Dictionary<string, int> assignResources() 
+            => new Dictionary<string, int>();
+        
+        public List<IShip> ShipmentDelivery() => new List<IShip>()
         {
-            return null;
-        }
+            ShipFactory.CreateShip(ShipType.Carrier),
+            ShipFactory.CreateShip(ShipType.Battleship),
+            ShipFactory.CreateShip(ShipType.Destroyer),
+            ShipFactory.CreateShip(ShipType.Destroyer),
+            ShipFactory.CreateShip(ShipType.Submarine)
+        };
     }
 
     public class DuelGameMode : IGameMode
@@ -50,6 +57,10 @@ namespace BattleshipZTP.GameAssets
         {
             return null;
         }
+        public List<IShip> ShipmentDelivery() => new List<IShip>()
+        {
+            ShipFactory.CreateShip(ShipType.Carrier)
+        };
     }
 
 
@@ -72,6 +83,7 @@ namespace BattleshipZTP.GameAssets
             resources.Add("Action Points", 2);
             return resources;
         }
+        public List<IShip> ShipmentDelivery() => new List<IShip>();
     }
 
 

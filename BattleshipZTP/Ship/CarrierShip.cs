@@ -7,5 +7,8 @@ public class CarrierShip : BaseShip
     public CarrierShip(List<Point> initialPlacement) 
         : base(CarrierSize, initialPlacement)
     {
+        StreamReader file = new StreamReader($"data/ships/classic/carrier/model.txt");
+        string reader = file.ReadLine();
+        _body.Add((reader, 0));
     }
 }

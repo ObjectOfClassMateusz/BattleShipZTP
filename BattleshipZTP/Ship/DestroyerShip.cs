@@ -6,5 +6,8 @@ public class DestroyerShip : BaseShip
     public DestroyerShip(List<Point> initialPlacement) 
         : base(DestroyerSize, initialPlacement)
     {
+        StreamReader file = new StreamReader($"data/ships/classic/destroyer/model.txt");
+        string reader = file.ReadLine();
+        _body.Add((reader, 0));
     }
 }

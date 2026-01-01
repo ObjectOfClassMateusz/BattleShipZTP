@@ -11,7 +11,7 @@ namespace BattleshipZTP.Scenarios;
 
 public class AuthorsScenario : Scenario
 {
-    private List<string> _authors = new List<string> {"Mateusz Treda", "Oliwia Sieradzka"};
+    private List<string> _authors = new List<string> {"Mateusz Tręda", "Oliwia Sieradzka"};
     
     public AuthorsScenario() : base() 
     { 
@@ -21,14 +21,14 @@ public class AuthorsScenario : Scenario
     {
         base.Act();
 
-        Drawing.DrawASCII("Authors", 5,1);
+        //Drawing.DrawASCII("Authors", 5,1);
 
         IWindowBuilder builder = new WindowBuilder();
         UIDirector director = new UIDirector(builder); // Tworzysz dyrektora i dajesz mu budowniczego
 
         director.AuthorsInit();
         
-        builder.AddComponent(new TextOutput("Authors of the game:"));
+        builder.AddComponent(new TextOutput("Authors of the game: ©️"));
         builder.AddComponent(new TextOutput($"- {_authors[0]}"));
         builder.AddComponent(new TextOutput($"- {_authors[1]}"));
         builder.AddComponent(new Button("Return to Main Menu"));
@@ -39,8 +39,12 @@ public class AuthorsScenario : Scenario
         controller.AddWindow(authorsWindow);
 
         List<string> option = controller.DrawAndStart();
-        IScenario scenario = new MainMenuScenario(new List<string>());
-        scenario.Act();
+
+        option[0] = "Main";
+        _scenarios[option.LastOrDefault()].Act();
+
+        //IScenario scenario = new MainMenuScenario();
+        //scenario.Act();
     }
 }
 

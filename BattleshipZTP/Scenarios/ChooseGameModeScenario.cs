@@ -39,7 +39,7 @@ namespace BattleshipZTP.Scenarios
             switch (options.FirstOrDefault())
             {
                 case "Return":
-                    scenario = new MainMenuScenario(new List<string>() { });
+                    scenario = new MainMenuScenario();
                     scenario.Act();
                     break;
                 case "Classic":

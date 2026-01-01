@@ -123,7 +123,7 @@ namespace BattleshipZTP.UI
         string _enterTextMark = "➤ ";
         string _option;
         int _charLimit = 5;
-        public TextBox(string option, int charLimit=5)
+        public TextBox(string option, int charLimit=5 , string initialValue="")
         {
             if(charLimit < 0)
             {
@@ -131,7 +131,7 @@ namespace BattleshipZTP.UI
             }
             _charLimit = charLimit;
             _option = option;
-            _value = "";
+            _value = initialValue;
         }
         int _margin = 0;
         public void SetMargin(int width)
@@ -325,6 +325,7 @@ namespace BattleshipZTP.UI
         Window Build();
         void ResetBuilder();
     }
+
     public class WindowBuilder : IWindowBuilder
     {
         Window _window;
