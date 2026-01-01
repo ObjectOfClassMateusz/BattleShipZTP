@@ -21,8 +21,6 @@ public class AuthorsScenario : Scenario
     {
         base.Act();
 
-        //Drawing.DrawASCII("Authors", 5,1);
-
         IWindowBuilder builder = new WindowBuilder();
         UIDirector director = new UIDirector(builder); // Tworzysz dyrektora i dajesz mu budowniczego
 
