@@ -20,8 +20,12 @@ public class AuthorsScenario : Scenario
     public override void Act()
     {
         base.Act();
+<<<<<<< HEAD
 
         //Drawing.DrawASCII("Authors", 5,1);
+=======
+        Drawing.DrawASCII("Authors", 5,1);
+>>>>>>> 071a7e2a94364d0d7a18a8958e9bfa8159c9d056
 
         IWindowBuilder builder = new WindowBuilder();
         UIDirector director = new UIDirector(builder); // Tworzysz dyrektora i dajesz mu budowniczego

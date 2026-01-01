@@ -6,7 +6,7 @@ public enum HitResult
     Hit,
     
     // Opcja 2: Trafiony i zatopiony
-    Sunk,
+    HitAndSunk,
     
     // Opcja 3: Pudło
     Miss,
