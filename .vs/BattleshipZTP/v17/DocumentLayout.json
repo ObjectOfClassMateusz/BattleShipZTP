@@ -3,20 +3,12 @@
   "WorkspaceRootPath": "H:\\C#Projects\\BattleshipZTP\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\scenarios\\authorsscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\scenarios\\authorsscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\gameassets\\battleboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\gameassets\\battleboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\ship\\baseship.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\ship\\baseship.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\scenarios\\singleplayerscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\scenarios\\singleplayerscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,56 +18,33 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "BaseShip.cs",
-              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Ship\\BaseShip.cs",
-              "RelativeDocumentMoniker": "BattleshipZTP\\Ship\\BaseShip.cs",
-              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Ship\\BaseShip.cs",
-              "RelativeToolTip": "BattleshipZTP\\Ship\\BaseShip.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABoAAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-31T17:14:10.814Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Program.cs",
-              "RelativeDocumentMoniker": "BattleshipZTP\\Program.cs",
-              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Program.cs",
-              "RelativeToolTip": "BattleshipZTP\\Program.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAwAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-31T16:39:21.074Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "AuthorsScenario.cs",
+              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\AuthorsScenario.cs",
+              "RelativeDocumentMoniker": "BattleshipZTP\\Scenarios\\AuthorsScenario.cs",
+              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\AuthorsScenario.cs",
+              "RelativeToolTip": "BattleshipZTP\\Scenarios\\AuthorsScenario.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAawC8AAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-02T15:03:47.761Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "BattleBoard.cs",
               "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\GameAssets\\BattleBoard.cs",
               "RelativeDocumentMoniker": "BattleshipZTP\\GameAssets\\BattleBoard.cs",
               "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\GameAssets\\BattleBoard.cs",
               "RelativeToolTip": "BattleshipZTP\\GameAssets\\BattleBoard.cs",
-              "ViewState": "AgIAAH0BAAAAAAAAAAAQwJEBAAAhAAAAAAAAAA==",
+              "ViewState": "AgIAAIcBAAAAAAAAAAAqwJoBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-30T00:50:44.461Z",
+              "WhenOpened": "2026-01-02T15:03:38.351Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "SingleplayerScenario.cs",
-              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
-              "RelativeDocumentMoniker": "BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
-              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
-              "RelativeToolTip": "BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAADAAAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-30T00:54:23.158Z"
             }
           ]
         }
