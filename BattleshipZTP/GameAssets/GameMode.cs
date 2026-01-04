@@ -4,7 +4,6 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Collections.Specialized.BitVector32;
 
 namespace BattleshipZTP.GameAssets
 {
@@ -32,8 +31,11 @@ namespace BattleshipZTP.GameAssets
         {
             ShipFactory.CreateShip(ShipType.Carrier),
             ShipFactory.CreateShip(ShipType.Battleship),
+            ShipFactory.CreateShip(ShipType.Battleship),
             ShipFactory.CreateShip(ShipType.Destroyer),
             ShipFactory.CreateShip(ShipType.Destroyer),
+            ShipFactory.CreateShip(ShipType.Destroyer),
+            ShipFactory.CreateShip(ShipType.Submarine),
             ShipFactory.CreateShip(ShipType.Submarine)
         };
     }

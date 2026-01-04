@@ -2,7 +2,8 @@
 
 public interface IShip
 {
-    List<(string, int)> GetBody();
+    List<(string text, int offset)> GetBody();
+    (ConsoleColor foreground, ConsoleColor background) GetColors();
 
     int GetSize(); // Poprawiono nazwę
     HitResult TakeHit(Point coords);

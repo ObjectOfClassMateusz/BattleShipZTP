@@ -14,11 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BattleshipZTP")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< HEAD
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+316bb89c1e6c6037e84fcae4d70d347ca190779c")]
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6d0ec54a819f4d905f37d5a245c42fe1345855f2")]
->>>>>>> 9c49e683e27ba5b299fff09180301da67187505a
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5113a1181cbe6a0e69f3600621834f1a682d52d4")]
 [assembly: System.Reflection.AssemblyProductAttribute("BattleshipZTP")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BattleshipZTP")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

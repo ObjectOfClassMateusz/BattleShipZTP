@@ -8,7 +8,8 @@ public class AttackCommand : ICommand
     public IBattleBoard Board { get; }
     public Point Target { get; }
     public int PlayerID { get; }
-    
+    public IGameMode GameMode { get; }
+
     public AttackCommand (IBattleBoard board, Point target, int playerId)
     {
         Board = board;
@@ -16,7 +17,7 @@ public class AttackCommand : ICommand
         PlayerID = playerId;
     }
     
-    public void Execute()
+    public void Execute(List<(int x, int y)> coords)
     {
         HitResult hitResult = Board.AttackPoint(Target);
         
@@ -28,5 +29,19 @@ public class AttackCommand : ICommand
         };
         
         ActionManager.Instance.LogAction(details);
+    }
+
+    public List<(string text, int offset)> GetBody()
+    {
+        return new List<(string text, int offset)>()
+        {
+            ("X",0)
+        };
+    }
+    public bool PlaceCondition(int x, int y)
+    {
+        //GameMode
+        //if already hit at "x" and "y"
+        return true;
     }
 }

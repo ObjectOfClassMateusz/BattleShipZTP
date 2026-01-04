@@ -10,5 +10,6 @@ public class CarrierShip : BaseShip
         StreamReader file = new StreamReader($"data/ships/classic/carrier/model.txt");
         string reader = file.ReadLine();
         _body.Add((reader, 0));
+        _colors = (ConsoleColor.DarkMagenta , ConsoleColor.Black);
     }
 }

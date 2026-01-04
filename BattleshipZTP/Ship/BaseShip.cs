@@ -6,6 +6,7 @@ public abstract class BaseShip : IShip
     private List<Point> hits;
     private List<Point> placement;
     protected readonly List<(string text, int offset)> _body;
+    protected (ConsoleColor foreground, ConsoleColor background) _colors;
 
     public BaseShip(int size, List<Point> initialPlacement)
     {
@@ -13,11 +14,17 @@ public abstract class BaseShip : IShip
         this.placement = initialPlacement;
         this.hits = new List<Point>();
         _body = new List<(string, int)>();
+        _colors = (ConsoleColor.White, ConsoleColor.Black);
     }
 
-    public List<(string,int)> GetBody()
+    public List<(string text,int offset)> GetBody()
     {
         return _body;
+    }
+
+    public (ConsoleColor foreground, ConsoleColor background) GetColors()
+    {
+        return _colors;
     }
 
     public int GetSize()

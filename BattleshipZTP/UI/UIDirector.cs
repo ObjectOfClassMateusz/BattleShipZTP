@@ -27,7 +27,7 @@ namespace BattleshipZTP.UI
         }
         public void MainMenuInit()
         {
-            _builder.SetPosition(65, 15)
+            _builder.SetPosition(65, 30)
             .ColorBorders(ConsoleColor.Black, ConsoleColor.DarkGray)
             .ColorHighlights(ConsoleColor.White, ConsoleColor.Green);
             Button singleplayer = new Button("Singleplayer");

@@ -24,7 +24,7 @@ namespace BattleshipZTP.Scenarios
             .ColorHighlights(ConsoleColor.White, ConsoleColor.Green)
             .AddComponent(new TextOutput("Enter you nickname below:"))
             .AddComponent(new TextBox("Nickname", 12,UserSettings.Instance.Nickname))
-            .AddComponent(new IntegerSideBar("Music volume"))
+            .AddComponent(new IntegerSideBar("Music volume",UserSettings.Instance.MusicVolume))
             .AddComponent(new CheckBox("Turn off SFX"))
             .AddComponent(new Button("Save and Return"));
 

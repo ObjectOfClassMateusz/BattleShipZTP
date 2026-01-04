@@ -210,9 +210,10 @@ namespace BattleshipZTP.UI
     {
         char _mark = '█';
         string _option;
-        int _value = 0;
-        public IntegerSideBar(string name)
+        int _value ;
+        public IntegerSideBar(string name , int value=50)
         {
+            _value = value;
             _option = name;
         }
         int _margin = 0;
@@ -369,23 +370,34 @@ namespace BattleshipZTP.UI
     {
         readonly List<IComponentUI> _components = new List<IComponentUI>();
 
-        public void Add(IComponentUI component)
+        void ReCalcSize()
         {
-            _components.Add(component);
             int longest_string = 0;
             foreach (IComponentUI c in _components)
             {
-                if (c.GetOption().Length + c.GetMargin()*2 > longest_string)
+                if (c.GetOption().Length + c.GetMargin() * 2 > longest_string)
                 {
-                    longest_string = c.GetOption().Length + c.GetMargin()*2;
+                    longest_string = c.GetOption().Length + c.GetMargin() * 2;
                 }
             }
-            this._width = (longest_string + 1 > _width) 
-                ? longest_string + 1 
+            this._width = (longest_string + 1 > _width)
+                ? longest_string + 1
                 : _width;
-            this._height = this._components.Count + 1 > _height 
-                ? this._components.Count + 1 
+            this._height = this._components.Count + 1 > _height
+                ? this._components.Count + 1
                 : _height;
+        }
+
+        public void Remove(int index)
+        {
+            _components.RemoveAt(index);
+            ReCalcSize();
+        }
+
+        public void Add(IComponentUI component)
+        {
+            _components.Add(component);
+            ReCalcSize();
         }
 
         public IComponentUI GetComponent(int index) => _components[index];
@@ -618,10 +630,6 @@ namespace BattleshipZTP.UI
                             int index = OptionsReturns.FindIndex(s => s.Contains(inputId));
                             OptionsReturns[index] = $"{inputId}#:{value}";
                         }
-                        if (value == "0")
-                        {
-                            OptionsReturns.Remove(optionHandlerString);
-                        }
                     }
                     else
                     {
@@ -636,6 +644,53 @@ namespace BattleshipZTP.UI
                         }
                     }
                     i--;
+                }
+            }
+        }
+        public void DrawAndEndSequence()
+        {
+            if (!_valid)
+            {
+                OnceValidate();
+            }
+            foreach (Window window in windows)
+            {
+                //Do the draw
+
+                //color border and set cursor to start the drawing
+                Env.SetColor(window.GetBorderColors().Item1, window.GetBorderColors().Item2);
+                Env.CursorPos(window.GetCorner().X, window.GetCorner().Y);
+
+                // top border --------------------
+                for (int j = 0; j < window.Width + 1; j++)
+                { Console.Write("-"); }
+
+                // list of window components
+                //              ...
+                //          |component1 |
+                //          |component2 |
+                //              ...
+                for (int i = 1; i < window.Height; i++)
+                {
+                    Env.CursorPos(window.GetCorner().X, window.GetCorner().Y + i);
+                    Console.Write("|");//left wall
+
+                    if (i <= window.ComponentsLenght())
+                    {
+                        Env.SetColor();
+                        window.GetComponent(i - 1).Print(window.Width);//dispay component
+                    }
+
+                    Env.SetColor(window.GetBorderColors().Item1, window.GetBorderColors().Item2);
+                    Env.CursorPos(window.GetCorner().X + window.Width, window.GetCorner().Y + i);
+                    Console.Write("|");//right wall
+                }
+
+                //bottom border --------------------
+                Env.CursorPos(window.GetCorner().X, window.GetCorner().Y + window.Height);
+                for (int j = 0; j < window.Width + 1; j++)
+                {
+                    Console.Write("-");
                 }
             }
         }

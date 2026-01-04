@@ -8,16 +8,12 @@ public class UserSettings
     public static UserSettings Instance => _instance ??= new UserSettings();
 
     public string Nickname { get; set; } = "PLAYER";
-    public int MusicVolume { get; set; } = 0;//50;
+    public int MusicVolume { get; set; } = 50;
     public bool SfxEnabled { get; set; } = true;
 
     public void UpdateSettings(List<string> options)
     {
         SfxEnabled = true;
-        if (!options.Any(o => o.Contains("slider-Music volume")))
-        {
-            MusicVolume = 0;
-        }
         foreach (var opt in options)
         {
             if (opt.Contains("input-Nickname"))

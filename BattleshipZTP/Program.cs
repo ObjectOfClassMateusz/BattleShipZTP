@@ -36,11 +36,6 @@ namespace BattleshipZTP
 
             main.Act();
 
-            /*
-            GameModeFactory gameModeFactory = new ClassicModeFactory();
-            IScenario scenario = new SingleplayerScenario(gameModeFactory.GetGameMode());
-            scenario.Act();
-            */
             /*StatBar bar = new StatBar(500, ConsoleColor.Red, 3);
             bar.Show();
             Console.WriteLine();

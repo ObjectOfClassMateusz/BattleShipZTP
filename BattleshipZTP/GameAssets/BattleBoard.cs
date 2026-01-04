@@ -1,4 +1,5 @@
-﻿using BattleshipZTP.Utilities;
+﻿using BattleshipZTP.Commands;
+using BattleshipZTP.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static BattleshipZTP.GameAssets.BattleBoard;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BattleshipZTP.GameAssets
 {
@@ -13,15 +15,15 @@ namespace BattleshipZTP.GameAssets
     {
         void Display();
         void DisplayField(int x, int y);
+        Field GetField(int x, int y);
+        bool IsNeighborHaveShipRef(Field field);
 
-        //void PlaceCommand(ICommand command);
+        List<(int x, int y)> PlaceCommand(ICommand command);
         //AttackCommand
         //PlaceShipCommand
+        //SpellCommand
+        //MoveCommand
 
-
-        //void UpdateField(int x, int y, char character, ConsoleColor foreground, ConsoleColor background);
-        //Field GetField(int x, int y)
-        void PlaceShip(IShip ship);
         //(int, int) PlaceCursor(CursorBody cursor);
         HitResult AttackPoint(Point target);
     }
@@ -31,10 +33,10 @@ namespace BattleshipZTP.GameAssets
         public int X { get; set; }
         public int Y { get; set; }
         public char Character { get; set; }
-        public (ConsoleColor, ConsoleColor) colors = (ConsoleColor.White, ConsoleColor.Black);
+        public (ConsoleColor foreground, ConsoleColor background) colors = (ConsoleColor.White, ConsoleColor.Black);
 
         public bool ArrowHit {  get; set; }
-        public IShip ShipReference {get;set;}
+        public IShip ShipReference { get; set; } = null;
 
         public Field(char character, int x, int y)
         {
@@ -44,14 +46,14 @@ namespace BattleshipZTP.GameAssets
         }
         public override string ToString()
         {
-            Env.SetColor(colors.Item1, colors.Item2);
+            Env.SetColor(colors.foreground, colors.background);
             return this.Character.ToString();
         }
     }
 
     public class BattleBoardMemento
     {
-        public Field[,] State {  get;  }
+        public Field[,] State { get; }
         public BattleBoardMemento(Field[,] state)
         {
             State = state;
@@ -60,12 +62,11 @@ namespace BattleshipZTP.GameAssets
 
     public class BattleBoard : IBattleBoard
     {
+        Field[,]? _field;//[y,x]
         public int cornerX;
         public int cornerY;
-        Field[,]? _field;//[y,x]
         public int width;
         public int height;
-
         public BattleBoard(int cornerLeft=0 , int cornerUp=0, int width = 90, int height = 16)
         {
             this.width = width;
@@ -105,23 +106,34 @@ namespace BattleshipZTP.GameAssets
             }
             return new BattleBoardMemento(copy);
         }
+
         public void Display()
         {
+            (ConsoleColor foreground, ConsoleColor background) lastColor = _field[0, 0].colors;
             Env.CursorPos(cornerX+1, cornerY+1);
             for (int i = 0; i < height; i++)
             {
                 StringBuilder str = new StringBuilder();
                 for (int j = 0; j < width; j++) 
                 {
-                    str.Append(_field[i, j].Character);
+                    if (_field[i,j].colors == lastColor){
+                        str.Append(_field[i, j].Character);
+                    }
+                    else{//Separete stream writes for direfent colors
+                        Env.SetColor(lastColor.foreground,lastColor.background);
+                        Console.Write(str.ToString());
+                        str.Clear();
+                        lastColor = _field[i, j].colors;
+                        j--;
+                    }
                 }
-                Console.Write(str.ToString());//instant
-                //Env.Wait(500);
+                Env.SetColor(lastColor.foreground, lastColor.background);
+                Console.Write(str.ToString());
                 Env.CursorPos(cornerX+1, cornerY+i+2);
             }
         }
 
-        private List<(string text, int offset)> RotateShipment
+        private List<(string text, int offset)> RotateBody
             (List<(string text, int offset)> ship)
         {
             List<string> lines = ship
@@ -141,52 +153,62 @@ namespace BattleshipZTP.GameAssets
                 {
                     sb.Append(lines[y][x]);
                 }
-                result.Add((sb.ToString().TrimEnd(), 0));
+                string k = sb.ToString().TrimEnd();
+                int spaceCount = k.Count(c => c == ' ');
+                result.Add((k.TrimStart(), spaceCount));
             }
             return result;
         }
 
         public void DisplayField(int x, int y)
         {
-            if (x >= 0 && x < width && y >= 0 && y < height)
-            {
-                Env.CursorPos(cornerX + 1 + x, cornerY + 1 + y);
-                Console.Write(_field[y, x]);
-            }
-            
+            Env.CursorPos(cornerX + 1 + x, cornerY + 1 + y);
+            Console.Write(_field[y, x]);
         }
 
-        public void PlaceShip(IShip ship)
+        public Field GetField(int x, int y)
         {
-            // Używamy body statku z obiektu, a nie wpisanego na sztywno
-            List<(string text, int offset)> Ship = ship.GetBody(); 
-            
+            return _field[y, x];
+        }
+
+        public bool IsNeighborHaveShipRef(Field field)
+        {
+            //Checks if field have an neighbor with ship reference
+            for(int y= field.Y - 1; y<= field.Y+1; y++)
+                for(int x= field.X - 1; x<= field.X+1; x++)
+                    if (x >= 0 && x < this.width && y >= 0 && y < this.height)
+                        if (this._field[y,x].ShipReference != null)
+                            return true;
+            return false;
+        }
+
+
+        public List<(int x, int y)> PlaceCommand(ICommand command)
+        {
+            List<(string text, int offset)> Body = command.GetBody();
             bool canPlace = true;
-            int shipMostWidth = 1;
-            int shipMostHeight = Ship.Count;
+            int bodyMostWidth = 1;
+            int bodyMostHeight = Body.Count;
 
-            foreach (var shipSlice in Ship) 
-                if(shipSlice.text.Length > shipMostWidth)
-                    shipMostWidth = shipSlice.text.Length;
-
-            // Funkcja pomocnicza do rysowania "cienia" statku
-            Func<int,int,List<(int x, int y)>> fieldHistoryOn = (int x, int y) =>
+            foreach (var bodySlice in Body)
+                if (bodySlice.text.Length > bodyMostWidth)
+                    bodyMostWidth = bodySlice.text.Length; 
+            //
+            Func<int, int, List<(int x, int y)>> fieldHistoryOn = (int x, int y) =>
             {
                 List<(int x, int y)> history = new List<(int x, int y)>();
                 Env.SetColor();
-                ConsoleColor placementAvaible = ConsoleColor.Green;
+                ConsoleColor placementAvaible = ConsoleColor.Green;//Green shdow placement
                 canPlace = true;
-                
                 int currentY = y;
-                foreach (var s in Ship)
+                foreach (var s in Body)
                 {
                     int cursorPosX = cornerX + 1 + s.offset + x;
                     int cursorPosY = cornerY + 1 + currentY;
                     for (int k = 0; k < s.text.Length; k++)
                     {
                         history.Add((cursorPosX + k, cursorPosY));
-                        // Sprawdzanie kolizji
-                        if (_field[currentY, x + k + s.offset].Character != ' ')
+                        if (command.PlaceCondition(x + k + s.offset, currentY))
                         {
                             placementAvaible = ConsoleColor.Red;
                             canPlace = false;
@@ -199,52 +221,88 @@ namespace BattleshipZTP.GameAssets
                 }
                 return history;
             };
-
+            //
             int localX = 0;
             int localY = 0;
             List<(int x, int y)> history = new List<(int x, int y)>();
-
             while (true)
             {
                 history = fieldHistoryOn(localX, localY);
                 ConsoleKeyInfo klawisz = Console.ReadKey(true);
-
-                if (klawisz.Key == ConsoleKey.Enter && canPlace) break;
-                
-                // Logika rotacji (Twoja nowość)
-                else if (klawisz.Key == ConsoleKey.Tab) 
+                //
+                if (klawisz.Key == ConsoleKey.Enter)//Placement
                 {
-                    Ship = this.RotateShipment(Ship);
-                    shipMostHeight = Ship.Count;
-                    // Rekalkulacja szerokości po obrocie
-                    shipMostWidth = Ship.Max(s => s.text.Length);
+                    if (canPlace)
+                        break;
+                    continue;
                 }
-                else if(klawisz.Key == ConsoleKey.UpArrow && localY > 0) localY--;
-                else if(klawisz.Key == ConsoleKey.DownArrow && localY < this.height - shipMostHeight) localY++;
-                else if(klawisz.Key == ConsoleKey.LeftArrow && localX > 0) localX--;
-                else if(klawisz.Key == ConsoleKey.RightArrow && localX < this.width - shipMostWidth) localX++;
-
-                // Przywracanie tła planszy
-                foreach (var point in history)
+                else if (klawisz.Key == ConsoleKey.Tab 
+                    && localX - 1 < this.width - bodyMostHeight
+                    && localY - 1 < this.height - bodyMostWidth)//Rotation
+                {
+                    Body = RotateBody(Body);
+                    bodyMostHeight = Body.Count;
+                    bodyMostWidth = 1;
+                    foreach (var bodySlice in Body)
+                        if (bodySlice.text.Length > bodyMostWidth)
+                            bodyMostWidth = bodySlice.text.Length;
+                }
+                else if (klawisz.Key == ConsoleKey.UpArrow && localY > 0)
+                    localY--;
+                else if (klawisz.Key == ConsoleKey.DownArrow && localY < this.height - bodyMostHeight)
+                    localY++;
+                else if (klawisz.Key == ConsoleKey.LeftArrow && localX > 0)
+                    localX--;
+                else if (klawisz.Key == ConsoleKey.RightArrow && localX < this.width - bodyMostWidth)
+                    localX++;
+                else
+                    continue;
+                //Update fields
+                List<(int x, int y)> new_history = fieldHistoryOn(localX, localY);
+                IEnumerable<(int x, int y)> pointsToRestore = history.Except(new_history);
+                foreach (var point in pointsToRestore)
                 {
                     Env.CursorPos(point.x, point.y);
                     Console.Write(_field[point.y - this.cornerY - 1, point.x - this.cornerX - 1]);
                 }
             }
+            return history;
+        }
 
-            // Ostateczne postawienie statku i zapisanie referencji dla Observera
-            int shipIterator = 0;
-            string shipValue = string.Join("", Ship.Select(s => s.text));
-            
-            foreach(var point in history) 
+        /*
+        public void PlaceShipAI(IShip ship , int x , int y)
+        {
+            int localX = cornerX + 1 + x;
+            int localY = cornerY + 1 + y;
+            List<(string text, int offset)> Ship = ship.GetBody();
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (var _ship in Ship)
             {
-                int finalY = point.y - this.cornerY - 1;
-                int finalX = point.x - this.cornerX - 1;
-                _field[finalY, finalX].Character = shipValue[shipIterator];
-                _field[finalY, finalX].ShipReference = ship; // To musi zostać dla AttackPoint!
+                foreach (char character in _ship.text)
+                {
+                    stringBuilder.Append(character);
+                }
+            }
+            string shipValue = stringBuilder.ToString();
+            int shipIterator = 0;
+            //
+            List<(int x, int y)> history = new List<(int x, int y)>();
+            for (int i = 0; i < shipValue.Length; i++) {
+                history.Add((localX + i, localY));
+            }
+            //
+            foreach ((int x, int y) h in history)
+            {
+                localY = h.y - this.cornerY - 1;
+                localX = h.x - this.cornerX - 1;
+                _field[localY, localX].Character = shipValue[shipIterator];
+                _field[localY, localX].colors = ship.GetColors();
+                _field[localY, localX].ShipReference = ship; // To musi zostać dla AttackPoint!
+                DisplayField(localX, localY);
                 shipIterator++;
             }
         }
+        */
         public HitResult AttackPoint(Point target)
         {
             if (target.X >= 0 && target.X < width && target.Y >= 0 && target.Y < height)
@@ -275,12 +333,16 @@ namespace BattleshipZTP.GameAssets
         BattleBoardMemento _memento;
         int _topLeftX;
         int _topLeftY;
-        //private Dictionary<Guid, ICommand> _cacheOperations;
+        private Dictionary<(int x , int y), ICommand> _cacheOperations;
         public BattleBoardProxy(BattleBoard board)
         {
             _board = board;
             _topLeftX = _board.cornerX;
             _topLeftY = _board.cornerY;
+        }
+        public List<(int x, int y)> PlaceCommand(ICommand command)
+        {
+            return _board.PlaceCommand(command);
         }
         public void FieldsInitialization()
         {
@@ -291,18 +353,18 @@ namespace BattleshipZTP.GameAssets
             }
         }
 
-        //public IShip GetReference(Field field)
-       // {
-
-       // }
-       
-        public void PlaceShip(IShip ship) 
-        //Pełnomocnik może przekazać żądanie obiektowi usługi tylko wtedy,
-        //gdy klient przedstawi odpowiednie poświadczenia.
+        public Field GetField(int x, int y)
         {
-            _board.PlaceShip(ship);
+            return _board.GetField(x, y);
         }
 
+        public bool IsNeighborHaveShipRef(Field field)
+        {
+            return _board.IsNeighborHaveShipRef(field);
+        }
+
+        //Pełnomocnik może przekazać żądanie obiektowi usługi tylko wtedy,
+        //gdy klient przedstawi odpowiednie poświadczenia.
         public HitResult AttackPoint(Point target)
         {
             return _board.AttackPoint(target);
@@ -341,7 +403,15 @@ namespace BattleshipZTP.GameAssets
         }
         public void DisplayField(int x, int y)
         {
-            _board.DisplayField (x, y);
+            if (x >= 0 && x < _board.width && y >= 0 && y < _board.height)
+            {
+                _board.DisplayField(x, y);
+            }
+            throw new Exception("Field cordinates out of range");
         }
+        /*public void PlaceShipAI(IShip ship, int x, int y)
+        {
+            _board.PlaceShipAI(ship, x, y); 
+        }*/
     }
 }

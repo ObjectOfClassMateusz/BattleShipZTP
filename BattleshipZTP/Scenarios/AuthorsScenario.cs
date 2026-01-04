@@ -40,9 +40,6 @@ public class AuthorsScenario : Scenario
 
         option[0] = "Main";
         _scenarios[option.LastOrDefault()].Act();
-
-        //IScenario scenario = new MainMenuScenario();
-        //scenario.Act();
     }
 }
 

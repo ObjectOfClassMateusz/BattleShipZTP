@@ -10,7 +10,7 @@ namespace BattleshipZTP.Utilities
 {
     public class Drawing
     {
-        private static (ConsoleColor foreground, ConsoleColor background) _colors;
+        static (ConsoleColor foreground, ConsoleColor background) _colors;
         public static void SetColors(ConsoleColor foreground, ConsoleColor background)
         {
             _colors.foreground = foreground;
@@ -37,7 +37,7 @@ namespace BattleshipZTP.Utilities
             Env.SetColor();
         }
 
-        private class ASCIIImage
+        class ASCIIImage
         {
             public List<string> pixels;
             public ASCIIImage(string filename)
@@ -45,22 +45,17 @@ namespace BattleshipZTP.Utilities
                 pixels = new List<string>();
                 try
                 {
+                    //delete soon
                     string content = File.ReadAllText("img//" + filename +"//"+filename+".txt");
                     StringBuilder result = new StringBuilder();
                     foreach (char c in content)
                     {
                         if (c == ' ')
-                        {
                             result.Append('!');
-                        }
                         else if (c == '\n' || c == '\r')
-                        {
                             result.Append(c); // zachowaj nowe linie
-                        }
                         else
-                        {
                             result.Append(' ');
-                        }
                     }
                     File.WriteAllText("img//" + filename +"//"+"colorDoesntCount.txt", result.ToString());
                     //delete soon
@@ -89,18 +84,15 @@ namespace BattleshipZTP.Utilities
                 }
             }
         }
-        static private readonly Dictionary<string, ASCIIImage> _images = new Dictionary<string, ASCIIImage>();
+
+        static readonly Dictionary<string, ASCIIImage> _images = new Dictionary<string, ASCIIImage>();
         public static void AddASCII(string filename)
         {
             _images [filename] = new ASCIIImage(filename);
         }
 
-        public static void DrawASCII(
-        string key,
-        int x,
-        int y,
-        ConsoleColor foreground = ConsoleColor.White,
-        ConsoleColor background = ConsoleColor.Black)
+        public static void DrawASCII(string key,
+        int x,int y,ConsoleColor foreground = ConsoleColor.White,ConsoleColor background = ConsoleColor.Black)
         {
             //Draw the image normally
             Env.SetColor(foreground, background);
@@ -109,11 +101,9 @@ namespace BattleshipZTP.Utilities
                 Console.SetCursorPosition(x, y + i);
                 Console.Write(_images[key].pixels[i]);
             }
-
             Env.SetColor();
             using StreamReader reader =new StreamReader($"img/{key}/colorDoesntCount.txt");
             int row = 0;
-
             //Apply mask in string runs
             while (!reader.EndOfStream)
             {
