@@ -369,9 +369,16 @@ namespace BattleshipZTP.GameAssets
                     if (result == HitResult.HitAndSunk)
                     {
                         for (int i = 0; i < height; i++)
-                        for (int j = 0; j < width; j++)
-                            if (_field[i, j].ShipReference == field.ShipReference)
-                                _field[i, j].colors = (ConsoleColor.DarkGray, ConsoleColor.Black);
+                        {
+                            for (int j = 0; j < width; j++)
+                            {
+                                if (_field[i, j].ShipReference == field.ShipReference)
+                                {
+                                    _field[i, j].colors = (ConsoleColor.DarkGray, ConsoleColor.Black);
+                                    _field[i, j].Character = 'X'; 
+                                }
+                            }
+                        }
                     }
                     else
                     {

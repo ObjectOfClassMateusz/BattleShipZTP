@@ -2,7 +2,7 @@
 
 public class DestroyerShip : BaseShip
 {
-    private const int DestroyerSize = 2;
+    private const int DestroyerSize = 3;
     public DestroyerShip(List<Point> initialPlacement) 
         : base(DestroyerSize, initialPlacement)
     {

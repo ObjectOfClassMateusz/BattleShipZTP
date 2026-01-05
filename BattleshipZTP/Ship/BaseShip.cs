@@ -74,6 +74,6 @@ public abstract class BaseShip : IShip
 
     public bool IsSunk()
     {
-        return hits.Count == size; // jesli liczba trafien jest rowna rozmiarowi statku, to statek jest zatopiony
+        return hits.Distinct().Count() == size; 
     }
 }

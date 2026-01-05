@@ -13,6 +13,9 @@ namespace BattleshipZTP
     {
         public static void Main(string[] args)
         {
+            Console.SetWindowSize(130, 45); 
+            Console.SetBufferSize(130, 100); 
+            Console.Clear();
             Console.OutputEncoding = Encoding.Unicode;
 
             Drawing.AddASCII("mainMenuShip");

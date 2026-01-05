@@ -33,6 +33,9 @@ namespace BattleshipZTP.Utilities
         }
         public static void CursorPos(int x = 0, int y = 0)
         {
+            int safeX = Math.Clamp(x, 0, Console.WindowWidth - 1);
+            int safeY = Math.Clamp(y, 0, Console.WindowHeight - 1);
+            
             Console.SetCursorPosition(x, y);
         }
         public static void Wait(int milisecs)

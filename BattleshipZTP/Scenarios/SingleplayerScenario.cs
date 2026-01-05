@@ -199,33 +199,76 @@ namespace BattleshipZTP.Scenarios
 
             SimpleAI ai = new SimpleAI();
 
-            stats.RequiredHitsToWin = ships.Sum(s => s.GetBody().Sum(b => b.text.Length));
+            int totalShipsToSink = 8; 
+            int playerSunkCounter = 0;
+            int aiSunkCounter = 0;       
             
             while (true)
             {
-                // 1. Tura Gracza
+                // --- TURA GRACZA ---
                 Point playerTarget = enemyProxy.ChooseAttackPoint();
                 AttackCommand playerAttack = new AttackCommand(enemyProxy, playerTarget, UserSettings.Instance.GetHashCode());
+    
+                // Execute() wyśle pierwsze powiadomienie do loggera
                 playerAttack.Execute(new List<(int x, int y)>());
-                enemyProxy.Display();
+                var fieldAtTarget = enemyProxy.GetField(playerTarget.X, playerTarget.Y);
+                HitResult playerResult = HitResult.Miss;
+
+                if (fieldAtTarget.ShipReference != null) 
+                {
+                    playerResult = fieldAtTarget.ShipReference.IsSunk() ? HitResult.HitAndSunk : HitResult.Hit;
+                    if (fieldAtTarget.ShipReference.IsSunk()) 
+                    {
+                        playerSunkCounter++;
+                    }
+                }
+
+                stats.Update(new GameActionDetails {
+                    PlayerID = UserSettings.Instance.GetHashCode(),
+                    Nickname = UserSettings.Instance.Nickname,
+                    ActionType = "Attack",
+                    Coords = playerTarget,
+                    Result = playerResult
+                });
                 
-                if (stats.HasPlayerWon(UserSettings.Instance.GetHashCode())) //
+                enemyProxy.Display();
+
+                if (playerSunkCounter >= totalShipsToSink) 
                 {
                     ShowVictoryScreen(UserSettings.Instance.Nickname, stats);
                     break;
                 }
 
-                // 2. Tura AI
+                // --- TURA AI ---
                 Point aiTarget = ai.GetNextMove(board.width, board.height);
                 AttackCommand aiAttack = new AttackCommand(proxy, aiTarget, "ai_enemy1".GetHashCode());
+    
+                // Execute() wyśle drugie powiadomienie dla AI
                 aiAttack.Execute(new List<(int x, int y)>());
-                
-                HitResult aiResult = proxy.GetField(aiTarget.X, aiTarget.Y).Character == 'X' ? HitResult.Hit : HitResult.Miss;
-                ai.ReportResult(aiTarget, aiResult);
 
-                proxy.Display();
+                var aiField = proxy.GetField(aiTarget.X, aiTarget.Y);
+                HitResult aiResult = HitResult.Miss;
                 
-                if (stats.HasPlayerWon("ai_enemy1".GetHashCode())) //
+                if (aiField.ShipReference != null)
+                {
+                    aiResult = aiField.ShipReference.IsSunk() ? HitResult.HitAndSunk : HitResult.Hit;
+                    if (aiField.ShipReference.IsSunk()) 
+                    {
+                        aiSunkCounter++;
+                    }
+                }
+
+                stats.Update(new GameActionDetails {
+                    PlayerID = "ai_enemy1".GetHashCode(),
+                    Nickname = "ai_enemy1",
+                    ActionType = "Attack",
+                    Coords = aiTarget,
+                    Result = aiResult
+                });
+                
+                proxy.Display();
+
+                if (aiSunkCounter >= totalShipsToSink) 
                 {
                     ShowVictoryScreen("ai_enemy1", stats);
                     break;

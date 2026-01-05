@@ -22,7 +22,7 @@ public class AuthorsScenario : Scenario
         base.Act();
 
         IWindowBuilder builder = new WindowBuilder();
-        UIDirector director = new UIDirector(builder); // Tworzysz dyrektora i dajesz mu budowniczego
+        UIDirector director = new UIDirector(builder);
 
         director.AuthorsInit();
         
