@@ -11,5 +11,6 @@ public class CarrierShip : BaseShip
         string reader = file.ReadLine();
         _body.Add((reader, 0));
         _colors = (ConsoleColor.DarkMagenta , ConsoleColor.Black);
+        _name = "Carrier";
     }
 }

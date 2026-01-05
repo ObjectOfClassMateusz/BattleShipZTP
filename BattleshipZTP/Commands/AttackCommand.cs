@@ -19,15 +19,18 @@ public class AttackCommand : ICommand
     
     public void Execute(List<(int x, int y)> coords)
     {
-        HitResult hitResult = Board.AttackPoint(Target);
-        
+        // Prosty sygnał dźwiękowy Systemu lub NAudio
+        Console.Beep(440, 100); 
+
+        HitResult hitResult = Board.AttackPoint(Target); //
+    
+        // Logowanie akcji powiadamia Obserwatorów (GameLogger dopisze to do Backlogu)
         var details = new GameActionDetails {
             PlayerID = this.PlayerID,
             ActionType = "Attack",
             Coords = Target,
             Result = hitResult
         };
-        
         ActionManager.Instance.LogAction(details);
     }
 
@@ -38,6 +41,12 @@ public class AttackCommand : ICommand
             ("X",0)
         };
     }
+    public void SetBody(List<(string text, int offset)> body)
+    {
+        //
+    }
+
+
     public bool PlaceCondition(int x, int y)
     {
         //GameMode

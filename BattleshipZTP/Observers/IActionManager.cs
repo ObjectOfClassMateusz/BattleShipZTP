@@ -1,9 +1,6 @@
 ﻿namespace BattleshipZTP.Observers;
 
-public class IActionManager
+public interface IActionManager
 {
-    public void Update(GameActionDetails details)
-    {
-        
-    }
+    void Update(GameActionDetails details);
 }

@@ -8,7 +8,7 @@ public class UserSettings
     public static UserSettings Instance => _instance ??= new UserSettings();
 
     public string Nickname { get; set; } = "PLAYER";
-    public int MusicVolume { get; set; } = 50;
+    public int MusicVolume { get; set; } = 0;
     public bool SfxEnabled { get; set; } = true;
 
     public void UpdateSettings(List<string> options)

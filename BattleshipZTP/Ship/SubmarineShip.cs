@@ -10,5 +10,7 @@ public class SubmarineShip : BaseShip
         StreamReader file = new StreamReader($"data/ships/classic/submarine/model.txt");
         string reader = file.ReadLine();
         _body.Add((reader, 0));
+        _colors = (ConsoleColor.Cyan, ConsoleColor.DarkBlue);
+        _name = "Submarine";
     }
 }

@@ -506,7 +506,7 @@ namespace BattleshipZTP.UI
                 lastRemembered = Selected;
             }
         }
-    };
+    }
 
     public class UIController
     {
