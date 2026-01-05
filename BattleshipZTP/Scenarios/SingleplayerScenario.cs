@@ -59,7 +59,35 @@ namespace BattleshipZTP.Scenarios
                 throw new Exception("Missing coords or shipment to execute the placement");
             }
         }
+        
+        private void ShowVictoryScreen(string winnerName, StatisticTracker stats)
+        {
+            Console.Clear();
+    
+            var winnerStats = stats.GetStats(winnerName.GetHashCode());
+            
+            IWindowBuilder winBuilder = new WindowBuilder();
+            winBuilder.SetPosition(Console.WindowWidth / 2 - 15, 5)
+                .SetSize(30)
+                .ColorBorders(ConsoleColor.Cyan, ConsoleColor.Black)
+                .ColorHighlights(ConsoleColor.White, ConsoleColor.Blue)
+                .AddComponent(new TextOutput("      BITWA ZAKONCZONA      "))
+                .AddComponent(new TextOutput("----------------------------"))
+                .AddComponent(new TextOutput($"  ZWYCIEZCA: {winnerName.ToUpper()}  "))
+                .AddComponent(new TextOutput("----------------------------"))
+                .AddComponent(new TextOutput($" Celnosc: {winnerStats.Accuracy:F1}%"))
+                .AddComponent(new TextOutput($" Trafienia: {winnerStats.Hits}"))
+                .AddComponent(new TextOutput($" Pudla: {winnerStats.Misses}"))
+                .AddComponent(new TextOutput("----------------------------"))
+                .AddComponent(new Button("POWROT DO MENU"));
 
+            Window winWindow = winBuilder.Build();
+            UIController winUI = new UIController();
+            winUI.AddWindow(winWindow);
+    
+            winUI.DrawAndStart(); 
+        }
+        
         public override void Act()
         {
             base.Act();
@@ -165,12 +193,14 @@ namespace BattleshipZTP.Scenarios
             
             GameLogger logger = new GameLogger(backlogWindow, logController);
             StatisticTracker stats = new StatisticTracker();
-
+            
             ActionManager.Instance.Attach(logger);
             ActionManager.Instance.Attach(stats);
 
             SimpleAI ai = new SimpleAI();
 
+            stats.RequiredHitsToWin = ships.Sum(s => s.GetBody().Sum(b => b.text.Length));
+            
             while (true)
             {
                 // 1. Tura Gracza
@@ -178,40 +208,32 @@ namespace BattleshipZTP.Scenarios
                 AttackCommand playerAttack = new AttackCommand(enemyProxy, playerTarget, UserSettings.Instance.GetHashCode());
                 playerAttack.Execute(new List<(int x, int y)>());
                 enemyProxy.Display();
+                
+                if (stats.HasPlayerWon(UserSettings.Instance.GetHashCode())) //
+                {
+                    ShowVictoryScreen(UserSettings.Instance.Nickname, stats);
+                    break;
+                }
 
                 // 2. Tura AI
                 Point aiTarget = ai.GetNextMove(board.width, board.height);
-
-                HitResult aiResult = proxy.AttackPoint(aiTarget); 
-
+                AttackCommand aiAttack = new AttackCommand(proxy, aiTarget, "ai_enemy1".GetHashCode());
+                aiAttack.Execute(new List<(int x, int y)>());
+                
+                HitResult aiResult = proxy.GetField(aiTarget.X, aiTarget.Y).Character == 'X' ? HitResult.Hit : HitResult.Miss;
                 ai.ReportResult(aiTarget, aiResult);
 
-                var aiDetails = new GameActionDetails {
-                    PlayerID = "ai_enemy1".GetHashCode(),
-                    ActionType = "Attack",
-                    Coords = aiTarget,
-                    Result = aiResult
-                };
-                ActionManager.Instance.LogAction(aiDetails);
-
                 proxy.Display();
+                
+                if (stats.HasPlayerWon("ai_enemy1".GetHashCode())) //
+                {
+                    ShowVictoryScreen("ai_enemy1", stats);
+                    break;
+                }
             }
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*Env.CursorPos(1, 39);
       Env.SetColor(ConsoleColor.DarkMagenta, ConsoleColor.Gray);

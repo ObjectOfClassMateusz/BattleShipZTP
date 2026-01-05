@@ -19,12 +19,10 @@ public class AttackCommand : ICommand
     
     public void Execute(List<(int x, int y)> coords)
     {
-        // Prosty sygnał dźwiękowy Systemu lub NAudio
         Console.Beep(440, 100); 
 
         HitResult hitResult = Board.AttackPoint(Target); //
     
-        // Logowanie akcji powiadamia Obserwatorów (GameLogger dopisze to do Backlogu)
         var details = new GameActionDetails {
             PlayerID = this.PlayerID,
             ActionType = "Attack",
@@ -49,8 +47,6 @@ public class AttackCommand : ICommand
 
     public bool PlaceCondition(int x, int y)
     {
-        //GameMode
-        //if already hit at "x" and "y"
         return true;
     }
 }

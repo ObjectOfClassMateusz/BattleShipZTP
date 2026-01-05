@@ -3,6 +3,9 @@
 public class StatisticTracker : IActionManager
 {
     private Dictionary<int, PlayerStats> _allPlayerStats = new Dictionary<int, PlayerStats>();
+    
+    public int RequiredHitsToWin { get; set; }
+    
     public int TotalShots { get; private set; } = 0;
     public int Hits { get; private set; } = 0;
     public int Misses { get; private set; } = 0;
@@ -39,11 +42,16 @@ public class StatisticTracker : IActionManager
         System.Diagnostics.Debug.WriteLine($"[STATS] Gracz {details.PlayerID} | Strzały: {stats.TotalShots} | Trafienia: {stats.Hits} | Celność: {stats.Accuracy:F1}%");
     }
 
-    // Metoda pomocnicza do pobierania statystyk konkretnego gracza
-    public PlayerStats GetStats(int playerId) => _allPlayerStats.ContainsKey(playerId) ? _allPlayerStats[playerId] : new PlayerStats();
+    public bool HasPlayerWon(int playerId)
+    {
+        if (!_allPlayerStats.ContainsKey(playerId)) return false;
+        
+        return _allPlayerStats[playerId].Hits >= RequiredHitsToWin;
+    }
+    public PlayerStats GetStats(int playerId) => 
+        _allPlayerStats.ContainsKey(playerId) ? _allPlayerStats[playerId] : new PlayerStats();
 }
 
-// Prosta klasa pomocnicza do przechowywania liczb
 public class PlayerStats
 {
     public int TotalShots { get; set; } = 0;
