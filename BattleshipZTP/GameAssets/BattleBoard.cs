@@ -19,10 +19,8 @@ namespace BattleshipZTP.GameAssets
         bool IsNeighborHaveShipRef(Field field);
 
         List<(int x, int y)> PlaceCommand(ICommand command);
-        //AttackCommand
-        //PlaceShipCommand
-        //SpellCommand
-        //MoveCommand
+        List<(int x, int y)> PlaceShip(IShip ship ,int x , int y);
+
 
         //(int, int) PlaceCursor(CursorBody cursor);
         HitResult AttackPoint(Point target);
@@ -36,7 +34,7 @@ namespace BattleshipZTP.GameAssets
         public (ConsoleColor foreground, ConsoleColor background) colors = (ConsoleColor.White, ConsoleColor.Black);
 
         public bool ArrowHit {  get; set; }
-        public IShip ShipReference { get; set; } = null;
+        public IShip ?ShipReference { get; set; }
 
         public Field(char character, int x, int y)
         {
@@ -133,8 +131,7 @@ namespace BattleshipZTP.GameAssets
             }
         }
 
-        private List<(string text, int offset)> RotateBody
-            (List<(string text, int offset)> ship)
+        private List<(string text, int offset)> RotateBody(List<(string text, int offset)> ship)
         {
             List<string> lines = ship
                 .Select(x => new string(' ', x.offset) + x.text)
@@ -186,13 +183,11 @@ namespace BattleshipZTP.GameAssets
         public List<(int x, int y)> PlaceCommand(ICommand command)
         {
             List<(string text, int offset)> Body = command.GetBody();
+            //Body - set of characters with the left offset. They are display on board
+            //and can be manipulated by input
             bool canPlace = true;
-            int bodyMostWidth = 1;
+            int bodyMostWidth = Body.Any() ? Body.Max(b => b.text.Length) : 1;
             int bodyMostHeight = Body.Count;
-
-            foreach (var bodySlice in Body)
-                if (bodySlice.text.Length > bodyMostWidth)
-                    bodyMostWidth = bodySlice.text.Length; 
             //
             Func<int, int, List<(int x, int y)>> fieldHistoryOn = (int x, int y) =>
             {
@@ -241,6 +236,7 @@ namespace BattleshipZTP.GameAssets
                     && localY - 1 < this.height - bodyMostWidth)//Rotation
                 {
                     Body = RotateBody(Body);
+                    command.SetBody(Body); 
                     bodyMostHeight = Body.Count;
                     bodyMostWidth = 1;
                     foreach (var bodySlice in Body)
@@ -269,29 +265,37 @@ namespace BattleshipZTP.GameAssets
             return history;
         }
 
-        /*
-        public void PlaceShipAI(IShip ship , int x , int y)
+
+    
+        public List<(int x, int y)> PlaceShip(IShip ship, int x, int y)
         {
             int localX = cornerX + 1 + x;
             int localY = cornerY + 1 + y;
-            List<(string text, int offset)> Ship = ship.GetBody();
-            StringBuilder stringBuilder = new StringBuilder();
-            foreach (var _ship in Ship)
-            {
-                foreach (char character in _ship.text)
-                {
-                    stringBuilder.Append(character);
-                }
-            }
-            string shipValue = stringBuilder.ToString();
-            int shipIterator = 0;
-            //
+            List<(string text, int offset)> shipBody = ship.GetBody();
             List<(int x, int y)> history = new List<(int x, int y)>();
-            for (int i = 0; i < shipValue.Length; i++) {
-                history.Add((localX + i, localY));
+
+            int j = 0;
+            foreach(var sB in shipBody)
+            {
+                int i = 0;
+                foreach (char @char in sB.text)
+                {
+                    history.Add((localX + sB.offset + i , localY + j));
+                    i++;
+                }
+                j++;
             }
+            return history;
+
+
+            /* 
+             for (int i = 0; i < shipValue.Length; i++) 
+             {
+                 history.Add((localX + i, localY)); 
+             }*/
+
             //
-            foreach ((int x, int y) h in history)
+            /*foreach ((int x, int y) h in history)
             {
                 localY = h.y - this.cornerY - 1;
                 localX = h.x - this.cornerX - 1;
@@ -300,9 +304,9 @@ namespace BattleshipZTP.GameAssets
                 _field[localY, localX].ShipReference = ship; // To musi zostać dla AttackPoint!
                 DisplayField(localX, localY);
                 shipIterator++;
-            }
+            }*/
         }
-        */
+
         public HitResult AttackPoint(Point target)
         {
             if (target.X >= 0 && target.X < width && target.Y >= 0 && target.Y < height)
@@ -409,9 +413,9 @@ namespace BattleshipZTP.GameAssets
             }
             throw new Exception("Field cordinates out of range");
         }
-        /*public void PlaceShipAI(IShip ship, int x, int y)
+        public List<(int x, int y)> PlaceShip(IShip ship, int x, int y)
         {
-            _board.PlaceShipAI(ship, x, y); 
-        }*/
+            return _board.PlaceShip(ship, x, y);
+        }
     }
 }

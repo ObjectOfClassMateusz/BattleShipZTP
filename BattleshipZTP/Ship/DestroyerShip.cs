@@ -9,5 +9,6 @@ public class DestroyerShip : BaseShip
         StreamReader file = new StreamReader($"data/ships/classic/destroyer/model.txt");
         string reader = file.ReadLine();
         _body.Add((reader, 0));
+        _name = "Destroyer";
     }
 }

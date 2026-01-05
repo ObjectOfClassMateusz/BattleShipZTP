@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,22 +10,38 @@ namespace BattleshipZTP.GameAssets
 {
     public interface IGameMode
     {
-        BattleBoard createBoard(int x , int y);
-        bool remeberArrowHit();
-        Dictionary<string, int> assignResources();
+        BattleBoard CreateBoard(int x , int y);
+        bool RemeberArrowHit();
+        Dictionary<string, int> AssignResources();
 
         List<IShip> ShipmentDelivery();
+        List<(int x , int y)> GetShipmentPlacementCoords();
     }
 
     public class ClassicGameMode : IGameMode
     {
-        public BattleBoard createBoard(int x , int y) 
+        string _path = "singleplayer_coords.txt";
+        readonly List<(int x, int y)> _coords = new List<(int x, int y)>();
+        public ClassicGameMode()
+        {
+            StreamReader reader = new StreamReader($"data/enemy_ai/{_path}");
+            string line;
+            while (!reader.EndOfStream)
+            {
+                line = reader.ReadLine();
+                string[] bits = line.Split(' ');
+                int x = int.Parse(bits[0]);
+                int y = int.Parse(bits[1]);
+                _coords.Add((x, y));
+            }
+        }
+        public BattleBoard CreateBoard(int x , int y) 
             => new BattleBoard(x,y,12,12);
 
-        public bool remeberArrowHit() 
+        public bool RemeberArrowHit() 
             => true;
 
-        public Dictionary<string, int> assignResources() 
+        public Dictionary<string, int> AssignResources() 
             => new Dictionary<string, int>();
         
         public List<IShip> ShipmentDelivery() => new List<IShip>()
@@ -38,24 +55,40 @@ namespace BattleshipZTP.GameAssets
             ShipFactory.CreateShip(ShipType.Submarine),
             ShipFactory.CreateShip(ShipType.Submarine)
         };
+        public List<(int x, int y)> GetShipmentPlacementCoords()
+        {
+            return _coords;
+        }
     }
 
     public class DuelGameMode : IGameMode
     {
         private ShipType _shipType;
+        readonly (int x, int y) _coords;
+        public List<(int x, int y)> GetShipmentPlacementCoords()
+        {
+            List<(int x,int y)> result = new List<(int x, int y)>() { 
+                _coords
+            };
+            if(result.Count != 1)
+            {
+                throw new Exception("More shipment are not allowed for duels");
+            }
+            return result;
+        }
         public DuelGameMode(ShipType type)
         { 
             _shipType = type;
         }
-        public BattleBoard createBoard(int x , int y)
+        public BattleBoard CreateBoard(int x , int y)
         {
             return new BattleBoard(x,y,12,12);
         }
-        public bool remeberArrowHit()
+        public bool RemeberArrowHit()
         {
             return false;
         }
-        public Dictionary<string, int> assignResources()
+        public Dictionary<string, int> AssignResources()
         {
             return null;
         }
@@ -68,16 +101,34 @@ namespace BattleshipZTP.GameAssets
 
     public class WarhammerGameMode : IGameMode
     {
-        public WarhammerGameMode() { }
-        public BattleBoard createBoard(int x , int y)
+        string _path = "singleWarhammer_coords.txt";
+        readonly List<(int x, int y)> _coords = new List<(int x, int y)>();
+        public List<(int x, int y)> GetShipmentPlacementCoords()
+        {
+            return _coords;
+        }
+        public WarhammerGameMode() 
+        {
+            StreamReader reader = new StreamReader($"data/enemy_ai/{_path}");
+            string line;
+            while (!reader.EndOfStream)
+            {
+                line = reader.ReadLine();
+                string[] bits = line.Split(' ');
+                int x = int.Parse(bits[0]);
+                int y = int.Parse(bits[1]);
+                _coords.Add((x, y));
+            }
+        }
+        public BattleBoard CreateBoard(int x , int y)
         {
             return new BattleBoard(x,y,90,16);
         }
-        public bool remeberArrowHit()
+        public bool RemeberArrowHit()
         {
             return false;
         }
-        public Dictionary<string, int> assignResources()
+        public Dictionary<string, int> AssignResources()
         {
             Dictionary<string,int> resources = new Dictionary<string,int>();
             resources.Add("Energy",200);

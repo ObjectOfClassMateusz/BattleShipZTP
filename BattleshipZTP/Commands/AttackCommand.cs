@@ -20,14 +20,12 @@ public class AttackCommand : ICommand
     public void Execute(List<(int x, int y)> coords)
     {
         HitResult hitResult = Board.AttackPoint(Target);
-        
         var details = new GameActionDetails {
             PlayerID = this.PlayerID,
             ActionType = "Attack",
             Coords = Target,
             Result = hitResult
         };
-        
         ActionManager.Instance.LogAction(details);
     }
 
@@ -38,6 +36,12 @@ public class AttackCommand : ICommand
             ("X",0)
         };
     }
+    public void SetBody(List<(string text, int offset)> body)
+    {
+        //
+    }
+
+
     public bool PlaceCondition(int x, int y)
     {
         //GameMode

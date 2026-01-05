@@ -36,6 +36,18 @@ namespace BattleshipZTP.Utilities
             }
             Env.SetColor();
         }
+        public static void ClearRectangleArea(int x, int y, int w, int h)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append(' ', w);
+            string rect = b.ToString();
+            Env.SetColor(_colors.foreground, _colors.background);
+            for (int i = 0; i < h; i++)
+            {
+                Env.CursorPos(x, y + i);
+                Console.Write(rect);
+            }
+        }
 
         class ASCIIImage
         {
@@ -90,7 +102,6 @@ namespace BattleshipZTP.Utilities
         {
             _images [filename] = new ASCIIImage(filename);
         }
-
         public static void DrawASCII(string key,
         int x,int y,ConsoleColor foreground = ConsoleColor.White,ConsoleColor background = ConsoleColor.Black)
         {

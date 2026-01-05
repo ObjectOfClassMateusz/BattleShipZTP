@@ -3,87 +3,121 @@ using BattleshipZTP.GameAssets;
 using BattleshipZTP.Settings;
 using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
+using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 
 namespace BattleshipZTP.Scenarios
 {
     public class SingleplayerScenario : Scenario
     {
         IGameMode _gameMode;
+        List<(int x, int y)> _enemyShipmentCoords = new List<(int x, int y)>();
         Window _windowShipmentList = new Window();
 
         public SingleplayerScenario(IGameMode gameMode)
         {
             _gameMode = gameMode;
         }
+
+        void WriteNickNameOnConsole(int x , int y , string nickname)
+        {
+            Env.CursorPos(x, y);
+            Console.Write(nickname);
+        }
+
+        void DisplayShipmentTable(int x , int y, List<IShip> ships)
+        {
+            Env.CursorPos(x-1, y);
+            Console.WriteLine("Place the ships");
+            Env.CursorPos(x, y + 1);
+            Console.WriteLine("on the board");
+            IWindowBuilder windowBuilder = new WindowBuilder();
+            windowBuilder
+               .SetPosition(x, y + 2)
+               .ColorHighlights(ConsoleColor.Yellow, ConsoleColor.DarkMagenta)
+               .ColorBorders(ConsoleColor.DarkBlue, ConsoleColor.DarkRed);
+
+            for (int i = 0; i < ships.Count; i++)
+            {
+                windowBuilder.AddComponent(new TextOutput(ships[i].Name()));
+            }
+            _windowShipmentList = windowBuilder.Build();
+        }
+
+        void Initialize(BattleBoardProxy board)
+        {
+            board.FieldsInitialization();
+            board.Display();
+        }
+
+        void EnemyPlacementValidate(List<IShip> ships , List<(int x, int y)> coords)
+        {
+            if(ships.Count != coords.Count)
+            {
+                throw new Exception("Missing coords or shipment to execute the placement");
+            }
+        }
+
         public override void Act()
         {
             base.Act();
 
-            Env.CursorPos(2, 1);
-            Console.WriteLine(UserSettings.Instance.Nickname);//Write NickName
-
-            BattleBoard board = _gameMode.createBoard(2, 2);//Create a Board
+            WriteNickNameOnConsole(52, 7,UserSettings.Instance.Nickname);
+            BattleBoard board = _gameMode.CreateBoard(52, 8);
             BattleBoardProxy proxy = new BattleBoardProxy(board);
-            proxy.FieldsInitialization();
-            proxy.Display();//Displays an Board
+            Initialize(proxy);
 
-            Env.CursorPos(20, 1);
-            Console.WriteLine("ai_enemy1");//enemy name
-            BattleBoard enemy_board = _gameMode.createBoard(20, 2); 
-            BattleBoardProxy enemy_proxy = new BattleBoardProxy(enemy_board);
-            enemy_proxy.FieldsInitialization();
-            enemy_proxy.Display();
-
+            WriteNickNameOnConsole(88, 7, "ai_enemy1");
+            BattleBoard enemyBoard = _gameMode.CreateBoard(88, 8); 
+            BattleBoardProxy enemyProxy = new BattleBoardProxy(enemyBoard);
+            Initialize(enemyProxy);
+            
             List<IShip> ships = _gameMode.ShipmentDelivery();
-
-            (int x, int y) tablePos = (37, 2);
-            Env.CursorPos(tablePos.x, tablePos.y);
-            Console.WriteLine("Place the ships");
-            Env.CursorPos(tablePos.x, tablePos.y+1);
-            Console.WriteLine("on the board");
-            IWindowBuilder windowBuilder = new WindowBuilder();
-             windowBuilder
-                .SetPosition(tablePos.x, tablePos.y + 2)
-                .ColorHighlights(ConsoleColor.Yellow, ConsoleColor.DarkMagenta)
-                .ColorBorders(ConsoleColor.DarkBlue, ConsoleColor.DarkRed);
-
-            for(int i =0; i < ships.Count; i++)
-            {
-                windowBuilder.AddComponent(new TextOutput(ships[i].ToString()));
-            }
-            _windowShipmentList = windowBuilder.Build();
+            (int x, int y) tablePos = (71, 7);
+            DisplayShipmentTable(tablePos.x, tablePos.y, ships);
             UIController uI = new UIController();
             uI.AddWindow(_windowShipmentList);
             uI.DrawAndEndSequence();
 
-            foreach (IShip sh in ships) 
+            Drawing.SetColors(ConsoleColor.Black, ConsoleColor.Black);
+            foreach (IShip ship in ships) 
             {
                 uI.DrawAndEndSequence();
-                PlaceCommand command = new PlaceCommand(board, sh , UserSettings.Instance.GetHashCode());
+                PlaceCommand command = new PlaceCommand(board, ship , UserSettings.Instance.GetHashCode());
                 var coords = proxy.PlaceCommand(command);
                 command.Execute(coords);
                 _windowShipmentList.Remove(0);
-                Env.ClearRectangleArea(tablePos.x, tablePos.y + 2, 29, 10);
+                Drawing.ClearRectangleArea(tablePos.x, tablePos.y + 2, 12, 10);
             }
-            Env.ClearRectangleArea(tablePos.x, tablePos.y , 30, 12);
+            Drawing.ClearRectangleArea(tablePos.x-1, tablePos.y , 15, 12);
+            Env.SetColor();
+
+            //
+            ships = _gameMode.ShipmentDelivery();
+            var enemyCoords = _gameMode.GetShipmentPlacementCoords();
+            EnemyPlacementValidate(ships, enemyCoords);
+            for (int i = 0; i < enemyCoords.Count; i++) 
+            {
+                var ship = ships[i];
+                var cord = enemyCoords[i];
+                PlaceCommand command = new PlaceCommand(enemyBoard, ship, "ai_enemy1".GetHashCode());
+                var resultCoords = enemyProxy.PlaceShip(ship,cord.x,cord.y);
+                command.Execute(resultCoords);
+            }
 
 
+            enemyProxy.Display();
+            Console.ReadKey(true);
 
+            // 11
+            // 11
 
-            
-
-
-
-            // IShip refShip = ships[0];
-
-            //Console.WriteLine(refShip.GetBody()[0].text);
-            //Console.WriteLine(refShip.GetSize());
-            //Console.WriteLine(refShip.GetColors().foreground);
-            //Console.WriteLine(refShip.IsSunk());
+            // PlaceCommand enemyCommand
 
 
             //AI places the ships
-            //PlaceCommand
+            // 1.) PlaceCommand.
+            // 2.) ExecuteNow()
 
 
             // enemy_proxy.PlaceShipAI(
