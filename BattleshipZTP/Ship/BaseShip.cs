@@ -57,19 +57,15 @@ public abstract class BaseShip : IShip
     {
         if (!placement.Contains(coords))
         {
-            return HitResult.Miss; // jesli statek nie zajmuje tych koordynatow, to pudlo
+            return HitResult.Miss;
         }
         
-        if (hits.Contains(coords))
-        {
-            return HitResult.AlreadyHit; // jesli statek juz byl trafiony w tych koordynatach
-        }
         hits.Add(coords); 
         if (IsSunk())
         {
-            return HitResult.HitAndSunk; // jesli statek jest zatopiony
+            return HitResult.HitAndSunk;
         }
-        return HitResult.Hit; // jesli statek jest trafiony ale nie zatopiony
+        return HitResult.Hit;
     }
 
     public bool IsSunk()

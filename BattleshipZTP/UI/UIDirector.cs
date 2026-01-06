@@ -15,7 +15,6 @@ namespace BattleshipZTP.UI
         }
         public void StandardWindowInit(int whereX , int whereY,params string[] options)
         {
-            //build a standard window with automatic size and buttons with no margins
             _builder.SetPosition(whereX, whereY)
             .SetSize()
             .ColorBorders(ConsoleColor.Black, ConsoleColor.DarkGray)

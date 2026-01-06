@@ -1,4 +1,5 @@
-﻿namespace BattleshipZTP.Observers;
+﻿
+namespace BattleshipZTP.Observers;
 
 public class StatisticTracker : IActionManager
 {
@@ -6,13 +7,8 @@ public class StatisticTracker : IActionManager
     
     public int RequiredHitsToWin { get; set; }
     
-    public int TotalShots { get; private set; } = 0;
-    public int Hits { get; private set; } = 0;
-    public int Misses { get; private set; } = 0;
-
     public void Update(GameActionDetails details)
     {
-        // Sprawdzamy, czy w słowniku mamy już statystyki dla tego gracza
         if (!_allPlayerStats.ContainsKey(details.PlayerID))
         {
             _allPlayerStats[details.PlayerID] = new PlayerStats();
@@ -30,7 +26,7 @@ public class StatisticTracker : IActionManager
             }
             else if (details.Result == HitResult.Miss)
             {
-                Misses++;
+                stats.Misses++;
             }
         }
         else if (details.ActionType == "Move")
@@ -38,8 +34,7 @@ public class StatisticTracker : IActionManager
             stats.TotalMoves++;
         }
         
-        // Diagnostyka: wyświetlanie statystyk w konsoli debugowania
-        System.Diagnostics.Debug.WriteLine($"[STATS] Gracz {details.PlayerID} | Strzały: {stats.TotalShots} | Trafienia: {stats.Hits} | Celność: {stats.Accuracy:F1}%");
+        System.Diagnostics.Debug.WriteLine($"[STATS] Gracz {details.PlayerID} | Strzały: {stats.TotalShots} | Trafienia: {stats.Hits} | Pudła: {stats.Misses} | Celność: {stats.Accuracy:F1}%");
     }
 
     public bool HasPlayerWon(int playerId)
@@ -50,13 +45,4 @@ public class StatisticTracker : IActionManager
     }
     public PlayerStats GetStats(int playerId) => 
         _allPlayerStats.ContainsKey(playerId) ? _allPlayerStats[playerId] : new PlayerStats();
-}
-
-public class PlayerStats
-{
-    public int TotalShots { get; set; } = 0;
-    public int Hits { get; set; } = 0;
-    public int Misses { get; set; } = 0;
-    public int TotalMoves { get; set; } = 0;
-    public double Accuracy => TotalShots > 0 ? (double)Hits / TotalShots * 100 : 0;
 }

@@ -25,7 +25,9 @@ namespace BattleshipZTP
 
             AudioManager.Instance.Add("2-02 - Dark Calculation");
             AudioManager.Instance.Play("2-02 - Dark Calculation");
-
+            
+            AudioManager.Instance.Add("victory_sound");
+            
             IScenario main = new MainMenuScenario();
             IScenario options = new OptionsScenario();
             IScenario exit = new ExitScenario();

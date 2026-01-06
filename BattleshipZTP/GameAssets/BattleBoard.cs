@@ -178,7 +178,6 @@ namespace BattleshipZTP.GameAssets
         {
             if (x < 0 || x >= width || y < 0 || y >= height)
             {
-                // Zamiast crashu, zwracamy null lub rzucamy czytelniejszy błąd
                 return null; 
             }
             return _field[y, x];
@@ -271,7 +270,6 @@ namespace BattleshipZTP.GameAssets
                 else
                     continue;
 
-                //Update fields
                 List<(int x, int y)> new_history = fieldHistoryOn(localX, localY);
                 IEnumerable<(int x, int y)> pointsToRestore = history.Except(new_history);
                 foreach (var point in pointsToRestore)
@@ -292,9 +290,8 @@ namespace BattleshipZTP.GameAssets
 
             while (true)
             {
-                // Rysujemy kursor
                 Env.CursorPos(cornerX + 1 + localX, cornerY + 1 + localY);
-                Env.SetColor(ConsoleColor.Yellow, ConsoleColor.Red);
+                Env.SetColor(ConsoleColor.Yellow);
                 Console.Write(cursorChar);
 
                 ConsoleKeyInfo key = Console.ReadKey(true);
@@ -302,7 +299,17 @@ namespace BattleshipZTP.GameAssets
                 Env.CursorPos(cornerX + 1 + localX, cornerY + 1 + localY);
                 Console.Write(_field[localY, localX]);
 
-                if (key.Key == ConsoleKey.Enter) return new Point(localX, localY);
+                
+                if (key.Key == ConsoleKey.Enter)
+                {
+                    var selectedField = _field[localY, localX];
+                    if (selectedField.Character != 'X' && selectedField.Character != '•')
+                    {
+                        return new Point(localX, localY);
+                    }
+                    Console.Beep(250, 120);
+                    continue;
+                }
 
                 if (key.Key == ConsoleKey.UpArrow && localY > 0) localY--;
                 else if (key.Key == ConsoleKey.DownArrow && localY < height - 1) localY++;
@@ -353,6 +360,7 @@ namespace BattleshipZTP.GameAssets
             }*/
         }
 
+        // csharp
         public HitResult AttackPoint(Point target)
         {
             if (target.X >= 0 && target.X < width && target.Y >= 0 && target.Y < height)
@@ -365,7 +373,6 @@ namespace BattleshipZTP.GameAssets
 
                     HitResult result = field.ShipReference.TakeHit(target);
                     field.Character = 'X';
-
                     if (result == HitResult.HitAndSunk)
                     {
                         for (int i = 0; i < height; i++)
@@ -375,7 +382,7 @@ namespace BattleshipZTP.GameAssets
                                 if (_field[i, j].ShipReference == field.ShipReference)
                                 {
                                     _field[i, j].colors = (ConsoleColor.DarkGray, ConsoleColor.Black);
-                                    _field[i, j].Character = 'X'; 
+                                    _field[i, j].Character = 'X';
                                 }
                             }
                         }
@@ -450,18 +457,19 @@ namespace BattleshipZTP.GameAssets
             public void Display()
             {
                 Drawing.SetColors(ConsoleColor.Black, ConsoleColor.DarkGray);
-                Drawing.DrawRight('#', _board.width + 2,
+                Drawing.DrawRight('═', _board.width + 2,
                     _topLeftX,
                     _topLeftY);
-                Drawing.DrawDown('#', _board.height,
+                Drawing.DrawDown('║', _board.height,
                     _topLeftX,
                     _topLeftY + 1);
-                Drawing.DrawDown('#', _board.height,
+                Drawing.DrawDown('║', _board.height,
                     _topLeftX + _board.width + 1,
                     _topLeftY + 1);
-                Drawing.DrawRight('#', _board.width + 2,
+                Drawing.DrawRight('═', _board.width + 2,
                     _topLeftX,
                     _topLeftY + 1 + _board.height);
+
                 Env.CursorPos(_topLeftX + 1, _topLeftY + 1);
                 for (int i = 0; i < _board.height; i++)
                 {

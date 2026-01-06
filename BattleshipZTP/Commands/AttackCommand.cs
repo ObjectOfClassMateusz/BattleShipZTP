@@ -19,10 +19,12 @@ public class AttackCommand : ICommand
     
     public void Execute(List<(int x, int y)> coords)
     {
-        Console.Beep(440, 100); 
+        var field = Board.GetField(Target.X, Target.Y);
+        if (field == null) return;
+        if (field.Character == 'X' || field.Character == '•') return;
 
-        HitResult hitResult = Board.AttackPoint(Target); //
-    
+        HitResult hitResult = Board.AttackPoint(Target);
+
         var details = new GameActionDetails {
             PlayerID = this.PlayerID,
             ActionType = "Attack",
@@ -32,6 +34,16 @@ public class AttackCommand : ICommand
         ActionManager.Instance.LogAction(details);
     }
 
+    public void PlayHitSound()
+    {
+        AudioManager.Instance.Play("hit");
+    }
+
+    public void PlayMissSound()
+    {
+        AudioManager.Instance.Play("miss");
+    }
+    
     public List<(string text, int offset)> GetBody()
     {
         return new List<(string text, int offset)>()
