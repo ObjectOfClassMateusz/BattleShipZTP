@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BattleshipZTP.Networking;
 
 namespace BattleshipZTP.Scenarios
 {
@@ -44,10 +45,30 @@ namespace BattleshipZTP.Scenarios
                     break;
                 case "Classic":
                     factory = new ClassicModeFactory();
-                    scenario = new SingleplayerScenario(factory.GetGameMode());
+                    var gameMode = factory.GetGameMode();
+                    scenario = new SingleplayerScenario(gameMode, difficulty: ChooseDifficulty());
                     scenario.Act();
                     break;
             }
+        }
+        private AIDifficulty ChooseDifficulty()
+        {
+            IWindowBuilder builder = new WindowBuilder();
+            UIDirector director = new UIDirector(builder);
+            director.StandardWindowInit(90, 18, "Easy", "Medium", "Hard");
+            Window window = builder.Build();
+            UIController controller = new UIController();
+            controller.AddWindow(window);
+            Env.CursorPos(72, 17);
+            Console.WriteLine("Wybierz poziom trudności AI:");
+            List<string> options = controller.DrawAndStart();
+            return options.FirstOrDefault() switch
+            {
+                "Easy" => AIDifficulty.Easy,
+                "Medium" => AIDifficulty.Medium,
+                "Hard" => AIDifficulty.Hard,
+                _ => AIDifficulty.Easy
+            };
         }
     }
 }

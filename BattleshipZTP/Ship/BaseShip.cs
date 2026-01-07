@@ -8,6 +8,7 @@ public abstract class BaseShip : IShip
     protected readonly List<(string text, int offset)> _body;
     protected (ConsoleColor foreground, ConsoleColor background) _colors;
     protected string _name;
+    public int Size => size;
 
     public BaseShip(int size, List<Point> initialPlacement)
     {
@@ -70,6 +71,7 @@ public abstract class BaseShip : IShip
 
     public bool IsSunk()
     {
-        return hits.Distinct().Count() == size; 
+        return hits.Distinct().Count() == size;
+        
     }
 }

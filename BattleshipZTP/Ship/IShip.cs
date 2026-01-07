@@ -7,6 +7,8 @@ public interface IShip
     void SetBody(List<(string text, int offset)> body);
     (ConsoleColor foreground, ConsoleColor background) GetColors();
     void Locate(List<(int x, int y)> coords);
+    int Size { get; }
+
 
     int GetSize();
     HitResult TakeHit(Point coords);
