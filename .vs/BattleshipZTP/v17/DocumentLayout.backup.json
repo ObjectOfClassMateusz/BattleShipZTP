@@ -50,8 +50,7 @@
               "RelativeToolTip": "BattleshipZTP\\Utilities\\Drawing.cs",
               "ViewState": "AgIAAD4AAAAAAAAAAAAAAE4AAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-05T00:59:47.949Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-05T00:59:47.949Z"
             },
             {
               "$type": "Document",
@@ -63,8 +62,7 @@
               "RelativeToolTip": "BattleshipZTP\\GameAssets\\GameMode.cs",
               "ViewState": "AgIAAA0AAAAAAAAAAAAjwB8AAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-05T00:57:14.806Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-05T00:57:14.806Z"
             },
             {
               "$type": "Document",
@@ -76,8 +74,7 @@
               "RelativeToolTip": "BattleshipZTP\\Utilities\\Env.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAjwCgAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-04T22:18:12.358Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-04T22:18:12.358Z"
             },
             {
               "$type": "Document",
@@ -89,8 +86,7 @@
               "RelativeToolTip": "BattleshipZTP\\Ship\\BaseShip.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAACcAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-04T02:02:11.19Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-04T02:02:11.19Z"
             },
             {
               "$type": "Document",
@@ -102,8 +98,7 @@
               "RelativeToolTip": "BattleshipZTP\\Commands\\PlaceCommand.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAABgAAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-04T21:24:40.453Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-04T21:24:40.453Z"
             },
             {
               "$type": "Document",
@@ -124,9 +119,9 @@
               "Title": "SingleplayerScenario.cs",
               "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
               "RelativeDocumentMoniker": "BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
-              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
-              "RelativeToolTip": "BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
-              "ViewState": "AgIAAEsAAAAAAAAAAAAjwF8AAAAxAAAAAAAAAA==",
+              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\SingleplayerScenario.cs*",
+              "RelativeToolTip": "BattleshipZTP\\Scenarios\\SingleplayerScenario.cs*",
+              "ViewState": "AgIAAMYAAAAAAAAAAAAAANEAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-02T18:34:05.422Z",
               "EditorCaption": ""
