@@ -4,7 +4,7 @@ public class ShipFactory
 {
     static public IShip CreateShip(ShipType shipType)
     {
-        var emptyPlacement = new List<Point>(); // Tymczasowe puste rozmieszczenie statku
+        var emptyPlacement = new List<Point>();
         
         return shipType switch
         {
@@ -12,7 +12,7 @@ public class ShipFactory
             ShipType.Battleship => new BattleshipShip(emptyPlacement),
             ShipType.Destroyer => new DestroyerShip(emptyPlacement),
             ShipType.Submarine => new SubmarineShip(emptyPlacement),
-            _=> throw new ArgumentException("Invalid ship type"), // _=> dla wszystkich innych przypadków 
+            _=> throw new ArgumentException("Invalid ship type")
         };
     }
 }

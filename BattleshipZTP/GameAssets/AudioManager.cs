@@ -30,6 +30,14 @@ namespace BattleshipZTP.GameAssets
                 output.Play();
             }
         }
+        
+        public void Stop(string fileName)
+        {
+            if (OperatingSystem.IsWindows())
+            {
+                // trzeba dodać obsługę zatrzymania dźwięku 
+            }
+        }
         public void ChangeVolume(string fileName , int v) 
         {
             float volume = v / 100.0f;

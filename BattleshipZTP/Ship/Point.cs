@@ -2,8 +2,8 @@
 
 public struct Point
 {
-    public int X { get; set; } // Kolumna (np. 1-10 lub A-J)
-    public int Y { get; set; } // Wiersz (np. 1-10)
+    public int X { get; set; }
+    public int Y { get; set; }
 
     public Point(int x, int y)
     {

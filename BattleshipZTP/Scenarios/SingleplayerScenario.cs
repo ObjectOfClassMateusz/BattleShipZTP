@@ -60,34 +60,6 @@ namespace BattleshipZTP.Scenarios
             }
         }
         
-        private void ShowVictoryScreen(string winnerName, StatisticTracker stats)
-        {
-            Console.Clear();
-    
-            var winnerStats = stats.GetStats(winnerName.GetHashCode());
-            
-            IWindowBuilder winBuilder = new WindowBuilder();
-            winBuilder.SetPosition(Console.WindowWidth / 2 - 15, 5)
-                .SetSize(30)
-                .ColorBorders(ConsoleColor.Cyan, ConsoleColor.Black)
-                .ColorHighlights(ConsoleColor.White, ConsoleColor.Blue)
-                .AddComponent(new TextOutput("      BITWA ZAKONCZONA      "))
-                .AddComponent(new TextOutput("----------------------------"))
-                .AddComponent(new TextOutput($"  ZWYCIEZCA: {winnerName.ToUpper()}  "))
-                .AddComponent(new TextOutput("----------------------------"))
-                .AddComponent(new TextOutput($" Celnosc: {winnerStats.Accuracy:F1}%"))
-                .AddComponent(new TextOutput($" Trafienia: {winnerStats.Hits}"))
-                .AddComponent(new TextOutput($" Pudla: {winnerStats.Misses}"))
-                .AddComponent(new TextOutput("----------------------------"))
-                .AddComponent(new Button("POWROT DO MENU"));
-
-            Window winWindow = winBuilder.Build();
-            UIController winUI = new UIController();
-            winUI.AddWindow(winWindow);
-    
-            winUI.DrawAndStart(); 
-        }
-        
         public override void Act()
         {
             base.Act();
@@ -103,6 +75,7 @@ namespace BattleshipZTP.Scenarios
             Initialize(enemyProxy);
             
             List<IShip> ships = _gameMode.ShipmentDelivery();
+            BeautifyHelper.ApplyFancyBodies(ships);
             (int x, int y) tablePos = (71, 7);
             DisplayShipmentTable(tablePos.x, tablePos.y, ships);
             UIController uI = new UIController();
@@ -123,6 +96,8 @@ namespace BattleshipZTP.Scenarios
             Env.SetColor();
 
             ships = _gameMode.ShipmentDelivery();
+            BeautifyHelper.ApplyFancyBodies(ships);
+            
             var enemyCoords = _gameMode.GetShipmentPlacementCoords();
             EnemyPlacementValidate(ships, enemyCoords);
             for (int i = 0; i < enemyCoords.Count; i++) 
@@ -199,35 +174,70 @@ namespace BattleshipZTP.Scenarios
 
             SimpleAI ai = new SimpleAI();
 
-            stats.RequiredHitsToWin = ships.Sum(s => s.GetBody().Sum(b => b.text.Length));
+            int totalShipsToSink = 8; 
+            int playerSunkCounter = 0;
+            int aiSunkCounter = 0;       
             
             while (true)
             {
-                // 1. Tura Gracza
+                // --- TURA GRACZA ---
                 Point playerTarget = enemyProxy.ChooseAttackPoint();
                 AttackCommand playerAttack = new AttackCommand(enemyProxy, playerTarget, UserSettings.Instance.GetHashCode());
+    
                 playerAttack.Execute(new List<(int x, int y)>());
-                enemyProxy.Display();
-                
-                if (stats.HasPlayerWon(UserSettings.Instance.GetHashCode())) //
+                var fieldAtTarget = enemyProxy.GetField(playerTarget.X, playerTarget.Y);
+                HitResult playerResult = HitResult.Miss;
+
+                if (fieldAtTarget.ShipReference != null) 
                 {
-                    ShowVictoryScreen(UserSettings.Instance.Nickname, stats);
+                    playerResult = fieldAtTarget.ShipReference.IsSunk() ? HitResult.HitAndSunk : HitResult.Hit;
+                    if (fieldAtTarget.ShipReference.IsSunk()) 
+                    {
+                        playerSunkCounter++;
+                    }
+                }
+                
+                enemyProxy.Display();
+
+                if (playerSunkCounter >= totalShipsToSink) 
+                {
+                    new VictoryScenario(UserSettings.Instance.Nickname, UserSettings.Instance.GetHashCode(), stats).Act();
                     break;
                 }
 
-                // 2. Tura AI
+                // --- TURA AI ---
                 Point aiTarget = ai.GetNextMove(board.width, board.height);
                 AttackCommand aiAttack = new AttackCommand(proxy, aiTarget, "ai_enemy1".GetHashCode());
                 aiAttack.Execute(new List<(int x, int y)>());
-                
-                HitResult aiResult = proxy.GetField(aiTarget.X, aiTarget.Y).Character == 'X' ? HitResult.Hit : HitResult.Miss;
-                ai.ReportResult(aiTarget, aiResult);
 
-                proxy.Display();
-                
-                if (stats.HasPlayerWon("ai_enemy1".GetHashCode())) //
+                var aiField = proxy.GetField(aiTarget.X, aiTarget.Y);
+                HitResult aiResult = HitResult.Miss;
+
+                if (aiField != null && aiField.ShipReference != null)
                 {
-                    ShowVictoryScreen("ai_enemy1", stats);
+                    aiResult = aiField.ShipReference.IsSunk() ? HitResult.HitAndSunk : HitResult.Hit;
+
+                    if (aiResult == HitResult.Hit)
+                    {
+                        ai.AddTargetNeighbors(aiTarget, board.width, board.height);
+                    }
+                    else if (aiResult == HitResult.HitAndSunk)
+                    {
+                        ai.ClearTargets();
+                        aiSunkCounter++;
+                    }
+                }
+                else
+                {
+                    aiResult = HitResult.Miss;
+                }
+                
+                
+                proxy.Display();
+
+                if (aiSunkCounter >= totalShipsToSink) 
+                {
+                    new VictoryScenario("ai_enemy1", "ai_enemy1".GetHashCode(), stats).Act();
                     break;
                 }
             }

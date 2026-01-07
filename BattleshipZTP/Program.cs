@@ -13,6 +13,9 @@ namespace BattleshipZTP
     {
         public static void Main(string[] args)
         {
+            Console.SetWindowSize(130, 45); 
+            Console.SetBufferSize(130, 100); 
+            Console.Clear();
             Console.OutputEncoding = Encoding.Unicode;
 
             Drawing.AddASCII("mainMenuShip");
@@ -22,7 +25,9 @@ namespace BattleshipZTP
 
             AudioManager.Instance.Add("2-02 - Dark Calculation");
             AudioManager.Instance.Play("2-02 - Dark Calculation");
-
+            
+            AudioManager.Instance.Add("victory_sound");
+            
             IScenario main = new MainMenuScenario();
             IScenario options = new OptionsScenario();
             IScenario exit = new ExitScenario();

@@ -8,7 +8,7 @@ public interface IShip
     (ConsoleColor foreground, ConsoleColor background) GetColors();
     void Locate(List<(int x, int y)> coords);
 
-    int GetSize(); // Poprawiono nazwę
+    int GetSize();
     HitResult TakeHit(Point coords);
-    bool IsSunk(); // Poprawiono nazwę
+    bool IsSunk();
 }

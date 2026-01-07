@@ -1,39 +1,99 @@
-﻿namespace BattleshipZTP.Networking;
+﻿// csharp
+namespace BattleshipZTP.Networking;
 
 public class SimpleAI
 {
     private Random _rnd = new Random();
-    private Point? _lastHit = null;
-    private List<Point> _targetsToCheck = new List<Point>();
+    private List<Point> _currentHits = new List<Point>();
+    private Queue<Point> _targetsToHit = new Queue<Point>();
+    private HashSet<Point> _alreadyShot = new HashSet<Point>();
 
-    public Point GetNextMove(int boardWidth, int boardHeight)
+    private enum Orientation { Unknown, Horizontal, Vertical }
+    private Orientation _orientation = Orientation.Unknown;
+
+    public Point GetNextMove(int width, int height)
     {
-        // Jeśli mamy pola do sprawdzenia wokół trafienia (Hunt Mode)
-        if (_targetsToCheck.Count > 0)
+        while (_targetsToHit.Count > 0)
         {
-            Point next = _targetsToCheck[0];
-            _targetsToCheck.RemoveAt(0);
-            return next;
+            Point target = _targetsToHit.Dequeue();
+            if (!ContainsPoint(_alreadyShot, target))
+            {
+                _alreadyShot.Add(target);
+                return target;
+            }
         }
 
-        // Losowy strzał (Seek Mode)
-        return new Point(_rnd.Next(0, boardWidth), _rnd.Next(0, boardHeight));
+        Point randomPoint;
+        do
+        {
+            randomPoint = new Point(_rnd.Next(width), _rnd.Next(height));
+        } while (ContainsPoint(_alreadyShot, randomPoint));
+
+        _alreadyShot.Add(randomPoint);
+        return randomPoint;
     }
 
-    public void ReportResult(Point p, HitResult result)
+    public void AddTargetNeighbors(Point hitPoint, int width, int height)
     {
-        if (result == HitResult.Hit)
+        if (!ContainsPoint(_currentHits, hitPoint))
+            _currentHits.Add(hitPoint);
+
+        if (_currentHits.Count >= 2 && _orientation == Orientation.Unknown)
         {
-            _lastHit = p;
-            // Dodaj sąsiednie pola do sprawdzenia
-            _targetsToCheck.Add(new Point(p.X + 1, p.Y));
-            _targetsToCheck.Add(new Point(p.X - 1, p.Y));
-            _targetsToCheck.Add(new Point(p.X, p.Y + 1));
-            _targetsToCheck.Add(new Point(p.X, p.Y - 1));
+            var a = _currentHits[0];
+            var b = _currentHits[1];
+            if (a.X == b.X) _orientation = Orientation.Vertical;
+            else if (a.Y == b.Y) _orientation = Orientation.Horizontal;
         }
-        else if (result == HitResult.HitAndSunk)
+
+        if (_orientation == Orientation.Unknown)
         {
-            _targetsToCheck.Clear(); // Statek zatopiony, wracamy do losowania
+            EnqueueIfValid(new Point(hitPoint.X, hitPoint.Y + 1), width, height);
+            EnqueueIfValid(new Point(hitPoint.X, hitPoint.Y - 1), width, height);
+            EnqueueIfValid(new Point(hitPoint.X + 1, hitPoint.Y), width, height);
+            EnqueueIfValid(new Point(hitPoint.X - 1, hitPoint.Y), width, height);
         }
+        else
+        {
+            if (_orientation == Orientation.Horizontal)
+            {
+                int minX = _currentHits.Min(p => p.X);
+                int maxX = _currentHits.Max(p => p.X);
+                int y = _currentHits[0].Y;
+
+                EnqueueIfValid(new Point(maxX + 1, y), width, height);
+                EnqueueIfValid(new Point(minX - 1, y), width, height);
+            }
+            else
+            {
+                int minY = _currentHits.Min(p => p.Y);
+                int maxY = _currentHits.Max(p => p.Y);
+                int x = _currentHits[0].X;
+
+                EnqueueIfValid(new Point(x, maxY + 1), width, height);
+                EnqueueIfValid(new Point(x, minY - 1), width, height);
+            }
+        }
+    }
+
+    public void ClearTargets()
+    {
+        _targetsToHit.Clear();
+        _currentHits.Clear();
+        _orientation = Orientation.Unknown;
+    }
+
+    private void EnqueueIfValid(Point p, int width, int height)
+    {
+        if (p.X < 0 || p.X >= width || p.Y < 0 || p.Y >= height) return;
+        if (ContainsPoint(_alreadyShot, p)) return;
+        // unikamy duplikatów w kolejce
+        if (_targetsToHit.Any(t => t.X == p.X && t.Y == p.Y)) return;
+        _targetsToHit.Enqueue(p);
+    }
+
+    private bool ContainsPoint(IEnumerable<Point> collection, Point p)
+    {
+        return collection.Any(q => q.X == p.X && q.Y == p.Y);
     }
 }
