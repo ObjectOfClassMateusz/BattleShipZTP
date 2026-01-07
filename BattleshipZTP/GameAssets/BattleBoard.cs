@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BattleshipZTP.Settings;
 using static BattleshipZTP.GameAssets.BattleBoard;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -17,6 +18,7 @@ namespace BattleshipZTP.GameAssets
         void DisplayField(int x, int y);
         Field GetField(int x, int y);
         bool IsNeighborHaveShipRef(Field field);
+        
 
         List<(int x, int y)> PlaceCommand(ICommand command);
         List<(int x, int y)> PlaceShip(IShip ship, int x, int y);
@@ -25,6 +27,7 @@ namespace BattleshipZTP.GameAssets
 
         //(int, int) PlaceCursor(CursorBody cursor);
         HitResult AttackPoint(Point target);
+        void PlaceMarker(Point actionCoords, HitResult actionResult);
     }
 
     public class Field
@@ -103,10 +106,14 @@ namespace BattleshipZTP.GameAssets
             {
                 for (int j = 0; j < width; j++)
                 {
-                    copy[i, j] = _field[i, j];
+                    Field original = _field[i, j];
+                    copy[i, j] = new Field(original.Character, j, i)
+                    {
+                        colors = original.colors,
+                        ShipReference = original.ShipReference
+                    };
                 }
             }
-
             return new BattleBoardMemento(copy);
         }
 
@@ -140,7 +147,7 @@ namespace BattleshipZTP.GameAssets
             }
         }
 
-        private List<(string text, int offset)> RotateBody(List<(string text, int offset)> ship)
+        public static List<(string text, int offset)> RotateBody(List<(string text, int offset)> ship)
         {
             List<string> lines = ship
                 .Select(x => new string(' ', x.offset) + x.text)
@@ -194,6 +201,31 @@ namespace BattleshipZTP.GameAssets
             return false;
         }
 
+        public void PlaceMarker(Point p, HitResult result)
+        {
+            if (p.X < 0 || p.X >= width || p.Y < 0 || p.Y >= height) return;
+    
+            Field field = _field[p.Y, p.X];
+    
+            if (result == HitResult.Hit || result == HitResult.HitAndSunk)
+            {
+                field.Character = 'X';
+                field.colors = (ConsoleColor.Red, ConsoleColor.Black);
+        
+                if (result == HitResult.HitAndSunk && field.ShipReference != null)
+                {
+                    for (int i = 0; i < height; i++)
+                    for (int j = 0; j < width; j++)
+                        if (_field[i, j].ShipReference == field.ShipReference)
+                            _field[i, j].colors = (ConsoleColor.DarkGray, ConsoleColor.Black);
+                }
+            }
+            else
+            {
+                field.Character = '•';
+                field.colors = (ConsoleColor.Blue, ConsoleColor.Black);
+            }
+        }
 
         public List<(int x, int y)> PlaceCommand(ICommand command)
         {
@@ -244,8 +276,21 @@ namespace BattleshipZTP.GameAssets
                 if (klawisz.Key == ConsoleKey.Enter) //Placement
                 {
                     if (canPlace)
+                    {
+                        if (UserSettings.Instance.SfxEnabled == true)
+                        {
+                            AudioManager.Instance.Play("stawianie");
+                        }
                         break;
-                    continue;
+                    }
+                    else
+                    {
+                        if (UserSettings.Instance.SfxEnabled == true)
+                        {
+                            AudioManager.Instance.Play("wrong");
+                        }
+                        continue;
+                    }
                 }
                 else if (klawisz.Key == ConsoleKey.Tab
                          && localX - 1 < this.width - bodyMostHeight
@@ -307,7 +352,7 @@ namespace BattleshipZTP.GameAssets
                     {
                         return new Point(localX, localY);
                     }
-                    Console.Beep(250, 120);
+                    AudioManager.Instance.Play("wrong");
                     continue;
                 }
 
@@ -403,9 +448,25 @@ namespace BattleshipZTP.GameAssets
 
             return HitResult.Miss;
         }
+        
+        public void Restore(BattleBoardMemento memento)
+        {
+            if (memento == null) return;
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    _field[i, j].Character = memento.State[i, j].Character;
+                    _field[i, j].colors = memento.State[i, j].colors;
+                    _field[i, j].ShipReference = memento.State[i, j].ShipReference;
+                }
+            }
+        }
 
         public class BattleBoardProxy : IBattleBoard
         {
+            public int Width => _board.width;
+            public int Height => _board.height;
             BattleBoard _board;
             BattleBoardMemento _memento;
             int _topLeftX;
@@ -454,6 +515,8 @@ namespace BattleshipZTP.GameAssets
                 return _board.AttackPoint(target);
             }
 
+            public BattleBoard GetBoard() => _board;
+            
             public void Display()
             {
                 Drawing.SetColors(ConsoleColor.Black, ConsoleColor.DarkGray);
@@ -503,6 +566,13 @@ namespace BattleshipZTP.GameAssets
             {
                 return _board.PlaceShip(ship, x, y);
             }
+
+            public void PlaceMarker(Point actionCoords, HitResult actionResult)
+            {
+                _board.PlaceMarker(actionCoords, actionResult);
+            }
         }
+        
     }
+    
 }

@@ -1,5 +1,6 @@
 ﻿using BattleshipZTP.GameAssets;
 using BattleshipZTP.Observers;
+using BattleshipZTP.Settings;
 
 namespace BattleshipZTP.Commands;
 
@@ -21,9 +22,26 @@ public class AttackCommand : ICommand
     {
         var field = Board.GetField(Target.X, Target.Y);
         if (field == null) return;
-        if (field.Character == 'X' || field.Character == '•') return;
-
+        if (field.Character == 'X' || field.Character == '•' && UserSettings.Instance.SfxEnabled == true) 
+        {
+            AudioManager.Instance.Play("wrong");
+            return;
+        }
         HitResult hitResult = Board.AttackPoint(Target);
+        
+        if (hitResult == HitResult.Hit && UserSettings.Instance.SfxEnabled == true)
+        {
+            AudioManager.Instance.Play("trafienie");
+        }
+        else if (hitResult == HitResult.HitAndSunk && UserSettings.Instance.SfxEnabled == true )
+        {
+            AudioManager.Instance.Play("trafiony zatopiony");
+        }
+        else if (hitResult == HitResult.Miss && UserSettings.Instance.SfxEnabled == true)
+        {
+            AudioManager.Instance.Play("miss");
+        }
+
 
         var details = new GameActionDetails {
             PlayerID = this.PlayerID,
@@ -36,7 +54,7 @@ public class AttackCommand : ICommand
 
     public void PlayHitSound()
     {
-        AudioManager.Instance.Play("hit");
+        AudioManager.Instance.Play("trafiony");
     }
 
     public void PlayMissSound()

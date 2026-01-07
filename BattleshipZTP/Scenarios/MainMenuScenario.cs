@@ -18,7 +18,7 @@ namespace BattleshipZTP.Scenarios
         public override void Act()
         {
             base.Act();
-            
+
             Drawing.DrawASCII("mainMenuTitle", 10, 1, ConsoleColor.DarkGray);
             Drawing.DrawASCII("mainMenuShip", 31, 12, background: ConsoleColor.DarkGreen);
 
@@ -33,12 +33,16 @@ namespace BattleshipZTP.Scenarios
             controller.AddWindow(menu1);
             Env.CursorPos();
 
-            //volume settings receive
             AudioManager.Instance.ChangeVolume(
                 "2-02 - Dark Calculation", 
                 UserSettings.Instance.MusicVolume
             );
 
+            if (UserSettings.Instance.MusicEnabled == true)
+            {
+                AudioManager.Instance.Play("2-02 - Dark Calculation", true);
+            }
+            
             List<string> option = controller.DrawAndStart();
             IScenario scenario;
 

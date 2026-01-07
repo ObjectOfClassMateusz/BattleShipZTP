@@ -18,7 +18,7 @@ public class GameLogger : IActionManager
     {
         string shooterName = (details.PlayerID == UserSettings.Instance.GetHashCode()) 
             ? UserSettings.Instance.Nickname 
-            : "ai_enemy1";
+            : "AI_ENEMY";
 
         string logEntry = $"{shooterName}: {details.ActionType} ({details.Coords.X},{details.Coords.Y}) -> {details.Result}";
 

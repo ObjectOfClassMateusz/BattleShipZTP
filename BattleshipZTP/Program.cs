@@ -24,20 +24,27 @@ namespace BattleshipZTP
             Drawing.AddASCII("optionImg");
 
             AudioManager.Instance.Add("2-02 - Dark Calculation");
-            AudioManager.Instance.Play("2-02 - Dark Calculation");
-            
             AudioManager.Instance.Add("victory_sound");
+            AudioManager.Instance.Add("miss");
+            AudioManager.Instance.Add("wrong");
+            AudioManager.Instance.Add("Pixel War Overlord");
+            AudioManager.Instance.Add("przyciski");
+            AudioManager.Instance.Add("stawianie");            
+            AudioManager.Instance.Add("trafienie");
+            AudioManager.Instance.Add("trafiony zatopiony");
             
             IScenario main = new MainMenuScenario();
             IScenario options = new OptionsScenario();
             IScenario exit = new ExitScenario();
             IScenario authors = new AuthorsScenario();
+            IScenario victory = new VictoryScenario();
             
             main.ConnectScenario("Options", options);
             main.ConnectScenario("Exit",exit);
             main.ConnectScenario("Authors", authors);
             options.ConnectScenario("Main",main);
             authors.ConnectScenario("Main",main);
+            victory.ConnectScenario("Main",main);
 
             main.Act();
 

@@ -77,7 +77,6 @@ public class MediumAI : SimpleAI
                             }
                         }
                     }
-
                     if (area.Count > largestArea.Count)
                         largestArea = area;
                 }

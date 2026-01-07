@@ -19,18 +19,18 @@ namespace BattleshipZTP.Scenarios
             base.Act();
             IWindowBuilder builder = new WindowBuilder();
             UIDirector director = new UIDirector(builder);
-            director.StandardWindowInit(69, 18, "Classic", "Single ship duel", "40K");
+            director.StandardWindowInit(69, 16, "Classic", "Single ship duel", "40K","Return");
             Window window1 = builder.Build();
             builder.ResetBuilder();
-            director.StandardWindowInit(73, 24, "Return");
             Window window2 = builder.Build();
             builder.ResetBuilder();
             UIController controller = new UIController();
             controller.AddWindow(window1);
             controller.AddWindow(window2);
             Drawing.DrawASCII("gameModeShip", 41, 0, ConsoleColor.Black , ConsoleColor.Red);
-            Env.CursorPos(70, 15);
-            Console.WriteLine("ℂ𝕙𝕠𝕠𝕤𝕖 𝔾𝕒𝕞𝕖 𝕄𝕠𝕕𝕖");
+            Env.CursorPos(70, 14);
+            Console.WriteLine("Choose game mode");
+            //Console.WriteLine("ℂ𝕙𝕠𝕠𝕤𝕖 𝔾𝕒𝕞𝕖 𝕄𝕠𝕕𝕖");
 
             GameModeFactory factory;
 
@@ -46,7 +46,13 @@ namespace BattleshipZTP.Scenarios
                 case "Classic":
                     factory = new ClassicModeFactory();
                     var gameMode = factory.GetGameMode();
-                    scenario = new SingleplayerScenario(gameMode, difficulty: ChooseDifficulty());
+                    scenario = new SingleplayerScenario(gameMode, difficulty: ChooseDifficulty(), 8);
+                    scenario.Act();
+                    break;
+                case "Single ship duel":
+                    factory = new DuelModeFactory();
+                    var duelMode = factory.GetGameMode();
+                    scenario = new SingleplayerScenario(duelMode, difficulty: ChooseDifficulty(), 1);
                     scenario.Act();
                     break;
             }
@@ -59,7 +65,7 @@ namespace BattleshipZTP.Scenarios
             Window window = builder.Build();
             UIController controller = new UIController();
             controller.AddWindow(window);
-            Env.CursorPos(72, 17);
+            Env.CursorPos(90, 17);
             Console.WriteLine("Wybierz poziom trudności AI:");
             List<string> options = controller.DrawAndStart();
             return options.FirstOrDefault() switch

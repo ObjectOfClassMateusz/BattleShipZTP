@@ -16,10 +16,12 @@ namespace BattleshipZTP.Scenarios
         IAI _ai;
         List<(int x, int y)> _enemyShipmentCoords = new List<(int x, int y)>();
         Window _windowShipmentList = new Window();
+        int numberOfShipsPerPlayer = 0;
 
-        public SingleplayerScenario(IGameMode gameMode, AIDifficulty difficulty)
+        public SingleplayerScenario(IGameMode gameMode, AIDifficulty difficulty, int numberOfShipsPerPlayer)
         {
             _gameMode = gameMode;
+            this.numberOfShipsPerPlayer = numberOfShipsPerPlayer;
             _ai = difficulty switch
             {
                 AIDifficulty.Easy => new SimpleAI(),
@@ -59,25 +61,78 @@ namespace BattleshipZTP.Scenarios
             board.FieldsInitialization();
             board.Display();
         }
-
-        void EnemyPlacementValidate(List<IShip> ships , List<(int x, int y)> coords)
+        
+        private bool CanPlaceAt(BattleBoard.BattleBoardProxy proxy, IShip ship, int x, int y)
         {
-            if(ships.Count != coords.Count)
+            var body = ship.GetBody();
+            int currentY = y;
+            foreach (var line in body)
             {
-                throw new Exception("Missing coords or shipment to execute the placement");
+                for (int i = 0; i < line.text.Length; i++)
+                {
+                    int checkX = x + line.offset + i;
+                    int checkY = currentY;
+
+                    if (checkX >= proxy.Width || checkY >= proxy.Height) return false;
+
+                    var field = proxy.GetField(checkX, checkY);
+                    if (field == null || field.ShipReference != null || proxy.IsNeighborHaveShipRef(field)) 
+                        return false;
+                }
+                currentY++;
+            }
+            return true;
+        }
+
+        private void PlaceShipsRandomly(BattleBoard.BattleBoardProxy enemyProxy, List<IShip> ships)
+        {
+            Random rand = new Random();
+            foreach (var ship in ships)
+            {
+                bool placed = false;
+                while (!placed)
+                {
+                    int x = rand.Next(0, enemyProxy.Width);
+                    int y = rand.Next(0, enemyProxy.Height);
+    
+                    if (rand.Next(2) == 0) 
+                    {
+                        ship.SetBody(BattleBoard.RotateBody(ship.GetBody())); 
+                    }
+            
+                    try 
+                    {
+                        PlaceCommand cmd = new PlaceCommand(enemyProxy.GetBoard(), ship, "AI_ENEMY".GetHashCode());
+        
+                        if (CanPlaceAt(enemyProxy, ship, x, y)) 
+                        {
+                            var resultCoords = enemyProxy.PlaceShip(ship, x, y);
+                            cmd.Execute(resultCoords);
+                            placed = true;
+                        }
+                    }
+                    catch { /* Ponowna próba losowania */ }
+                }
             }
         }
         
         public override void Act()
         {
+            if (UserSettings.Instance.MusicEnabled == true)
+            {
+                AudioManager.Instance.Stop("2-02 - Dark Calculation");
+                AudioManager.Instance.ChangeVolume("Pixel War Overlord", UserSettings.Instance.MusicVolume);
+                AudioManager.Instance.Play("Pixel War Overlord", true);
+            }
+            
             base.Act();
-
+            
             WriteNickNameOnConsole(52, 7,UserSettings.Instance.Nickname);
             BattleBoard board = _gameMode.CreateBoard(52, 8);
             BattleBoard.BattleBoardProxy proxy = new BattleBoard.BattleBoardProxy(board);
             Initialize(proxy);
 
-            WriteNickNameOnConsole(88, 7, "ai_enemy1");
+            WriteNickNameOnConsole(88, 7, "AI_ENEMY");
             BattleBoard enemyBoard = _gameMode.CreateBoard(88, 8); 
             BattleBoard.BattleBoardProxy enemyProxy = new BattleBoard.BattleBoardProxy(enemyBoard);
             Initialize(enemyProxy);
@@ -102,23 +157,14 @@ namespace BattleshipZTP.Scenarios
             }
             Drawing.ClearRectangleArea(tablePos.x-1, tablePos.y , 15, 12);
             Env.SetColor();
-
-            ships = _gameMode.ShipmentDelivery();
-            BeautifyHelper.ApplyFancyBodies(ships);
             
-            var enemyCoords = _gameMode.GetShipmentPlacementCoords();
-            EnemyPlacementValidate(ships, enemyCoords);
-            for (int i = 0; i < enemyCoords.Count; i++) 
-            {
-                var ship = ships[i];
-                var cord = enemyCoords[i];
-                PlaceCommand command = new PlaceCommand(enemyBoard, ship, "ai_enemy1".GetHashCode());
-                var resultCoords = enemyProxy.PlaceShip(ship,cord.x,cord.y);
-                command.Execute(resultCoords);
-            }
-
-
+            List<IShip> enemyShips = _gameMode.ShipmentDelivery();
+            BeautifyHelper.ApplyFancyBodies(enemyShips);
+            PlaceShipsRandomly(enemyProxy, enemyShips);
+            
             enemyProxy.Display();
+            BattleBoardMemento playerMemento = board.GetSaveState();
+            BattleBoardMemento enemyMemento = enemyBoard.GetSaveState();
             Console.ReadKey(true);
 
             // 11
@@ -179,14 +225,13 @@ namespace BattleshipZTP.Scenarios
             
             ActionManager.Instance.Attach(logger);
             ActionManager.Instance.Attach(stats);
-
             
-            int totalShipsToSink = 8; 
+            int totalShipsToSink = numberOfShipsPerPlayer; 
             int playerSunkCounter = 0;
             int aiSunkCounter = 0;       
             bool nextTurn = true;
             bool victory = false;
-
+            
             while (victory == false)
             {
                 // --- TURA GRACZA ---
@@ -202,29 +247,53 @@ namespace BattleshipZTP.Scenarios
                     {
                         HitResult playerResult = fieldAtTarget.ShipReference.IsSunk() ? HitResult.HitAndSunk : HitResult.Hit;
                         if (fieldAtTarget.ShipReference.IsSunk()) playerSunkCounter++;
-                        
                     }
                     else 
                     {
                         nextTurn = false;
                     }
-                    
                     enemyProxy.Display();
-                    if (playerSunkCounter >= totalShipsToSink) 
+                    if (playerSunkCounter >= totalShipsToSink || aiSunkCounter >= totalShipsToSink) 
                     {
                         victory = true;
-                        new VictoryScenario(UserSettings.Instance.Nickname, UserSettings.Instance.GetHashCode(), stats).Act();
+                        
+                        BattleBoard rawPlayer = new BattleBoard(52, 8, board.width, board.height);
+                        BattleBoard rawEnemy = new BattleBoard(88, 8, enemyBoard.width, enemyBoard.height);
+    
+                        rawPlayer.FieldsInitialization();
+                        rawEnemy.FieldsInitialization();
+
+                        rawPlayer.Restore(playerMemento); 
+                        rawEnemy.Restore(enemyMemento);
+
+                        var replayPlayerProxy = new BattleBoard.BattleBoardProxy(rawPlayer);
+                        var replayEnemyProxy = new BattleBoard.BattleBoardProxy(rawEnemy);
+
+                        Env.Wait(900);
+    
+                        string winnerName = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.Nickname : "AI_ENEMY";
+                        int winnerId = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.GetHashCode() : "AI_ENEMY".GetHashCode();
+
+                        var victoryScen = new VictoryScenario(winnerName, winnerId, stats, replayPlayerProxy, replayEnemyProxy, board.height, board.width);
+    
+                        victoryScen.ConnectScenario("Main", new MainMenuScenario());
+                        
+                        ActionManager.Instance.Detach(stats);
+                        ActionManager.Instance.Detach(logger);
+                        
+                        victoryScen.Act();
                         break;
-                    }                }
+                    }               
+                }
                 if (victory) break;
 
                 // --- TURA AI ---
                 while (nextTurn == false)
                 {
-                    Env.Wait(500);
+                    Env.Wait(900);
     
                     Point aiTarget = _ai.GetNextMove(board.width, board.height, board);
-                    AttackCommand aiAttack = new AttackCommand(proxy, aiTarget, "ai_enemy1".GetHashCode());
+                    AttackCommand aiAttack = new AttackCommand(proxy, aiTarget, "AI_ENEMY".GetHashCode());
     
                     aiAttack.Execute(new List<(int x, int y)>());
     
@@ -237,12 +306,24 @@ namespace BattleshipZTP.Scenarios
 
                         if (aiResult == HitResult.HitAndSunk)
                         {
+                            if (UserSettings.Instance.SfxEnabled == true)
+                            {
+                                AudioManager.Instance.Play("trafiony zatopiony");
+                            }
                             _ai.ClearTargets();
                             aiSunkCounter++;
                         }
-                        else
+                        else if (aiResult == HitResult.Hit )
                         {
+                            if (UserSettings.Instance.SfxEnabled == true)
+                            {
+                                AudioManager.Instance.Play("trafienie");
+                            }
                             _ai.AddTargetNeighbors(aiTarget, board.width, board.height);
+                        }
+                        else if (aiResult == HitResult.Miss && UserSettings.Instance.SfxEnabled == true)
+                        {
+                            AudioManager.Instance.Play("miss");
                         }
                     }
                     else
@@ -251,10 +332,35 @@ namespace BattleshipZTP.Scenarios
                     }
 
                     proxy.Display();
-                    if (aiSunkCounter >= totalShipsToSink) 
+                    if (playerSunkCounter >= totalShipsToSink || aiSunkCounter >= totalShipsToSink) 
                     {
                         victory = true;
-                        new VictoryScenario("ai_enemy1", "ai_enemy1".GetHashCode(), stats).Act();
+                        
+                        BattleBoard rawPlayer = new BattleBoard(52, 8, board.width, board.height);
+                        BattleBoard rawEnemy = new BattleBoard(88, 8, enemyBoard.width, enemyBoard.height);
+    
+                        rawPlayer.FieldsInitialization();
+                        rawEnemy.FieldsInitialization();
+
+                        rawPlayer.Restore(playerMemento); 
+                        rawEnemy.Restore(enemyMemento);
+
+                        var replayPlayerProxy = new BattleBoard.BattleBoardProxy(rawPlayer);
+                        var replayEnemyProxy = new BattleBoard.BattleBoardProxy(rawEnemy);
+
+                        Env.Wait(900);
+    
+                        string winnerName = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.Nickname : "AI_ENEMY";
+                        int winnerId = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.GetHashCode() : "AI_ENEMY".GetHashCode();
+
+                        var victoryScen = new VictoryScenario(winnerName, winnerId, stats, replayPlayerProxy, replayEnemyProxy, board.height, board.width);
+    
+                        victoryScen.ConnectScenario("Main", new MainMenuScenario());
+                        
+                        ActionManager.Instance.Detach(stats);
+                        ActionManager.Instance.Detach(logger);
+                        
+                        victoryScen.Act();
                         break;
                     }
                 }
