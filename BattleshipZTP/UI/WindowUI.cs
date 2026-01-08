@@ -1,6 +1,8 @@
 ﻿using BattleshipZTP.Utilities;
 using Microsoft.VisualBasic.FileIO;
 using System.Linq;
+using BattleshipZTP.GameAssets;
+using BattleshipZTP.Settings;
 
 namespace BattleshipZTP.UI
 {
@@ -472,6 +474,10 @@ namespace BattleshipZTP.UI
                 if (klawisz.Key == ConsoleKey.UpArrow && Selected != 0)
                 {
                     //downlight previous component
+                    if (UserSettings.Instance.SfxEnabled == true)
+                    {
+                        AudioManager.Instance.Play("przyciski");
+                    }
                     Env.CursorPos(cornerX + 1, cornerY + 1 + Selected);
                     Env.SetColor();
                     _components[Selected].Print(Width);
@@ -480,6 +486,10 @@ namespace BattleshipZTP.UI
                 if (klawisz.Key == ConsoleKey.DownArrow && Selected < _components.Count - 1)
                 {
                     //downlight previous component
+                    if (UserSettings.Instance.SfxEnabled == true)
+                    {
+                        AudioManager.Instance.Play("przyciski");
+                    }
                     Env.CursorPos(cornerX + 1, cornerY + 1 + Selected);
                     Env.SetColor();
                     _components[Selected].Print(Width);
@@ -488,6 +498,10 @@ namespace BattleshipZTP.UI
                 if (klawisz.Key == ConsoleKey.Enter)
                 {
                     _selectedOption = _components[Selected].GetOption();
+                    if (UserSettings.Instance.SfxEnabled == true)
+                    {
+                        AudioManager.Instance.Play("przyciski");
+                    }
                     Env.SetColor();
                     //Selected Option Respone, return Component option
                     if(_selectedOption != "")
@@ -499,8 +513,12 @@ namespace BattleshipZTP.UI
                 {
                     Env.CursorPos(cornerX + 1, cornerY + 1 + Selected);
                     Env.SetColor();
+                    if (UserSettings.Instance.SfxEnabled == true)
+                    {
+                        AudioManager.Instance.Play("przyciski");
+                    }
                     _components[Selected].Print(Width);
-                    //Empty Respone, take to the next Window
+                            //Empty Respone, take to the next Window
                     return "";
                 }
                 lastRemembered = Selected;
