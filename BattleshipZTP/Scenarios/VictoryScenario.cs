@@ -8,6 +8,7 @@ using BattleshipZTP.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,26 +19,47 @@ namespace BattleshipZTP.Scenarios
         private readonly string _winnerName;
         private readonly int _winnerId;
         private readonly StatisticTracker _stats;
+        private readonly IBattleBoard _playerReplayBoard;
+        private readonly IBattleBoard _enemyReplayBoard;
+        private readonly int _height;
+        private readonly int _width;
 
-        public VictoryScenario(string winnerName, int winnerId, StatisticTracker stats)
+        public VictoryScenario(string winnerName, int winnerId, StatisticTracker stats, IBattleBoard pBoard, IBattleBoard eBoard, int height, int width)
         {
             _winnerName = winnerName;
             _winnerId = winnerId;
             _stats = stats;
+            _playerReplayBoard = pBoard;
+            _enemyReplayBoard = eBoard;
+            _height = height;
+            _width = width;
+        }
+
+        public VictoryScenario()
+        {
         }
 
         public override void Act()
         {
             Console.Clear();
-            var winnerStats = _stats.GetStats(_winnerId);
-
+            
             AudioManager.Instance.ChangeVolume(
                 "victory_sound", 
                 UserSettings.Instance.MusicVolume
             );
             
-            AudioManager.Instance.Stop("2-02 - Dark Calculation");
-            AudioManager.Instance.Play("victory_sound");
+            var winnerStats = _stats.GetStats(_winnerId);
+
+            if (UserSettings.Instance.MusicEnabled == true)
+            {
+                AudioManager.Instance.Stop("Pixel War Overlord");
+            }
+
+            if (UserSettings.Instance.SfxEnabled == true)
+            {
+                AudioManager.Instance.Play("victory_sound");
+
+            }
             
             IWindowBuilder winBuilder = new WindowBuilder();
             winBuilder.SetPosition(Console.WindowWidth / 2 - 15, 5)
@@ -52,12 +74,26 @@ namespace BattleshipZTP.Scenarios
                 .AddComponent(new TextOutput($" Trafienia: {winnerStats.Hits}"))
                 .AddComponent(new TextOutput($" Pudla: {winnerStats.Misses}"))
                 .AddComponent(new TextOutput("----------------------------"))
+                .AddComponent(new Button("POWTORKA BITWY"))
                 .AddComponent(new Button("POWROT DO MENU"));
-
+            
             Window winWindow = winBuilder.Build();
             UIController winUI = new UIController();
             winUI.AddWindow(winWindow);
             winUI.DrawAndStart();
+            
+            List<string> results = winUI.DrawAndStart();
+            string choice = results.LastOrDefault();
+
+            if (choice == "POWTORKA BITWY")
+            {
+                new ReplayScenario(_stats.GetHistory(), _playerReplayBoard, _enemyReplayBoard, _height, _width).Act();
+                this.Act();
+            }
+            else if (choice == "POWROT DO MENU")
+            {
+                new MainMenuScenario().Act();
+            }
         }
     }
 }

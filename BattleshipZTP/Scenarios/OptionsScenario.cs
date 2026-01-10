@@ -25,6 +25,7 @@ namespace BattleshipZTP.Scenarios
             .AddComponent(new TextOutput("Enter you nickname below:"))
             .AddComponent(new TextBox("Nickname", 12,UserSettings.Instance.Nickname))
             .AddComponent(new IntegerSideBar("Music volume",UserSettings.Instance.MusicVolume))
+            .AddComponent(new CheckBox("Turn off Music"))
             .AddComponent(new CheckBox("Turn off SFX"))
             .AddComponent(new Button("Save and Return"));
 
@@ -37,14 +38,13 @@ namespace BattleshipZTP.Scenarios
         public override void ConnectScenario(string key, IScenario scenario)
         {
             base.ConnectScenario(key, scenario);
-            //
             _menuScenario = (MainMenuScenario)_scenarios.FirstOrDefault().Value;
         }
 
         public override void Act()
         {
             base.Act();
-            //
+            
             Drawing.DrawASCII("optionImg", 5,1);
             List<string> option = _controller.DrawAndStart();
             UserSettings.Instance.UpdateSettings(option);

@@ -8,8 +8,14 @@ public class ActionManager
 
     private List<IActionManager> _observers = new List<IActionManager>();
     
-    public void Attach(IActionManager observer) => _observers.Add(observer);
-    public void Detach(IActionManager observer) => _observers.Remove(observer);
+    public void Attach(IActionManager observer)
+    {
+        _observers.Add(observer);
+    }
+    public void Detach(IActionManager observer)
+    {
+        _observers.Remove(observer);
+    } 
     
     public void NotifyObservers(GameActionDetails details)
     {

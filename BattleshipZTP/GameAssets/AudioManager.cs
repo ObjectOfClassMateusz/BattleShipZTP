@@ -4,6 +4,7 @@ using System.Linq;
 using System.Media;
 using System.Text;
 using System.Threading.Tasks;
+using BattleshipZTP.UI;
 using NAudio.Wave;
 
 namespace BattleshipZTP.GameAssets
@@ -14,30 +15,60 @@ namespace BattleshipZTP.GameAssets
         private AudioManager() { }
         public static AudioManager Instance => _instance;
 
-        private Dictionary<string,AudioFileReader> _audios = new Dictionary<string, AudioFileReader> ();
+        private Dictionary<string, AudioFileReader> _audios = new Dictionary<string, AudioFileReader>();
+        private Dictionary<string, IWavePlayer> _activePlayers = new Dictionary<string, IWavePlayer>();
+
 
         public void Add(string fileName)
         {
-            _audios[fileName] = new NAudio.Wave.AudioFileReader($"audio/{fileName}.wav");
+            _audios[fileName] = new AudioFileReader($"audio/{fileName}.wav");
         }
 
-        public void Play(string fileName)
+        public void Play(string fileName, bool isLooping = false)
         {
             if (OperatingSystem.IsWindows())
             {
-                var output = new NAudio.Wave.WaveOutEvent();
-                output.Init(_audios[fileName]);
-                output.Play();
+                if (_activePlayers.ContainsKey(fileName)) return;
+
+                if (!_audios.TryGetValue(fileName, out var audioFile)) return;
+
+                var outputDevice = new WaveOutEvent();
+                
+                audioFile.Position = 0;
+                outputDevice.Init(audioFile);
+
+                outputDevice.PlaybackStopped += (s, e) =>
+                {
+                    if (isLooping && _activePlayers.ContainsKey(fileName))
+                    {
+                        audioFile.Position = 0;
+                        outputDevice.Play();
+                    }
+                    else
+                    {
+                        outputDevice.Dispose();
+                        _activePlayers.Remove(fileName);
+                    }
+                };
+
+                _activePlayers[fileName] = outputDevice;
+                outputDevice.Play();
+            }
+        }
+
+        public void Stop(string fileName)
+        {
+            if (_activePlayers.TryGetValue(fileName, out var player))
+            {
+                _activePlayers.Remove(fileName);
+                if (player != null)
+                {
+                    player.Stop();
+                    player.Dispose();
+                }
             }
         }
         
-        public void Stop(string fileName)
-        {
-            if (OperatingSystem.IsWindows())
-            {
-                // trzeba dodać obsługę zatrzymania dźwięku 
-            }
-        }
         public void ChangeVolume(string fileName , int v) 
         {
             float volume = v / 100.0f;

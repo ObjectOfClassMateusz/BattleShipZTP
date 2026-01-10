@@ -21,20 +21,9 @@ namespace BattleshipZTP.GameAssets
 
     public class ClassicGameMode : IGameMode
     {
-        string _path = "singleplayer_coords.txt";
         readonly List<(int x, int y)> _coords = new List<(int x, int y)>();
         public ClassicGameMode()
         {
-            StreamReader reader = new StreamReader($"data/enemy_ai/{_path}");
-            string line;
-            while (!reader.EndOfStream)
-            {
-                line = reader.ReadLine();
-                string[] bits = line.Split(' ');
-                int x = int.Parse(bits[0]);
-                int y = int.Parse(bits[1]);
-                _coords.Add((x, y));
-            }
         }
         public BattleBoard CreateBoard(int x , int y) 
             => new BattleBoard(x,y,12,12);
@@ -88,7 +77,7 @@ namespace BattleshipZTP.GameAssets
         }
         public BattleBoard CreateBoard(int x , int y)
         {
-            return new BattleBoard(x,y,6,6);
+            return new BattleBoard(x,y,5,5);
         }
         public bool RemeberArrowHit()
         {
@@ -100,7 +89,8 @@ namespace BattleshipZTP.GameAssets
         }
         public List<IShip> ShipmentDelivery() => new List<IShip>()
         {
-            ShipFactory.CreateShip(ShipType.Carrier)
+            ShipFactory.CreateShip(ShipType.Battleship)
+            
         };
         public List<int> GetShipSizes()
         {
@@ -173,7 +163,7 @@ namespace BattleshipZTP.GameAssets
         public override IGameMode GetGameMode()
         {
             //One ship 1v1
-            return new DuelGameMode(ShipType.Carrier);
+            return new DuelGameMode(ShipType.Battleship);
         }
     }
     public class WarhammerModeFactory : GameModeFactory

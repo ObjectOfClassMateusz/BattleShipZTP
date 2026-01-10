@@ -28,8 +28,10 @@ public abstract class BaseShip : IShip
     public void SetBody(List<(string text, int offset)> body)
     {   
         _body.Clear();
-        foreach (var b in body) 
-        { 
+        foreach (var b in body)
+        {
+            if (b.text == null)
+                throw new ArgumentException("Element body ma text null");
             _body.Add(b);
         }
     }
@@ -72,6 +74,5 @@ public abstract class BaseShip : IShip
     public bool IsSunk()
     {
         return hits.Distinct().Count() == size;
-        
     }
 }
