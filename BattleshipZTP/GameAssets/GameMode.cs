@@ -16,6 +16,7 @@ namespace BattleshipZTP.GameAssets
 
         List<IShip> ShipmentDelivery();
         List<(int x , int y)> GetShipmentPlacementCoords();
+        List<int> GetShipSizes();
     }
 
     public class ClassicGameMode : IGameMode
@@ -59,6 +60,11 @@ namespace BattleshipZTP.GameAssets
         {
             return _coords;
         }
+
+        public List<int> GetShipSizes()
+        {
+            return new List<int> { 5, 4, 3, 3, 1 };
+        }
     }
 
     public class DuelGameMode : IGameMode
@@ -82,7 +88,7 @@ namespace BattleshipZTP.GameAssets
         }
         public BattleBoard CreateBoard(int x , int y)
         {
-            return new BattleBoard(x,y,12,12);
+            return new BattleBoard(x,y,6,6);
         }
         public bool RemeberArrowHit()
         {
@@ -96,6 +102,10 @@ namespace BattleshipZTP.GameAssets
         {
             ShipFactory.CreateShip(ShipType.Carrier)
         };
+        public List<int> GetShipSizes()
+        {
+            return new List<int> { 3};
+        }
     }
 
 
@@ -137,6 +147,11 @@ namespace BattleshipZTP.GameAssets
             return resources;
         }
         public List<IShip> ShipmentDelivery() => new List<IShip>();
+        
+        public List<int> GetShipSizes()
+        {
+            return new List<int> { 3};
+        }
     }
 
 

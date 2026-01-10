@@ -13,12 +13,20 @@ namespace BattleshipZTP.Scenarios
     public class SingleplayerScenario : Scenario
     {
         IGameMode _gameMode;
+        IAI _ai;
         List<(int x, int y)> _enemyShipmentCoords = new List<(int x, int y)>();
         Window _windowShipmentList = new Window();
 
-        public SingleplayerScenario(IGameMode gameMode)
+        public SingleplayerScenario(IGameMode gameMode, AIDifficulty difficulty)
         {
             _gameMode = gameMode;
+            _ai = difficulty switch
+            {
+                AIDifficulty.Easy => new SimpleAI(),
+                AIDifficulty.Medium => new MediumAI(),
+                AIDifficulty.Hard => new HardAI(),
+                _ => new SimpleAI()
+            };
         }
 
         void WriteNickNameOnConsole(int x , int y , string nickname)
@@ -172,78 +180,90 @@ namespace BattleshipZTP.Scenarios
             ActionManager.Instance.Attach(logger);
             ActionManager.Instance.Attach(stats);
 
-            SimpleAI ai = new SimpleAI();
-
+            
             int totalShipsToSink = 8; 
             int playerSunkCounter = 0;
             int aiSunkCounter = 0;       
-            
-            while (true)
+            bool nextTurn = true;
+            bool victory = false;
+
+            while (victory == false)
             {
                 // --- TURA GRACZA ---
-                Point playerTarget = enemyProxy.ChooseAttackPoint();
-                AttackCommand playerAttack = new AttackCommand(enemyProxy, playerTarget, UserSettings.Instance.GetHashCode());
-    
-                playerAttack.Execute(new List<(int x, int y)>());
-                var fieldAtTarget = enemyProxy.GetField(playerTarget.X, playerTarget.Y);
-                HitResult playerResult = HitResult.Miss;
-
-                if (fieldAtTarget.ShipReference != null) 
+                while (nextTurn == true)
                 {
-                    playerResult = fieldAtTarget.ShipReference.IsSunk() ? HitResult.HitAndSunk : HitResult.Hit;
-                    if (fieldAtTarget.ShipReference.IsSunk()) 
+                    Point playerTarget = enemyProxy.ChooseAttackPoint();
+                    AttackCommand playerAttack = new AttackCommand(enemyProxy, playerTarget, UserSettings.Instance.GetHashCode());
+                    playerAttack.Execute(new List<(int x, int y)>());
+                    
+                    var fieldAtTarget = enemyProxy.GetField(playerTarget.X, playerTarget.Y);
+                    
+                    if (fieldAtTarget.ShipReference != null) 
                     {
-                        playerSunkCounter++;
+                        HitResult playerResult = fieldAtTarget.ShipReference.IsSunk() ? HitResult.HitAndSunk : HitResult.Hit;
+                        if (fieldAtTarget.ShipReference.IsSunk()) playerSunkCounter++;
+                        
                     }
-                }
-                
-                enemyProxy.Display();
-
-                if (playerSunkCounter >= totalShipsToSink) 
-                {
-                    new VictoryScenario(UserSettings.Instance.Nickname, UserSettings.Instance.GetHashCode(), stats).Act();
-                    break;
-                }
+                    else 
+                    {
+                        nextTurn = false;
+                    }
+                    
+                    enemyProxy.Display();
+                    if (playerSunkCounter >= totalShipsToSink) 
+                    {
+                        victory = true;
+                        new VictoryScenario(UserSettings.Instance.Nickname, UserSettings.Instance.GetHashCode(), stats).Act();
+                        break;
+                    }                }
+                if (victory) break;
 
                 // --- TURA AI ---
-                Point aiTarget = ai.GetNextMove(board.width, board.height);
-                AttackCommand aiAttack = new AttackCommand(proxy, aiTarget, "ai_enemy1".GetHashCode());
-                aiAttack.Execute(new List<(int x, int y)>());
-
-                var aiField = proxy.GetField(aiTarget.X, aiTarget.Y);
-                HitResult aiResult = HitResult.Miss;
-
-                if (aiField != null && aiField.ShipReference != null)
+                while (nextTurn == false)
                 {
-                    aiResult = aiField.ShipReference.IsSunk() ? HitResult.HitAndSunk : HitResult.Hit;
+                    Env.Wait(500);
+    
+                    Point aiTarget = _ai.GetNextMove(board.width, board.height, board);
+                    AttackCommand aiAttack = new AttackCommand(proxy, aiTarget, "ai_enemy1".GetHashCode());
+    
+                    aiAttack.Execute(new List<(int x, int y)>());
+    
+                    var aiField = proxy.GetField(aiTarget.X, aiTarget.Y);
+                    HitResult aiResult = HitResult.Miss;
 
-                    if (aiResult == HitResult.Hit)
+                    if (aiField != null && aiField.ShipReference != null)
                     {
-                        ai.AddTargetNeighbors(aiTarget, board.width, board.height);
-                    }
-                    else if (aiResult == HitResult.HitAndSunk)
-                    {
-                        ai.ClearTargets();
-                        aiSunkCounter++;
-                    }
-                }
-                else
-                {
-                    aiResult = HitResult.Miss;
-                }
-                
-                
-                proxy.Display();
+                        aiResult = aiField.ShipReference.IsSunk() ? HitResult.HitAndSunk : HitResult.Hit;
 
-                if (aiSunkCounter >= totalShipsToSink) 
-                {
-                    new VictoryScenario("ai_enemy1", "ai_enemy1".GetHashCode(), stats).Act();
-                    break;
+                        if (aiResult == HitResult.HitAndSunk)
+                        {
+                            _ai.ClearTargets();
+                            aiSunkCounter++;
+                        }
+                        else
+                        {
+                            _ai.AddTargetNeighbors(aiTarget, board.width, board.height);
+                        }
+                    }
+                    else
+                    {
+                        nextTurn = true; 
+                    }
+
+                    proxy.Display();
+                    if (aiSunkCounter >= totalShipsToSink) 
+                    {
+                        victory = true;
+                        new VictoryScenario("ai_enemy1", "ai_enemy1".GetHashCode(), stats).Act();
+                        break;
+                    }
                 }
             }
         }
     }
+    
 }
+
 
 /*Env.CursorPos(1, 39);
       Env.SetColor(ConsoleColor.DarkMagenta, ConsoleColor.Gray);
