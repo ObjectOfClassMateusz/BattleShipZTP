@@ -24,8 +24,6 @@ namespace BattleshipZTP.GameAssets
         List<(int x, int y)> PlaceShip(IShip ship, int x, int y);
 
         Point ChooseAttackPoint();
-
-        //(int, int) PlaceCursor(CursorBody cursor);
         HitResult AttackPoint(Point target);
         void PlaceMarker(Point actionCoords, HitResult actionResult);
     }
@@ -332,7 +330,6 @@ namespace BattleshipZTP.GameAssets
             int localX = 0;
             int localY = 0;
             char cursorChar = '+';
-
             while (true)
             {
                 Env.CursorPos(cornerX + 1 + localX, cornerY + 1 + localY);
@@ -342,13 +339,20 @@ namespace BattleshipZTP.GameAssets
                 ConsoleKeyInfo key = Console.ReadKey(true);
 
                 Env.CursorPos(cornerX + 1 + localX, cornerY + 1 + localY);
-                Console.Write(_field[localY, localX]);
+                var field = _field[localY, localX];
+                if(field.ArrowHit)
+                {
+                    Console.Write(field);
+                }
+                else
+                {
+                    Console.Write(' ');
+                }
 
-                
                 if (key.Key == ConsoleKey.Enter)
                 {
-                    var selectedField = _field[localY, localX];
-                    if (selectedField.Character != 'X' && selectedField.Character != '•')
+                    var selectedField = field;
+                    if (selectedField.Character != 'X' && selectedField.Character != '•' && !selectedField.ArrowHit)
                     {
                         return new Point(localX, localY);
                     }
@@ -379,30 +383,9 @@ namespace BattleshipZTP.GameAssets
                     history.Add((localX + sB.offset + i, localY + j));
                     i++;
                 }
-
                 j++;
             }
-
             return history;
-
-
-            /*
-             for (int i = 0; i < shipValue.Length; i++)
-             {
-                 history.Add((localX + i, localY));
-             }*/
-
-            //
-            /*foreach ((int x, int y) h in history)
-            {
-                localY = h.y - this.cornerY - 1;
-                localX = h.x - this.cornerX - 1;
-                _field[localY, localX].Character = shipValue[shipIterator];
-                _field[localY, localX].colors = ship.GetColors();
-                _field[localY, localX].ShipReference = ship; // To musi zostać dla AttackPoint!
-                DisplayField(localX, localY);
-                shipIterator++;
-            }*/
         }
 
         // csharp
@@ -414,7 +397,10 @@ namespace BattleshipZTP.GameAssets
 
                 if (field.ShipReference != null)
                 {
-                    if (field.Character == 'X') return HitResult.Hit; 
+                    if (field.Character == 'X') {
+                        DisplayField(target.X, target.Y);
+                        return HitResult.Hit;
+                    } 
 
                     HitResult result = field.ShipReference.TakeHit(target);
                     field.Character = 'X';
@@ -428,6 +414,7 @@ namespace BattleshipZTP.GameAssets
                                 {
                                     _field[i, j].colors = (ConsoleColor.DarkGray, ConsoleColor.Black);
                                     _field[i, j].Character = 'X';
+                                    DisplayField(j, i);
                                 }
                             }
                         }
@@ -436,16 +423,18 @@ namespace BattleshipZTP.GameAssets
                     {
                         field.colors = (ConsoleColor.Red, ConsoleColor.Black);
                     }
+                    DisplayField(target.X, target.Y);
                     return result;
                 }
                 else
                 {
                     field.Character = '•';
                     field.colors = (ConsoleColor.Blue, ConsoleColor.Black);
+                    DisplayField(target.X, target.Y);
+                    //Console.Write('c');
                     return HitResult.Miss;
                 }
             }
-
             return HitResult.Miss;
         }
         

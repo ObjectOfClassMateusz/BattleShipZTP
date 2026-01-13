@@ -20,6 +20,7 @@ public class AuthorsScenario : Scenario
     public override void Act()
     {
         base.Act();
+        Drawing.DrawASCII("skull", 15, 9,ConsoleColor.DarkGray);
 
         IWindowBuilder builder = new WindowBuilder();
         UIDirector director = new UIDirector(builder);
@@ -37,7 +38,6 @@ public class AuthorsScenario : Scenario
         controller.AddWindow(authorsWindow);
 
         List<string> option = controller.DrawAndStart();
-
         option[0] = "Main";
         _scenarios[option.LastOrDefault()].Act();
     }

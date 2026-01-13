@@ -1,13 +1,15 @@
 ﻿using BattleshipZTP.GameAssets;
+using BattleshipZTP.Networking;
+using BattleshipZTP.Ship;
 using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
+using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BattleshipZTP.Networking;
 
 namespace BattleshipZTP.Scenarios
 {
@@ -29,30 +31,42 @@ namespace BattleshipZTP.Scenarios
             controller.AddWindow(window2);
             Drawing.DrawASCII("gameModeShip", 41, 0, ConsoleColor.Black , ConsoleColor.Red);
             Env.CursorPos(70, 14);
-            Console.WriteLine("Choose game mode");
-            //Console.WriteLine("ℂ𝕙𝕠𝕠𝕤𝕖 𝔾𝕒𝕞𝕖 𝕄𝕠𝕕𝕖");
+            //Console.WriteLine("Choose game mode");
+            Console.WriteLine("ℂ𝕙𝕠𝕠𝕤𝕖 𝔾𝕒𝕞𝕖 𝕄𝕠𝕕𝕖");
 
             GameModeFactory factory;
 
-            List<string> options = controller.DrawAndStart();
+            List<string> option = controller.DrawAndStart();
             IScenario scenario;
 
-            switch (options.FirstOrDefault())
+            switch (option.FirstOrDefault())
             {
                 case "Return":
-                    scenario = new MainMenuScenario();
-                    scenario.Act();
+                    _scenarios["Main"].Act();
                     break;
                 case "Classic":
                     factory = new ClassicModeFactory();
                     var gameMode = factory.GetGameMode();
-                    scenario = new SingleplayerScenario(gameMode, difficulty: ChooseDifficulty(), 8);
+                    scenario = new SingleplayerScenario(gameMode, difficulty: ChooseDifficulty(),
+                        8, _scenarios["Main"]);
                     scenario.Act();
                     break;
                 case "Single ship duel":
                     factory = new DuelModeFactory();
                     var duelMode = factory.GetGameMode();
-                    scenario = new SingleplayerScenario(duelMode, difficulty: ChooseDifficulty(), 1);
+                    scenario = new SingleplayerScenario(duelMode, difficulty: ChooseDifficulty(),
+                        1, _scenarios["Main"]);
+                    scenario.Act();
+                    break;
+                case "40K":
+                    var chooseRace = new SelectRaceScenario();
+                    chooseRace.Act();
+                    Fraction fraction = chooseRace.GetRace();
+
+                    factory = new WarhammerModeFactory(chooseRace.GetRace());
+                    var warhammerMode = factory.GetGameMode();
+                    scenario = new SingleplayerScenario(warhammerMode, difficulty: ChooseDifficulty(),
+                        6, _scenarios["Main"]);
                     scenario.Act();
                     break;
             }
@@ -61,12 +75,12 @@ namespace BattleshipZTP.Scenarios
         {
             IWindowBuilder builder = new WindowBuilder();
             UIDirector director = new UIDirector(builder);
-            director.StandardWindowInit(90, 18, "Easy", "Medium", "Hard");
+            director.StandardWindowInit(89, 16, "Easy", "Medium", "Hard");
             Window window = builder.Build();
             UIController controller = new UIController();
             controller.AddWindow(window);
-            Env.CursorPos(90, 17);
-            Console.WriteLine("Wybierz poziom trudności AI:");
+            Env.CursorPos(89, 14);
+            Console.WriteLine("Choose your AI difficulty level:");
             List<string> options = controller.DrawAndStart();
             return options.FirstOrDefault() switch
             {

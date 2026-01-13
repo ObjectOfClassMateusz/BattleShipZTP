@@ -449,7 +449,7 @@ namespace BattleshipZTP.UI
         string _selectedOption;
         public string SelectedOption() => this._selectedOption;
 
-          int lastRemembered = 0;
+        int lastRemembered = 0;
 
         public string DrawAndStart()
         {
@@ -616,10 +616,10 @@ namespace BattleshipZTP.UI
                      * if text-{input}              -> bla bla ...
                      * if intSlider-{number}-{name} -> bla bla ...
                      */
-
-                    if(optionHandlerString.Contains("input-"))//Handle TextBox user inputs
+                    if(optionHandlerString.Contains("input-"))
                     {
-                        string inputId = optionHandlerString.Split(new[] { "#:" }, StringSplitOptions.None)[0];
+                        //Handle TextBox user inputs
+                        string inputId = optionHandlerString.Split(new[] { "#:" }, StringSplitOptions.None)[0];//separate
                         string value = optionHandlerString.Split(new[] { "#:" }, StringSplitOptions.None)[1];
                         if (!OptionsReturns.Any(s => s.Contains(inputId)))
                         {
@@ -637,6 +637,7 @@ namespace BattleshipZTP.UI
                     }
                     else if (optionHandlerString.Contains("slider-"))
                     {
+                        //Handle slider user inputs
                         string inputId = optionHandlerString.Split(new[] { "#:" }, StringSplitOptions.None)[0];
                         string value = optionHandlerString.Split(new[] { "#:" }, StringSplitOptions.None)[1];
                         if (!OptionsReturns.Any(s => s.Contains(inputId)))

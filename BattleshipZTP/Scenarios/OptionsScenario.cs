@@ -1,11 +1,6 @@
 ﻿using BattleshipZTP.Settings;
 using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BattleshipZTP.Scenarios
 {
@@ -44,9 +39,16 @@ namespace BattleshipZTP.Scenarios
         public override void Act()
         {
             base.Act();
-            
-            Drawing.DrawASCII("optionImg", 5,1);
+            Drawing.DrawASCII("optionImg", 5,1,ConsoleColor.DarkCyan,ConsoleColor.DarkBlue);
             List<string> option = _controller.DrawAndStart();
+            if (!UserSettings.Instance.MusicEnabled && option.Contains("checkbox-Turn off Music")) 
+            {
+                option.Remove("checkbox-Turn off Music");
+            }
+            if (!UserSettings.Instance.SfxEnabled && option.Contains("checkbox-Turn off SFX"))
+            {
+                option.Remove("checkbox-Turn off SFX");
+            }
             UserSettings.Instance.UpdateSettings(option);
             _menuScenario.Act();
         }

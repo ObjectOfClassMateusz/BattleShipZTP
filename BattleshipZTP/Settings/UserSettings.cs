@@ -10,13 +10,14 @@ public class UserSettings
     public static UserSettings Instance => _instance ??= new UserSettings();
 
     public string Nickname { get; set; } = "PLAYER";
-    public int MusicVolume { get; set; } = 1;
+    public int MusicVolume { get; set; } = 10;
     public bool MusicEnabled { get; set; } = true;
     public bool SfxEnabled { get; set; } = true;
 
     public void UpdateSettings(List<string> options)
     {
         SfxEnabled = true;
+        MusicEnabled = true;
         foreach (var opt in options)
         {
             if (opt.Contains("input-Nickname"))

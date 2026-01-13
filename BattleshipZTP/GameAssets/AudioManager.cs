@@ -21,7 +21,14 @@ namespace BattleshipZTP.GameAssets
 
         public void Add(string fileName)
         {
-            _audios[fileName] = new AudioFileReader($"audio/{fileName}.wav");
+            try
+            {
+                _audios[fileName] = new AudioFileReader($"audio/{fileName}.wav");
+            }
+            catch(FileNotFoundException ex)
+            {
+                _audios[fileName] = new AudioFileReader($"audio/{fileName}.mp3");
+            }
         }
 
         public void Play(string fileName, bool isLooping = false)

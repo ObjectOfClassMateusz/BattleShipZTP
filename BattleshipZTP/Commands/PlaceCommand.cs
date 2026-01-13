@@ -7,8 +7,7 @@ namespace BattleshipZTP.Commands;
 
 public class PlaceCommand : ICommand
 {
-    public BattleBoard Board { get; }//Commandy wysyłajmy bezbośrednio do boarda
-    //nie musi byc interfejs bo proxy jest po stronie użytkownika
+    public BattleBoard Board { get; }
     public IShip Ship { get; }
     public int PlayerID { get; }
     

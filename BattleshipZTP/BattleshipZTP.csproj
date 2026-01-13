@@ -13,7 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Ship\DarkEldarShips\" />
+    <Folder Include="Ship\EldarShips\" />
+    <Folder Include="Ship\SpaceShips\" />
+    <Folder Include="Ship\SaxonyShips\" />
   </ItemGroup>
 
 </Project>

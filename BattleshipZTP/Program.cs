@@ -13,8 +13,13 @@ namespace BattleshipZTP
     {
         public static void Main(string[] args)
         {
-            Console.SetWindowSize(130, 45); 
-            Console.SetBufferSize(130, 100); 
+            //Console.SetWindowSize(130, 45); 
+            //Console.SetBufferSize(130, 100); 
+            Env.SetColor();
+            Drawing.SetColors(ConsoleColor.White,ConsoleColor.Black);
+            Env.Wait(300);
+            Env.SetColor();
+            Drawing.SetColors(ConsoleColor.White, ConsoleColor.Black);
             Console.Clear();
             Console.OutputEncoding = Encoding.Unicode;
 
@@ -22,6 +27,11 @@ namespace BattleshipZTP
             Drawing.AddASCII("mainMenuTitle");
             Drawing.AddASCII("gameModeShip");
             Drawing.AddASCII("optionImg");
+            Drawing.AddASCII("skull");
+            Drawing.AddASCII("drukhari");
+            Drawing.AddASCII("bloodR");
+            Drawing.AddASCII("saxony");
+            Drawing.AddASCII("bieltan");
 
             AudioManager.Instance.Add("2-02 - Dark Calculation");
             AudioManager.Instance.Add("victory_sound");
@@ -32,19 +42,22 @@ namespace BattleshipZTP
             AudioManager.Instance.Add("stawianie");            
             AudioManager.Instance.Add("trafienie");
             AudioManager.Instance.Add("trafiony zatopiony");
+            AudioManager.Instance.Add("2-11 - Blood of Man");
             
             IScenario main = new MainMenuScenario();
             IScenario options = new OptionsScenario();
+            IScenario chooseGamemode = new ChooseGameModeScenario();
             IScenario exit = new ExitScenario();
             IScenario authors = new AuthorsScenario();
-            IScenario victory = new VictoryScenario();
             
             main.ConnectScenario("Options", options);
             main.ConnectScenario("Exit",exit);
             main.ConnectScenario("Authors", authors);
+            main.ConnectScenario("Singleplayer",chooseGamemode);
+
+            chooseGamemode.ConnectScenario("Main", main);
             options.ConnectScenario("Main",main);
             authors.ConnectScenario("Main",main);
-            victory.ConnectScenario("Main",main);
 
             main.Act();
 

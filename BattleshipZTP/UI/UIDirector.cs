@@ -35,9 +35,6 @@ namespace BattleshipZTP.UI
             Button multiplayer = new Button("Multiplayer");
             multiplayer.SetMargin(8);
             _builder.AddComponent(multiplayer);
-            Button replay = new Button("Replay");
-            replay.SetMargin(10);
-            _builder.AddComponent(replay);
             Button options = new Button("Options");
             options.SetMargin(10);
             _builder.AddComponent(options);

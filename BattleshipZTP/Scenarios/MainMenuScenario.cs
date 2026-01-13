@@ -19,8 +19,9 @@ namespace BattleshipZTP.Scenarios
         {
             base.Act();
 
-            Drawing.DrawASCII("mainMenuTitle", 10, 1, ConsoleColor.DarkGray);
-            Drawing.DrawASCII("mainMenuShip", 31, 12, background: ConsoleColor.DarkGreen);
+            //Decoration for main menu scene
+            Drawing.DrawASCII("mainMenuTitle", 18, 1, ConsoleColor.DarkGray);
+            Drawing.DrawASCII("mainMenuShip", 40, 12, background: ConsoleColor.DarkGreen);
 
             IWindowBuilder builder = new WindowBuilder();
             UIDirector director = new UIDirector(builder);
@@ -33,40 +34,19 @@ namespace BattleshipZTP.Scenarios
             controller.AddWindow(menu1);
             Env.CursorPos();
 
+            //Playing Dark Calculation
             AudioManager.Instance.ChangeVolume(
                 "2-02 - Dark Calculation", 
                 UserSettings.Instance.MusicVolume
             );
-
             if (UserSettings.Instance.MusicEnabled == true)
             {
                 AudioManager.Instance.Play("2-02 - Dark Calculation", true);
             }
-            
+
             List<string> option = controller.DrawAndStart();
             IScenario scenario;
-
-            switch (option.LastOrDefault())
-            {
-                case "Singleplayer":
-                    scenario = new ChooseGameModeScenario();
-                    scenario.Act();
-                    break;
-                case "Multiplayer":
-                    break;
-                case "Replay":
-                    break;
-                case "Options":
-                    _scenarios[option.LastOrDefault()].Act();
-                    break;
-                case "Authors":
-                    _scenarios[option.LastOrDefault()].Act();
-                    break;
-                case "Exit":
-                    _scenarios[option.LastOrDefault()].Act();
-                    break;
-            }
-            //_scenarios[option.LastOrDefault()].Act();
+            _scenarios[option.LastOrDefault()].Act();
         }
     }
 }

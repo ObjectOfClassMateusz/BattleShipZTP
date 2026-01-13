@@ -28,7 +28,7 @@ public class AttackCommand : ICommand
             return;
         }
         HitResult hitResult = Board.AttackPoint(Target);
-        
+        field.ArrowHit = true;
         if (hitResult == HitResult.Hit && UserSettings.Instance.SfxEnabled == true)
         {
             AudioManager.Instance.Play("trafienie");
@@ -73,7 +73,6 @@ public class AttackCommand : ICommand
     {
         //
     }
-
 
     public bool PlaceCondition(int x, int y)
     {

@@ -8,6 +8,20 @@ using System.Threading.Tasks;
 
 namespace BattleshipZTP.Utilities
 {
+    public class CoordsToDrawBoard
+    {
+        public readonly int Player1X;
+        public readonly int Player1Y;
+
+        public readonly int Player2X;
+        public readonly int Player2Y;
+        public CoordsToDrawBoard(int p1x ,int p1y ,int p2x , int p2y)
+        {
+            Player1X = p1x; Player1Y = p1y;
+            Player2X = p2x; Player2Y = p2y;
+        }
+    }
+
     public class Drawing
     {
         static (ConsoleColor foreground, ConsoleColor background) _colors;
@@ -49,6 +63,8 @@ namespace BattleshipZTP.Utilities
             }
         }
 
+
+
         class ASCIIImage
         {
             public List<string> pixels;
@@ -57,24 +73,6 @@ namespace BattleshipZTP.Utilities
                 pixels = new List<string>();
                 try
                 {
-                    //delete soon
-                    string content = File.ReadAllText("img//" + filename +"//"+filename+".txt");
-                    StringBuilder result = new StringBuilder();
-                    foreach (char c in content)
-                    {
-                        if (c == ' ')
-                            result.Append('!');
-                        else if (c == '\n' || c == '\r')
-                            result.Append(c); // zachowaj nowe linie
-                        else
-                            result.Append(' ');
-                    }
-                    File.WriteAllText("img//" + filename +"//"+"colorDoesntCount.txt", result.ToString());
-                    //delete soon
-
-
-
-
                     StreamReader reader = new StreamReader("img//"+filename+"//"+filename+".txt");
                     while (!reader.EndOfStream)
                     {
@@ -113,7 +111,14 @@ namespace BattleshipZTP.Utilities
                 Console.Write(_images[key].pixels[i]);
             }
             Env.SetColor();
-            using StreamReader reader =new StreamReader($"img/{key}/colorDoesntCount.txt");
+
+            if (!File.Exists($"img/{key}/colorDoesntCount.txt"))
+            {
+                //if mask doesnt exist
+                return;
+            }
+
+            using StreamReader reader = new StreamReader($"img/{key}/colorDoesntCount.txt");
             int row = 0;
             //Apply mask in string runs
             while (!reader.EndOfStream)

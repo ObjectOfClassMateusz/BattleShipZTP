@@ -7,19 +7,22 @@ using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
 using BattleshipZTP.Networking;
 using BattleshipZTP.Observers;
+using BattleshipZTP.Ship;
 
 namespace BattleshipZTP.Scenarios
 {
     public class SingleplayerScenario : Scenario
     {
         IGameMode _gameMode;
+        IScenario _mainScenario;
         IAI _ai;
-        List<(int x, int y)> _enemyShipmentCoords = new List<(int x, int y)>();
+        Fraction _fraction;
         Window _windowShipmentList = new Window();
         int numberOfShipsPerPlayer = 0;
 
-        public SingleplayerScenario(IGameMode gameMode, AIDifficulty difficulty, int numberOfShipsPerPlayer)
+        public SingleplayerScenario(IGameMode gameMode, AIDifficulty difficulty, int numberOfShipsPerPlayer,IScenario mainmenu)
         {
+            _mainScenario = mainmenu;
             _gameMode = gameMode;
             this.numberOfShipsPerPlayer = numberOfShipsPerPlayer;
             _ai = difficulty switch
@@ -121,30 +124,36 @@ namespace BattleshipZTP.Scenarios
             if (UserSettings.Instance.MusicEnabled == true)
             {
                 AudioManager.Instance.Stop("2-02 - Dark Calculation");
-                AudioManager.Instance.ChangeVolume("Pixel War Overlord", UserSettings.Instance.MusicVolume);
-                AudioManager.Instance.Play("Pixel War Overlord", true);
+                AudioManager.Instance.ChangeVolume(_gameMode.GameThemeAudio(), UserSettings.Instance.MusicVolume);
+                AudioManager.Instance.Play(_gameMode.GameThemeAudio(), true);
             }
-            
             base.Act();
-            
-            WriteNickNameOnConsole(52, 7,UserSettings.Instance.Nickname);
-            BattleBoard board = _gameMode.CreateBoard(52, 8);
+            var playersCoords = _gameMode.BoardCoords();
+
+
+            WriteNickNameOnConsole(playersCoords.Player1X, playersCoords.Player1Y,UserSettings.Instance.Nickname);
+            //return;
+            BattleBoard board = _gameMode.CreateBoard(playersCoords.Player1X, playersCoords.Player1Y+1);
             BattleBoard.BattleBoardProxy proxy = new BattleBoard.BattleBoardProxy(board);
             Initialize(proxy);
 
-            WriteNickNameOnConsole(88, 7, "AI_ENEMY");
-            BattleBoard enemyBoard = _gameMode.CreateBoard(88, 8); 
+            WriteNickNameOnConsole(playersCoords.Player2X, playersCoords.Player2Y, "AI_ENEMY");
+            BattleBoard enemyBoard = _gameMode.CreateBoard(playersCoords.Player2X, playersCoords.Player2Y+1); 
             BattleBoard.BattleBoardProxy enemyProxy = new BattleBoard.BattleBoardProxy(enemyBoard);
             Initialize(enemyProxy);
-            
+
             List<IShip> ships = _gameMode.ShipmentDelivery();
-            BeautifyHelper.ApplyFancyBodies(ships);
-            (int x, int y) tablePos = (71, 7);
+            if (_gameMode.RemeberArrowHit())
+            {
+                BeautifyHelper.ApplyFancyBodies(ships);
+            }
+            
+            (int x, int y) tablePos = _gameMode.RemeberArrowHit() ? (71, 7) : (96, 22);
             DisplayShipmentTable(tablePos.x, tablePos.y, ships);
             UIController uI = new UIController();
             uI.AddWindow(_windowShipmentList);
             uI.DrawAndEndSequence();
-            
+
             Drawing.SetColors(ConsoleColor.Black, ConsoleColor.Black);
             foreach (IShip ship in ships) 
             {
@@ -161,54 +170,18 @@ namespace BattleshipZTP.Scenarios
             List<IShip> enemyShips = _gameMode.ShipmentDelivery();
             BeautifyHelper.ApplyFancyBodies(enemyShips);
             PlaceShipsRandomly(enemyProxy, enemyShips);
+
+            Drawing.SetColors(ConsoleColor.Black,ConsoleColor.Blue);
+            Drawing.ClearRectangleArea(
+                playersCoords.Player2X+1, 
+                playersCoords.Player2Y+2,
+                proxy.Width,proxy.Height
+            );
             
-            enemyProxy.Display();
+            //enemyProxy.Display();
             BattleBoardMemento playerMemento = board.GetSaveState();
             BattleBoardMemento enemyMemento = enemyBoard.GetSaveState();
-            Console.ReadKey(true);
 
-            // 11
-            // 11
-
-            // PlaceCommand enemyCommand
-
-
-            //AI places the ships
-            // 1.) PlaceCommand.
-            // 2.) ExecuteNow()
-
-
-            // enemy_proxy.PlaceShipAI(
-            //    ShipFactory.CreateShip(ShipType.Carrier),
-            //     0,0);
-            // enemy_proxy.Display();
-
-
-
-            /*IWindowBuilder windowBuilder = new WindowBuilder();
-            windowBuilder.SetPosition(37, 2)
-                .SetSize(20)
-                .ColorBorders(ConsoleColor.Black, ConsoleColor.DarkGray)
-                .ColorHighlights(ConsoleColor.White, ConsoleColor.Green)
-                .AddComponent(new TextOutput("Game backlogs"))
-                .AddComponent(new Button("click me "));
-
-            Window window = windowBuilder.Build();
-            var controller = new UIController();
-            controller.AddWindow(window);
-            controller.DrawAndStart();
-
-            window.Add(new TextOutput("Log:"));
-            controller.DrawAndStart();
-            window.Add(new TextOutput("Cos sie stało :D"));
-            controller.DrawAndStart();
-            window.Add(new TextOutput("Text3:"));
-            controller.DrawAndStart();
-            window.Add(new TextOutput("Text4:"));
-            controller.DrawAndStart();
-            window.Add(new TextOutput("Text5:"));
-            controller.DrawAndStart();*/
-            
             IWindowBuilder windowBuilder = new WindowBuilder();
             windowBuilder.SetPosition(2, 2)
                 .SetSize(30)
@@ -231,6 +204,7 @@ namespace BattleshipZTP.Scenarios
             int aiSunkCounter = 0;       
             bool nextTurn = true;
             bool victory = false;
+
             
             while (victory == false)
             {
@@ -252,7 +226,6 @@ namespace BattleshipZTP.Scenarios
                     {
                         nextTurn = false;
                     }
-                    enemyProxy.Display();
                     if (playerSunkCounter >= totalShipsToSink || aiSunkCounter >= totalShipsToSink) 
                     {
                         victory = true;
@@ -276,17 +249,16 @@ namespace BattleshipZTP.Scenarios
 
                         var victoryScen = new VictoryScenario(winnerName, winnerId, stats, replayPlayerProxy, replayEnemyProxy, board.height, board.width);
     
-                        victoryScen.ConnectScenario("Main", new MainMenuScenario());
+                        victoryScen.ConnectScenario("Main", _mainScenario);
                         
                         ActionManager.Instance.Detach(stats);
                         ActionManager.Instance.Detach(logger);
-                        
+                        Env.SetColor();
                         victoryScen.Act();
                         break;
                     }               
                 }
                 if (victory) break;
-
                 // --- TURA AI ---
                 while (nextTurn == false)
                 {
@@ -354,12 +326,12 @@ namespace BattleshipZTP.Scenarios
                         int winnerId = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.GetHashCode() : "AI_ENEMY".GetHashCode();
 
                         var victoryScen = new VictoryScenario(winnerName, winnerId, stats, replayPlayerProxy, replayEnemyProxy, board.height, board.width);
-    
-                        victoryScen.ConnectScenario("Main", new MainMenuScenario());
-                        
+
+                        victoryScen.ConnectScenario("Main", _mainScenario);
+
                         ActionManager.Instance.Detach(stats);
                         ActionManager.Instance.Detach(logger);
-                        
+                        Env.SetColor();
                         victoryScen.Act();
                         break;
                     }

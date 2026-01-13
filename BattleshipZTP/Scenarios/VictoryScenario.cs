@@ -1,10 +1,11 @@
-﻿using BattleshipZTP.UI;
-using BattleshipZTP.Settings;
+﻿using BattleshipZTP.GameAssets;
 using BattleshipZTP.Observers;
-using BattleshipZTP.GameAssets;
+using BattleshipZTP.Settings;
 using BattleshipZTP.Settings;
 using BattleshipZTP.UI;
+using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
+using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +42,8 @@ namespace BattleshipZTP.Scenarios
 
         public override void Act()
         {
-            Console.Clear();
+            Env.Wait(100);
+            base.Act();
             
             AudioManager.Instance.ChangeVolume(
                 "victory_sound", 
@@ -80,19 +82,20 @@ namespace BattleshipZTP.Scenarios
             Window winWindow = winBuilder.Build();
             UIController winUI = new UIController();
             winUI.AddWindow(winWindow);
-            winUI.DrawAndStart();
+            //winUI.DrawAndStart();
             
             List<string> results = winUI.DrawAndStart();
             string choice = results.LastOrDefault();
 
             if (choice == "POWTORKA BITWY")
             {
-                new ReplayScenario(_stats.GetHistory(), _playerReplayBoard, _enemyReplayBoard, _height, _width).Act();
+                new ReplayScenario(_stats.GetHistory(), _playerReplayBoard, _enemyReplayBoard, _height, _width, _scenarios["Main"]).Act();
                 this.Act();
             }
             else if (choice == "POWROT DO MENU")
             {
-                new MainMenuScenario().Act();
+                _scenarios["Main"].Act();
+                //new MainMenuScenario().Act();
             }
         }
     }

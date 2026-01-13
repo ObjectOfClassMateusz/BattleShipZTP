@@ -8,19 +8,21 @@ namespace BattleshipZTP.Scenarios;
 
 public class ReplayScenario : Scenario
 {
+    private IScenario _mainMenu;
     private List<GameActionDetails> _history;
     private IBattleBoard _playerBoard;
     private IBattleBoard _enemyBoard;
     private int _height;
     private int _width;
 
-    public ReplayScenario(List<GameActionDetails> history, IBattleBoard playerBoard, IBattleBoard enemyBoard, int height, int width)
+    public ReplayScenario(List<GameActionDetails> history, IBattleBoard playerBoard, IBattleBoard enemyBoard, int height, int width, IScenario mainMenu)
     {
         _history = history;
         _playerBoard = playerBoard;
         _enemyBoard = enemyBoard;
         _height = height;
         _width = width;
+        _mainMenu = mainMenu;
     }
 
     public override void Act()
@@ -106,7 +108,7 @@ public class ReplayScenario : Scenario
         string choice = results.LastOrDefault();
         if (choice == "POWROT DO MENU")
         {
-            new MainMenuScenario().Act();
+            _mainMenu.Act();
         }
     }
     

@@ -1,4 +1,6 @@
-﻿namespace BattleshipZTP;
+﻿using BattleshipZTP.Ship.DarkEldarShips;
+
+namespace BattleshipZTP;
 
 public class ShipFactory
 {
@@ -12,6 +14,13 @@ public class ShipFactory
             ShipType.Battleship => new BattleshipShip(emptyPlacement),
             ShipType.Destroyer => new DestroyerShip(emptyPlacement),
             ShipType.Submarine => new SubmarineShip(emptyPlacement),
+
+            ShipType.Dr_JetBike => new ReaverJetBikeShip(emptyPlacement),
+            ShipType.Dr_Raider => new RaiderShip(emptyPlacement),
+            ShipType.Dr_Ravanger => new RavangerShip(emptyPlacement),
+            ShipType.Dr_Dair => new DairOfDestructionShip(emptyPlacement),
+
+
             _=> throw new ArgumentException("Invalid ship type")
         };
     }
