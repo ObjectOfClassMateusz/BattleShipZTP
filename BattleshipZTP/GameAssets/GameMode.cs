@@ -263,7 +263,7 @@ namespace BattleshipZTP.GameAssets
         public List<IShip> BuyShip(Dictionary<string, int> wallet)
         {
             IWindowBuilder windowBuilder = new WindowBuilder();
-            windowBuilder.SetPosition(96, 2)
+            windowBuilder.SetPosition(96, 20)
                 .ColorHighlights(ConsoleColor.Green, ConsoleColor.DarkGreen)
                 .ColorBorders(ConsoleColor.Cyan, ConsoleColor.DarkYellow);
     
@@ -278,7 +278,7 @@ namespace BattleshipZTP.GameAssets
             Window shipsWindow = windowBuilder.Build();
             
             windowBuilder.ResetBuilder();
-            windowBuilder.SetPosition(118, 2)
+            windowBuilder.SetPosition(118, 20)
                 .ColorHighlights(ConsoleColor.Yellow, ConsoleColor.DarkMagenta)
                 .ColorBorders(ConsoleColor.Black, ConsoleColor.White);
     
@@ -301,12 +301,13 @@ namespace BattleshipZTP.GameAssets
             //zakupy
             while (option != "POWROT")
             {
-                //stan zasobów
-                Env.CursorPos(96, 1);
+                // Wyświetlanie aktualnego stanu portfela w pętli
+                Env.CursorPos(96, 19);
                 Console.Write($"PORTFEL - Req: {wallet["Requisition"]} | En: {wallet["Energy"]}      ");
 
                 option = controller.DrawAndStart().FirstOrDefault() ?? "";
 
+                // PRZYPADEK 1: Gracz wybrał konkretny statek
                 if (option != "POWROT" && option != "")
                 {
                     var (req, en, type) = GetShipPrice(option);
@@ -315,10 +316,22 @@ namespace BattleshipZTP.GameAssets
                     {
                         wallet["Requisition"] -= req;
                         wallet["Energy"] -= en;
+
                         boughtShips.Add(ShipFactory.CreateShip(type));
+
                         if (UserSettings.Instance.SfxEnabled) AudioManager.Instance.Play("stawianie");
+
+                        return boughtShips;
                     }
-                    else if (UserSettings.Instance.SfxEnabled) AudioManager.Instance.Play("wrong");
+                    else
+                    {
+                        if (UserSettings.Instance.SfxEnabled) AudioManager.Instance.Play("wrong");
+                    }
+                }
+
+                if (option == "POWROT")
+                {
+                    return boughtShips;
                 }
             }
             return boughtShips;
