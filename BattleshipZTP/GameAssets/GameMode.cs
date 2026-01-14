@@ -199,13 +199,14 @@ namespace BattleshipZTP.GameAssets
         public List<IShip> ShipmentDelivery()
         {
             return new List<IShip>() 
-            { 
+            {
+                ShipFactory.CreateShip(ShipType.Sax_Eisen),
                 ShipFactory.CreateShip(ShipType.Dr_JetBike),
-                ShipFactory.CreateShip(ShipType.Dr_JetBike),
-                ShipFactory.CreateShip(ShipType.Dr_Ravanger),
-                ShipFactory.CreateShip(ShipType.Dr_Raider),
-                ShipFactory.CreateShip(ShipType.Dr_Dair),
-                ShipFactory.CreateShip(ShipType.Sax_Eisen)
+                //ShipFactory.CreateShip(ShipType.Dr_JetBike),
+                //ShipFactory.CreateShip(ShipType.Dr_Ravanger),
+                //ShipFactory.CreateShip(ShipType.Dr_Raider),
+                ShipFactory.CreateShip(ShipType.Dr_Dair)
+                
             };
 
             //ReaverJetBikeShip.RequisitionCost;

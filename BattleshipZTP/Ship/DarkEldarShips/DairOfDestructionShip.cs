@@ -21,9 +21,9 @@ namespace BattleshipZTP.Ship.DarkEldarShips
             _body.Add(("=╫╋╫=", 1));
             _body.Add(("╱=╫=╫=╲", 0));
 
-            _colors = (ConsoleColor.DarkMagenta, ConsoleColor.Black);
             _name = "DairOfDestruction";
-
+            _colors = (ConsoleColor.DarkMagenta, ConsoleColor.Black);
+            
             _health = 770;
             _maxHealth = 770;
         }
