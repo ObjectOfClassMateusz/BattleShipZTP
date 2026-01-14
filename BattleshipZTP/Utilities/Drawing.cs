@@ -10,15 +10,15 @@ namespace BattleshipZTP.Utilities
 {
     public class CoordsToDrawBoard
     {
-        public readonly int Player1X;
-        public readonly int Player1Y;
+        public readonly int XAxis_Player1;
+        public readonly int YAxis_Player1;
+        public readonly int XAxis_Player2;
+        public readonly int YAxis_Player2;
 
-        public readonly int Player2X;
-        public readonly int Player2Y;
-        public CoordsToDrawBoard(int p1x ,int p1y ,int p2x , int p2y)
+        public CoordsToDrawBoard(int Pl1x ,int Pl1y ,int Pl2x , int Pl2y)
         {
-            Player1X = p1x; Player1Y = p1y;
-            Player2X = p2x; Player2Y = p2y;
+            XAxis_Player1 = Pl1x; YAxis_Player1 = Pl1y;
+            XAxis_Player2 = Pl2x; YAxis_Player2 = Pl2y;
         }
     }
 
@@ -50,7 +50,7 @@ namespace BattleshipZTP.Utilities
             }
             Env.SetColor();
         }
-        public static void ClearRectangleArea(int x, int y, int w, int h)
+        public static void DrawRectangleArea(int x, int y, int w, int h)
         {
             StringBuilder b = new StringBuilder();
             b.Append(' ', w);
@@ -62,8 +62,6 @@ namespace BattleshipZTP.Utilities
                 Console.Write(rect);
             }
         }
-
-
 
         class ASCIIImage
         {
@@ -96,12 +94,13 @@ namespace BattleshipZTP.Utilities
         }
 
         static readonly Dictionary<string, ASCIIImage> _images = new Dictionary<string, ASCIIImage>();
-        public static void AddASCII(string filename)
+        public static void AddASCIIDrawing(string filename)
         {
             _images [filename] = new ASCIIImage(filename);
         }
-        public static void DrawASCII(string key,
-        int x,int y,ConsoleColor foreground = ConsoleColor.White,ConsoleColor background = ConsoleColor.Black)
+        public static void DrawASCII(string key,int x,int y,
+        ConsoleColor foreground = ConsoleColor.White,
+        ConsoleColor background = ConsoleColor.Black)
         {
             //Draw the image normally
             Env.SetColor(foreground, background);
@@ -117,7 +116,6 @@ namespace BattleshipZTP.Utilities
                 //if mask doesnt exist
                 return;
             }
-
             using StreamReader reader = new StreamReader($"img/{key}/colorDoesntCount.txt");
             int row = 0;
             //Apply mask in string runs

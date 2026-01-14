@@ -1,4 +1,5 @@
 ﻿using BattleshipZTP.Ship;
+using BattleshipZTP.Ship.DarkEldarShips;
 using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
 
@@ -98,7 +99,7 @@ namespace BattleshipZTP.GameAssets
         };
         public List<int> GetShipSizes()
         {
-            return new List<int> { 3};
+            return new List<int> {3};
         }
     }
 
@@ -121,7 +122,9 @@ namespace BattleshipZTP.GameAssets
         public CoordsToDrawBoard BoardCoords() => new CoordsToDrawBoard(2, 20, 2, 1);
         public BattleBoard CreateBoard(int x , int y)
         {
-            return new BattleBoard(x,y,90,16);
+            var result = new BattleBoard(x, y, 90, 16);
+            result.EnableRotation(false);
+            return result;
         }
         public bool RemeberArrowHit()
         {
@@ -148,10 +151,11 @@ namespace BattleshipZTP.GameAssets
         }
         void InsertDrukhariPrices(IWindowBuilder windowBuilder)
         {
-            windowBuilder.AddComponent(new TextOutput("Req: 150  En: 10"));
-            windowBuilder.AddComponent(new TextOutput("Req: 280  En: 20"));
-            windowBuilder.AddComponent(new TextOutput("Req: 375  En: 30"));
-            windowBuilder.AddComponent(new TextOutput("Req: 720  En: 50"));
+            windowBuilder.AddComponent(new TextOutput
+                ($"Req: {ReaverJetBikeShip.RequisitionCost}  En: {ReaverJetBikeShip.EnergyCost}"));
+            windowBuilder.AddComponent(new TextOutput($"Req: 280  En: 20"));
+            windowBuilder.AddComponent(new TextOutput($"Req: 375  En: 30"));
+            windowBuilder.AddComponent(new TextOutput($"Req: 720  En: 50"));
         }
         void InsertEldarShipNames(IWindowBuilder windowBuilder)
         {
@@ -197,10 +201,15 @@ namespace BattleshipZTP.GameAssets
             return new List<IShip>() 
             { 
                 ShipFactory.CreateShip(ShipType.Dr_JetBike),
+                ShipFactory.CreateShip(ShipType.Dr_JetBike),
                 ShipFactory.CreateShip(ShipType.Dr_Ravanger),
                 ShipFactory.CreateShip(ShipType.Dr_Raider),
-                ShipFactory.CreateShip(ShipType.Dr_Dair)            
+                ShipFactory.CreateShip(ShipType.Dr_Dair),
+                ShipFactory.CreateShip(ShipType.Sax_Eisen)
             };
+
+            //ReaverJetBikeShip.RequisitionCost;
+            //ReaverJetBikeShip.EnergyCost;
 
             /// help ;_;
             /// 
@@ -255,7 +264,6 @@ namespace BattleshipZTP.GameAssets
                 //Console.WriteLine(option);
                 //Console.WriteLine(costsWindow.GetComponent(0).GetOption());
             }
-
             return result;
         }
             
@@ -287,12 +295,10 @@ namespace BattleshipZTP.GameAssets
         }
     }
 
-
     public abstract class GameModeFactory
     {
         public abstract IGameMode GetGameMode();
     }
-
     public class ClassicModeFactory : GameModeFactory 
     {
         public override IGameMode GetGameMode()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BattleshipZTP.GameAssets;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,9 @@ namespace BattleshipZTP.Ship.DarkEldarShips
 
             _colors = (ConsoleColor.DarkMagenta,ConsoleColor.Black);
             _name = "Raider";
+
+            _health = 180;
+            _maxHealth = 180;
         }
     }
 }

@@ -16,15 +16,13 @@ namespace BattleshipZTP.Scenarios
         IGameMode _gameMode;
         IScenario _mainScenario;
         IAI _ai;
-        Fraction _fraction;
         Window _windowShipmentList = new Window();
         int numberOfShipsPerPlayer = 0;
 
-        public SingleplayerScenario(IGameMode gameMode, AIDifficulty difficulty, int numberOfShipsPerPlayer,IScenario mainmenu)
+        public SingleplayerScenario(IGameMode gameMode, AIDifficulty difficulty,IScenario mainmenu)
         {
             _mainScenario = mainmenu;
             _gameMode = gameMode;
-            this.numberOfShipsPerPlayer = numberOfShipsPerPlayer;
             _ai = difficulty switch
             {
                 AIDifficulty.Easy => new SimpleAI(),
@@ -98,7 +96,7 @@ namespace BattleshipZTP.Scenarios
                     int x = rand.Next(0, enemyProxy.Width);
                     int y = rand.Next(0, enemyProxy.Height);
     
-                    if (rand.Next(2) == 0) 
+                    if (rand.Next(2) == 0 && _gameMode.RemeberArrowHit()) 
                     {
                         ship.SetBody(BattleBoard.RotateBody(ship.GetBody())); 
                     }
@@ -121,33 +119,46 @@ namespace BattleshipZTP.Scenarios
         
         public override void Act()
         {
-            if (UserSettings.Instance.MusicEnabled == true)
+            if (UserSettings.Instance.MusicEnabled)
             {
                 AudioManager.Instance.Stop("2-02 - Dark Calculation");
                 AudioManager.Instance.ChangeVolume(_gameMode.GameThemeAudio(), UserSettings.Instance.MusicVolume);
                 AudioManager.Instance.Play(_gameMode.GameThemeAudio(), true);
             }
             base.Act();
-            var playersCoords = _gameMode.BoardCoords();
+            var boardCoords = _gameMode.BoardCoords();
 
 
-            WriteNickNameOnConsole(playersCoords.Player1X, playersCoords.Player1Y,UserSettings.Instance.Nickname);
-            //return;
-            BattleBoard board = _gameMode.CreateBoard(playersCoords.Player1X, playersCoords.Player1Y+1);
+            WriteNickNameOnConsole(boardCoords.XAxis_Player1, boardCoords.YAxis_Player1,UserSettings.Instance.Nickname);
+            BattleBoard board = _gameMode.CreateBoard(boardCoords.XAxis_Player1, boardCoords.YAxis_Player1 + 1);
             BattleBoard.BattleBoardProxy proxy = new BattleBoard.BattleBoardProxy(board);
             Initialize(proxy);
 
-            WriteNickNameOnConsole(playersCoords.Player2X, playersCoords.Player2Y, "AI_ENEMY");
-            BattleBoard enemyBoard = _gameMode.CreateBoard(playersCoords.Player2X, playersCoords.Player2Y+1); 
+            WriteNickNameOnConsole(boardCoords.XAxis_Player2, boardCoords.YAxis_Player2, "AI_ENEMY");
+            BattleBoard enemyBoard = _gameMode.CreateBoard(boardCoords.XAxis_Player2, boardCoords.YAxis_Player2 + 1); 
             BattleBoard.BattleBoardProxy enemyProxy = new BattleBoard.BattleBoardProxy(enemyBoard);
             Initialize(enemyProxy);
 
             List<IShip> ships = _gameMode.ShipmentDelivery();
+            numberOfShipsPerPlayer = ships.Count;
             if (_gameMode.RemeberArrowHit())
             {
                 BeautifyHelper.ApplyFancyBodies(ships);
             }
-            
+            else
+            {
+                  Env.CursorPos(1, 40);
+                  Env.SetColor(ConsoleColor.DarkMagenta, ConsoleColor.Gray);
+                  Console.Write(" Action Points ");
+                  Env.CursorPos(27, 40);
+                  Env.SetColor(ConsoleColor.DarkBlue, ConsoleColor.DarkCyan);
+                  Console.Write(" Requisition ");
+                  Env.CursorPos(51, 40);
+                  Env.SetColor(ConsoleColor.DarkGreen, ConsoleColor.Green);
+                  Console.Write(" Energy ");
+                  Env.SetColor();
+            }
+
             (int x, int y) tablePos = _gameMode.RemeberArrowHit() ? (71, 7) : (96, 22);
             DisplayShipmentTable(tablePos.x, tablePos.y, ships);
             UIController uI = new UIController();
@@ -161,30 +172,39 @@ namespace BattleshipZTP.Scenarios
                 PlaceCommand command = new PlaceCommand(board, ship , UserSettings.Instance.GetHashCode());
                 var coords = proxy.PlaceCommand(command);
                 command.Execute(coords);
+                Drawing.DrawRectangleArea(tablePos.x, tablePos.y + 2, _windowShipmentList.Width , _windowShipmentList.Height);
                 _windowShipmentList.Remove(0);
-                Drawing.ClearRectangleArea(tablePos.x, tablePos.y + 2, 12, 10);
             }
-            Drawing.ClearRectangleArea(tablePos.x-1, tablePos.y , 15, 12);
+            Drawing.DrawRectangleArea(tablePos.x-1, tablePos.y , _windowShipmentList.Width+4, _windowShipmentList.Height+3);
             Env.SetColor();
             
             List<IShip> enemyShips = _gameMode.ShipmentDelivery();
-            BeautifyHelper.ApplyFancyBodies(enemyShips);
+            if (_gameMode.RemeberArrowHit())
+            {
+                BeautifyHelper.ApplyFancyBodies(enemyShips);
+            }
             PlaceShipsRandomly(enemyProxy, enemyShips);
 
-            Drawing.SetColors(ConsoleColor.Black,ConsoleColor.Blue);
-            Drawing.ClearRectangleArea(
-                playersCoords.Player2X+1, 
-                playersCoords.Player2Y+2,
+            Drawing.SetColors(ConsoleColor.Black,ConsoleColor.Black);
+            Drawing.DrawRectangleArea(
+                boardCoords.XAxis_Player2+1, 
+                boardCoords.YAxis_Player2+2,
                 proxy.Width,proxy.Height
             );
-            
-            //enemyProxy.Display();
+            enemyProxy.Display();//delete me soon
             BattleBoardMemento playerMemento = board.GetSaveState();
             BattleBoardMemento enemyMemento = enemyBoard.GetSaveState();
 
             IWindowBuilder windowBuilder = new WindowBuilder();
-            windowBuilder.SetPosition(2, 2)
-                .SetSize(30)
+            if(_gameMode.RemeberArrowHit())
+            {
+                windowBuilder.SetPosition(2, 2);
+            }
+            else
+            {
+                windowBuilder.SetPosition(96, 2);
+            }
+            windowBuilder.SetSize(30)
                 .ColorBorders(ConsoleColor.Black, ConsoleColor.DarkGray)
                 .ColorHighlights(ConsoleColor.White, ConsoleColor.Green)
                 .AddComponent(new TextOutput("=== Game Backlogs ==="));
@@ -198,15 +218,20 @@ namespace BattleshipZTP.Scenarios
             
             ActionManager.Instance.Attach(logger);
             ActionManager.Instance.Attach(stats);
+
+            if (!_gameMode.RemeberArrowHit())
+            {
+                Gameplay40kHandle(proxy,enemyProxy,ships ,enemyShips);
+                return;
+            }
             
             int totalShipsToSink = numberOfShipsPerPlayer; 
             int playerSunkCounter = 0;
-            int aiSunkCounter = 0;       
+            int aiSunkCounter = 0;
             bool nextTurn = true;
             bool victory = false;
 
-            
-            while (victory == false)
+            while (!victory)
             {
                 // --- TURA GRACZA ---
                 while (nextTurn == true)
@@ -338,17 +363,57 @@ namespace BattleshipZTP.Scenarios
                 }
             }
         }
+
+        void GetAdvancedShipFromOption(List<Advanced40KShip> ships)
+        {
+            IWindowBuilder builder = new WindowBuilder();
+            builder.SetPosition(96, 25)
+                .ColorBorders(ConsoleColor.Black, ConsoleColor.DarkGray)
+                .ColorHighlights(ConsoleColor.DarkGreen, ConsoleColor.Green);
+
+            for (int i= 0; i < ships.Count; i++)// 0...n
+            {
+                builder.AddComponent(new MaskedButton(ships[i].Name(),i.ToString()));
+            }
+            Window window = builder.Build();
+            builder.ResetBuilder();
+
+            UIController controller = new UIController();
+            controller.AddWindow(window);
+            List<string> option = controller.DrawAndStart();
+
+            Console.WriteLine(option.FirstOrDefault());
+
+            Console.ReadKey(true);
+
+            List<string> option2 = controller.DrawAndStart();
+
+            Console.WriteLine(option2.FirstOrDefault());
+        }
+
+        void Gameplay40kHandle(IBattleBoard board1 , IBattleBoard enemyboard,
+            List<IShip> ships , List<IShip> enemyships)
+        {
+            bool victory = false;
+            bool nextTurn = true;
+
+            List<Advanced40KShip> advanced40KShips = new List<Advanced40KShip> ();
+            foreach (var shipItem in ships) 
+            {
+                advanced40KShips.Add((Advanced40KShip)shipItem);
+            }
+            GetAdvancedShipFromOption(advanced40KShips);
+
+
+
+
+            while (!victory)
+            {
+                
+            }
+        }
     }
     
 }
 
 
-/*Env.CursorPos(1, 39);
-      Env.SetColor(ConsoleColor.DarkMagenta, ConsoleColor.Gray);
-      Console.Write(" Action Points ");
-      Env.CursorPos(17, 39);
-      Env.SetColor(ConsoleColor.DarkBlue, ConsoleColor.DarkCyan);
-      Console.Write(" Requisition ");
-      Env.CursorPos(31, 39);
-      Env.SetColor(ConsoleColor.DarkGreen, ConsoleColor.Green);
-      Console.Write(" Energy ");*/

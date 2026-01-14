@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BattleshipZTP.GameAssets;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,9 @@ namespace BattleshipZTP.Ship.DarkEldarShips
 
             _name = "Ravanger";
             _colors = (ConsoleColor.DarkMagenta, ConsoleColor.Black);
+
+            _health = 300;
+            _maxHealth = 300;
         }
     }
 }

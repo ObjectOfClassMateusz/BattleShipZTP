@@ -31,8 +31,7 @@ namespace BattleshipZTP.Scenarios
             controller.AddWindow(window2);
             Drawing.DrawASCII("gameModeShip", 41, 0, ConsoleColor.Black , ConsoleColor.Red);
             Env.CursorPos(70, 14);
-            //Console.WriteLine("Choose game mode");
-            Console.WriteLine("ℂ𝕙𝕠𝕠𝕤𝕖 𝔾𝕒𝕞𝕖 𝕄𝕠𝕕𝕖");
+            Console.WriteLine("Choose game mode");
 
             GameModeFactory factory;
 
@@ -48,25 +47,24 @@ namespace BattleshipZTP.Scenarios
                     factory = new ClassicModeFactory();
                     var gameMode = factory.GetGameMode();
                     scenario = new SingleplayerScenario(gameMode, difficulty: ChooseDifficulty(),
-                        8, _scenarios["Main"]);
+                         _scenarios["Main"]);
                     scenario.Act();
                     break;
                 case "Single ship duel":
                     factory = new DuelModeFactory();
                     var duelMode = factory.GetGameMode();
                     scenario = new SingleplayerScenario(duelMode, difficulty: ChooseDifficulty(),
-                        1, _scenarios["Main"]);
+                         _scenarios["Main"]);
                     scenario.Act();
                     break;
                 case "40K":
                     var chooseRace = new SelectRaceScenario();
                     chooseRace.Act();
                     Fraction fraction = chooseRace.GetRace();
-
                     factory = new WarhammerModeFactory(chooseRace.GetRace());
                     var warhammerMode = factory.GetGameMode();
                     scenario = new SingleplayerScenario(warhammerMode, difficulty: ChooseDifficulty(),
-                        6, _scenarios["Main"]);
+                         _scenarios["Main"]);
                     scenario.Act();
                     break;
             }

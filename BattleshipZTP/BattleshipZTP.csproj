@@ -12,10 +12,4 @@
     <PackageReference Include="System.Windows.Extensions" Version="10.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Ship\EldarShips\" />
-    <Folder Include="Ship\SpaceShips\" />
-    <Folder Include="Ship\SaxonyShips\" />
-  </ItemGroup>
-
 </Project>

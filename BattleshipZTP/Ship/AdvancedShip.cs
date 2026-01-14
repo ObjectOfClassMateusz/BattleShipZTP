@@ -18,7 +18,12 @@ namespace BattleshipZTP.Ship
         public Advanced40KShip(int size, List<Point> initialPlacement) 
             : base(size, initialPlacement)
         {
-            
+            _healthBar = new StatBar(_maxHealth, ConsoleColor.DarkRed, 6);
+            /*StatBar bar = new StatBar(500, ConsoleColor.Red, 3);
+            bar.Show();
+            Console.WriteLine();
+            bar.Decrease(297);
+            bar.Show();*/
         }
     }
 }

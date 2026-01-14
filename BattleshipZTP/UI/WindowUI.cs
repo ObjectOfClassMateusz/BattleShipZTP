@@ -32,7 +32,6 @@ namespace BattleshipZTP.UI
             //Skip other handlers for other keys
             return "";
         }
-
         int _margin = 0;
         public void SetMargin(int width)
         {
@@ -54,6 +53,60 @@ namespace BattleshipZTP.UI
             }
             int diff = (rigthMarginFullfilment - k)-1;
             for(int i = 0; i < diff; i++)
+            {
+                Console.Write(' ');
+            }
+        }
+    }
+
+    public class MaskedButton : IComponentUI
+    {
+        //Button component that return option result other than displayed
+        string _option { get; set; } = "";
+        string _display { get; set; } = "";
+
+        string _backupOption { get; set; } = "";
+        public MaskedButton(string option,string display)
+        {
+            _option = option;
+            _display = display;
+            _backupOption = _option;
+        }
+        public string GetOption()
+        {
+            return _option;
+        }
+        public string HandleKey(ConsoleKey key)
+        {
+            if (key == ConsoleKey.Enter)
+            {
+                _option = _display;
+            }
+            //Skip other handlers for other keys
+            return "";
+        }
+        int _margin = 0;
+        public void SetMargin(int width)
+        {
+            _margin = width;
+        }
+        public int GetMargin() => _margin;
+        public void Print(int rigthMarginFullfilment = 0)
+        {
+            _option = _backupOption;
+            int k = 0;
+            for (int i = 0; i < _margin; i++)
+            {
+                Console.Write(' '); k++;
+            }
+            Console.Write(GetOption());
+            k += GetOption().Length;
+            for (int i = 0; i < _margin; i++)
+            {
+                Console.Write(' '); k++;
+            }
+            int diff = (rigthMarginFullfilment - k) - 1;
+            for (int i = 0; i < diff; i++)
             {
                 Console.Write(' ');
             }
@@ -424,25 +477,25 @@ namespace BattleshipZTP.UI
             this._height = height;
         }
 
-        (ConsoleColor, ConsoleColor) _borderColor;
-        public (ConsoleColor, ConsoleColor) GetBorderColors()
+        (ConsoleColor foreground, ConsoleColor background) _borderColor; 
+        (ConsoleColor foreground, ConsoleColor background) _highlightColor;
+        public (ConsoleColor foreground, ConsoleColor background) GetBorderColors()
         {
             return _borderColor;
         }
         public void SetBorderColors(ConsoleColor foregroundColor, ConsoleColor backgroundColor)
         {
-            this._borderColor.Item1 = foregroundColor;
-            this._borderColor.Item2 = backgroundColor;
+            this._borderColor.foreground = foregroundColor;
+            this._borderColor.background = backgroundColor;
         }
-        (ConsoleColor, ConsoleColor) _highlightColor;
-        public (ConsoleColor, ConsoleColor) GetHighColors()
+        public (ConsoleColor foreground, ConsoleColor background) GetHighColors()
         {
             return _highlightColor;
         }
         public void SetHighColors(ConsoleColor foregroundColor, ConsoleColor backgroundColor)
         {
-            this._highlightColor.Item1 = foregroundColor;
-            this._highlightColor.Item2 = backgroundColor;
+            this._highlightColor.foreground = foregroundColor;
+            this._highlightColor.background = backgroundColor;
         }
 
         public Window(){}
@@ -459,7 +512,7 @@ namespace BattleshipZTP.UI
             {
                 //print highlighted option
                 Env.CursorPos(cornerX + 1, cornerY + 1 + Selected);
-                Env.SetColor(_highlightColor.Item1, _highlightColor.Item2);
+                Env.SetColor(_highlightColor.foreground, _highlightColor.background);
                 _components[Selected].Print(Width);
                 klawisz = Console.ReadKey(true);
 
@@ -552,50 +605,7 @@ namespace BattleshipZTP.UI
         }
         public List<string> DrawAndStart()
         {
-            if (!_valid)
-            {
-                OnceValidate();
-            }
-            foreach (Window window in windows)
-            {
-                //Do the draw
-
-                //color border and set cursor to start the drawing
-                Env.SetColor(window.GetBorderColors().Item1, window.GetBorderColors().Item2);
-                Env.CursorPos(window.GetCorner().X, window.GetCorner().Y);
-
-                // top border --------------------
-                for (int j = 0; j < window.Width + 1; j++)
-                { Console.Write("-"); }
-
-                // list of window components
-                //              ...
-                //          |component1 |
-                //          |component2 |
-                //              ...
-                for (int i = 1; i < window.Height; i++)
-                {
-                    Env.CursorPos(window.GetCorner().X, window.GetCorner().Y + i);
-                    Console.Write("|");//left wall
-
-                    if (i <= window.ComponentsLenght())
-                    {
-                        Env.SetColor();
-                        window.GetComponent(i - 1).Print(window.Width);//dispay component
-                    }
-
-                    Env.SetColor(window.GetBorderColors().Item1, window.GetBorderColors().Item2);
-                    Env.CursorPos(window.GetCorner().X + window.Width, window.GetCorner().Y + i);
-                    Console.Write("|");//right wall
-                }
-
-                //bottom border --------------------
-                Env.CursorPos(window.GetCorner().X, window.GetCorner().Y + window.Height);
-                for (int j = 0; j < window.Width + 1; j++)
-                {
-                    Console.Write("-");
-                }
-            }
+            DrawAndEndSequence();
             // Main navigation
             List<string> OptionsReturns = new List<string>();
             for (int i = 0; true; i = (i + 1) % windows.Count)
@@ -677,7 +687,7 @@ namespace BattleshipZTP.UI
                 //Do the draw
 
                 //color border and set cursor to start the drawing
-                Env.SetColor(window.GetBorderColors().Item1, window.GetBorderColors().Item2);
+                Env.SetColor(window.GetBorderColors().foreground, window.GetBorderColors().background);
                 Env.CursorPos(window.GetCorner().X, window.GetCorner().Y);
 
                 // top border --------------------
@@ -700,7 +710,7 @@ namespace BattleshipZTP.UI
                         window.GetComponent(i - 1).Print(window.Width);//dispay component
                     }
 
-                    Env.SetColor(window.GetBorderColors().Item1, window.GetBorderColors().Item2);
+                    Env.SetColor(window.GetBorderColors().foreground, window.GetBorderColors().background);
                     Env.CursorPos(window.GetCorner().X + window.Width, window.GetCorner().Y + i);
                     Console.Write("|");//right wall
                 }
