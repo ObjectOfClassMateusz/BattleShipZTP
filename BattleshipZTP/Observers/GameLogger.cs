@@ -1,5 +1,6 @@
 ﻿using BattleshipZTP.UI;
 using BattleshipZTP.Settings;
+using BattleshipZTP.Commands;
 
 
 namespace BattleshipZTP.Observers;
@@ -20,7 +21,16 @@ public class GameLogger : IActionManager
             ? UserSettings.Instance.Nickname 
             : "AI_ENEMY";
 
-        string logEntry = $"{shooterName}: {details.ActionType} ({details.Coords.X},{details.Coords.Y}) -> {details.Result}";
+        string logEntry;
+
+        if (details.ActionType == "Place")
+        {
+            logEntry = $"{shooterName} postawił statek";
+        }
+        else
+        {
+            logEntry = $"{shooterName}: {details.ActionType} ({details.Coords.X},{details.Coords.Y}) -> {details.Result}";
+        }
 
         if (_logWindow.ComponentsLenght() > 10) 
         {

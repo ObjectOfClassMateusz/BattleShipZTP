@@ -13,6 +13,21 @@ namespace BattleshipZTP
     {
         public static void Main(string[] args)
         {
+            try
+            {
+                if (OperatingSystem.IsWindows())
+                {
+                    // Ustawiamy szerokość na co najmniej 140, żeby pozycja 123 była bezpieczna
+                    Console.SetWindowSize(150, 45);
+                    Console.SetBufferSize(150, 45);
+                }
+            }
+            catch
+            {
+                // Jeśli laptop ma za mały ekran na 150 znaków, program przynajmniej się nie wywali
+                Console.WriteLine("Uwaga: Nie można ustawić preferowanego rozmiaru okna.");
+            }
+
             Console.SetWindowSize(130, 45); 
             Env.SetColor();
             Drawing.SetColors(ConsoleColor.White,ConsoleColor.Black);

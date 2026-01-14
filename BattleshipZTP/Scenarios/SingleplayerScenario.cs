@@ -219,11 +219,6 @@ namespace BattleshipZTP.Scenarios
             ActionManager.Instance.Attach(logger);
             ActionManager.Instance.Attach(stats);
 
-            if (!_gameMode.RemeberArrowHit())
-            {
-                Gameplay40kHandle(proxy,enemyProxy,ships ,enemyShips);
-                return;
-            }
             
             int totalShipsToSink = numberOfShipsPerPlayer; 
             int playerSunkCounter = 0;
@@ -234,23 +229,48 @@ namespace BattleshipZTP.Scenarios
 
             while (victory == false)
             {
-                if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.B)
-                {
-                    List<IShip> posilki = ((WarhammerGameMode)_gameMode).BuyShip(playerWallet);
-        
-                    foreach (var ship in posilki)
-                    {
-                        BeautifyHelper.ApplyFancyBodies(new List<IShip>{ship});
-                        PlaceCommand cmd = new PlaceCommand(board, ship, UserSettings.Instance.GetHashCode());
-                        var coords = proxy.PlaceCommand(cmd);
-                        cmd.Execute(coords);
-                    }
-                    proxy.Display();
-                }
                 // --- TURA GRACZA ---
                 while (nextTurn == true)
                 {
+                    if (!_gameMode.RemeberArrowHit())
+                    {
+                        Env.CursorPos(15, 20);
+                        Env.SetColor(ConsoleColor.Green, ConsoleColor.Black);
+                        Console.Write("FAZA DECYZJI: [B] - Sklep | [S] - Strzelanie | [K] - Koniec Tury    ");
+
+                        var decision = Console.ReadKey(true).Key;
+
+                        if (decision == ConsoleKey.B)
+                        {
+                            List<IShip> reinforcement = _gameMode.BuyShip(playerWallet);
+                            if (reinforcement != null && reinforcement.Count > 0)
+                            {
+                                foreach (var ship in reinforcement)
+                                {
+                                    PlaceCommand cmd = new PlaceCommand(board, ship, UserSettings.Instance.GetHashCode());
+                                    var coords = proxy.PlaceCommand(cmd);
+                                    cmd.Execute(coords);
+                                }
+                                proxy.Display();
+                                enemyProxy.Display();
+                            }
+                            continue; // Wraca na początek wyboru
+                        }
+
+                        if (decision == ConsoleKey.K)
+                        {
+                            nextTurn = false; // Gracz dobrowolnie kończy turę
+                            break;
+                        }
+
+                        if (decision != ConsoleKey.S)
+                        {
+                            continue; // Jeśli gracz kliknął coś innego, pytamy ponownie
+                        }
+                    }
+
                     Point playerTarget = enemyProxy.ChooseAttackPoint();
+
                     AttackCommand playerAttack = new AttackCommand(enemyProxy, playerTarget, UserSettings.Instance.GetHashCode());
                     playerAttack.Execute(new List<(int x, int y)>());
                     
