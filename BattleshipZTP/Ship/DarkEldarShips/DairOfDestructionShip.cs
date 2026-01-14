@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BattleshipZTP.GameAssets;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,9 @@ namespace BattleshipZTP.Ship.DarkEldarShips
 {
     public class DairOfDestructionShip : Advanced40KShip
     {
+        static public int RequisitionCost = 720;
+        static public int EnergyCost = 50;
+        
         private const int DairOfDestructionSize = 7;
         public DairOfDestructionShip( List<Point> initialPlacement)
             : base(DairOfDestructionSize, initialPlacement)
@@ -22,6 +26,9 @@ namespace BattleshipZTP.Ship.DarkEldarShips
 
             _colors = (ConsoleColor.DarkMagenta, ConsoleColor.Black);
             _name = "DairOfDestruction";
+
+            _health = 770;
+            _maxHealth = 770;
         }
     }
 }

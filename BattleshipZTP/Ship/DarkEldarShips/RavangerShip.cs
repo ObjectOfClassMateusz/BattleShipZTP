@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BattleshipZTP.GameAssets;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,9 @@ namespace BattleshipZTP.Ship.DarkEldarShips
 {
     public class RavangerShip : Advanced40KShip
     {
+        static public int RequisitionCost = 375;
+        static public int EnergyCost = 30;
+        
         private const int RavangerSize = 5;
         public RavangerShip(List<Point> initialPlacement)
             : base(RavangerSize, initialPlacement)
@@ -20,6 +24,9 @@ namespace BattleshipZTP.Ship.DarkEldarShips
 
             _name = "Ravanger";
             _colors = (ConsoleColor.DarkMagenta, ConsoleColor.Black);
+
+            _health = 300;
+            _maxHealth = 300;
         }
     }
 }

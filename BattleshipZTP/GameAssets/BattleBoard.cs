@@ -65,6 +65,7 @@ namespace BattleshipZTP.GameAssets
     public class BattleBoard : IBattleBoard
     {
         Field[,]? _field; //[y,x]
+        bool _canRotate = true;
         public int cornerX;
         public int cornerY;
         public int width;
@@ -77,6 +78,8 @@ namespace BattleshipZTP.GameAssets
             cornerX = cornerLeft;
             cornerY = cornerUp;
         }
+
+        public void EnableRotation(bool v) { _canRotate = v; }
 
         public void FieldsInitialization()
         {
@@ -253,13 +256,11 @@ namespace BattleshipZTP.GameAssets
                             canPlace = false;
                         }
                     }
-
                     Env.CursorPos(cursorPosX, cursorPosY);
                     Env.SetColor(placementAvaible);
                     Console.Write(s.text);
                     currentY++;
                 }
-
                 return history;
             };
             //
@@ -292,7 +293,8 @@ namespace BattleshipZTP.GameAssets
                 }
                 else if (klawisz.Key == ConsoleKey.Tab
                          && localX - 1 < this.width - bodyMostHeight
-                         && localY - 1 < this.height - bodyMostWidth) //Rotation
+                         && localY - 1 < this.height - bodyMostWidth
+                         && _canRotate)//Rotation
                 {
                     Body = RotateBody(Body);
                     command.SetBody(Body);
