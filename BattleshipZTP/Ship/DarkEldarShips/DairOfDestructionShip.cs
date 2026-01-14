@@ -9,6 +9,9 @@ namespace BattleshipZTP.Ship.DarkEldarShips
 {
     public class DairOfDestructionShip : Advanced40KShip
     {
+        static public int RequisitionCost = 720;
+        static public int EnergyCost = 50;
+        
         private const int DairOfDestructionSize = 7;
         public DairOfDestructionShip( List<Point> initialPlacement)
             : base(DairOfDestructionSize, initialPlacement)

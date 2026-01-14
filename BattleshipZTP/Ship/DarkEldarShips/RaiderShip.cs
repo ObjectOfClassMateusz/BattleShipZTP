@@ -9,6 +9,9 @@ namespace BattleshipZTP.Ship.DarkEldarShips
 {
     public class RaiderShip : Advanced40KShip
     {
+        static public int RequisitionCost = 280;
+        static public int EnergyCost = 20;
+        
         private const int RaiderSize = 5;
         public RaiderShip( List<Point> initialPlacement)
             : base(RaiderSize, initialPlacement)

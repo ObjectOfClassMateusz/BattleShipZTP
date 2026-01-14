@@ -1,4 +1,5 @@
-﻿using BattleshipZTP.Ship;
+﻿using BattleshipZTP.Settings;
+using BattleshipZTP.Ship;
 using BattleshipZTP.Ship.DarkEldarShips;
 using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
@@ -16,6 +17,7 @@ namespace BattleshipZTP.GameAssets
         List<IShip> ShipmentDelivery();
         List<(int x , int y)> GetShipmentPlacementCoords();
         List<int> GetShipSizes();
+        List<IShip> BuyShip(Dictionary<string, int> wallet);
     }
 
     public class ClassicGameMode : IGameMode
@@ -57,6 +59,10 @@ namespace BattleshipZTP.GameAssets
         {
             return new List<int> { 5, 4, 3, 3, 1 };
         }
+        public List<IShip> BuyShip(Dictionary<string, int> wallet)
+        {
+            return null;
+        }
     }
 
     public class DuelGameMode : IGameMode
@@ -92,6 +98,12 @@ namespace BattleshipZTP.GameAssets
         {
             return null;
         }
+        
+        public List<IShip> BuyShip(Dictionary<string, int> wallet)
+        {
+            return null;
+        }
+        
         public List<IShip> ShipmentDelivery() => new List<IShip>()
         {
             ShipFactory.CreateShip(ShipType.Battleship)
@@ -139,9 +151,7 @@ namespace BattleshipZTP.GameAssets
             resources.Add("Action Points", 2);
             return resources;
         }
-
-        //local private methods
-
+        
         void InsertDrukhariShipNames(IWindowBuilder windowBuilder)
         {
             windowBuilder.AddComponent(new Button("Reaver JetBike"));
@@ -153,9 +163,12 @@ namespace BattleshipZTP.GameAssets
         {
             windowBuilder.AddComponent(new TextOutput
                 ($"Req: {ReaverJetBikeShip.RequisitionCost}  En: {ReaverJetBikeShip.EnergyCost}"));
-            windowBuilder.AddComponent(new TextOutput($"Req: 280  En: 20"));
-            windowBuilder.AddComponent(new TextOutput($"Req: 375  En: 30"));
-            windowBuilder.AddComponent(new TextOutput($"Req: 720  En: 50"));
+            windowBuilder.AddComponent(new TextOutput
+                ($"Req: {RaiderShip.RequisitionCost}  En: {RaiderShip.EnergyCost}"));
+            windowBuilder.AddComponent(new TextOutput
+                ($"Req: {RavangerShip.RequisitionCost}  En: {RavangerShip.EnergyCost}"));
+            windowBuilder.AddComponent(new TextOutput
+                ($"Req: {DairOfDestructionShip.RequisitionCost}  En: {DairOfDestructionShip.EnergyCost}"));
         }
         void InsertEldarShipNames(IWindowBuilder windowBuilder)
         {
@@ -198,6 +211,8 @@ namespace BattleshipZTP.GameAssets
 
         public List<IShip> ShipmentDelivery()
         {
+           // return BuyShip
+
             return new List<IShip>() 
             {
                 ShipFactory.CreateShip(ShipType.Sax_Eisen),
@@ -208,91 +223,105 @@ namespace BattleshipZTP.GameAssets
                 ShipFactory.CreateShip(ShipType.Dr_Dair)
                 
             };
-
-            //ReaverJetBikeShip.RequisitionCost;
-            //ReaverJetBikeShip.EnergyCost;
-
-            /// help ;_;
-            /// 
-            IWindowBuilder windowBuilder = new WindowBuilder();
-            windowBuilder
-               .SetPosition(96, 2)
-               .ColorHighlights(ConsoleColor.Green, ConsoleColor.DarkGreen)
-               .ColorBorders(ConsoleColor.Cyan, ConsoleColor.DarkYellow);
-            switch (_playerFraction)
-            {
-                case Fraction.Drukhari:
-                    InsertDrukhariShipNames(windowBuilder); break;
-                case Fraction.SaxonyEmpire:
-                    InsertSaxonyShipNames(windowBuilder); break;
-                case Fraction.BloodRavens:
-                    InsertSpaceShipNames(windowBuilder); break;
-                case Fraction.BielTan:
-                    InsertEldarShipNames(windowBuilder); break;
-            }
-            windowBuilder.AddComponent(new Button("=>"));
-            Window shipsWindow = windowBuilder.Build();
-            windowBuilder.ResetBuilder();
-            //
-            windowBuilder
-               .SetPosition(118, 2)
-               .ColorHighlights(ConsoleColor.Yellow, ConsoleColor.DarkMagenta)
-               .ColorBorders(ConsoleColor.Black, ConsoleColor.White);
-            switch (_playerFraction)
-            {
-                case Fraction.Drukhari:
-                    InsertDrukhariPrices(windowBuilder); break;
-                case Fraction.SaxonyEmpire:
-                    InsertSaxonyPrices(windowBuilder); break;
-                case Fraction.BielTan: 
-                    InsertEldarPrices(windowBuilder);break;
-                case Fraction.BloodRavens:
-                    InsertSpacePrices(windowBuilder); break;
-            }
-            Window costsWindow = windowBuilder.Build();
-            windowBuilder.ResetBuilder();
-
-            List<IShip> result = new List<IShip>();
-            UIController controller = new UIController();
-            controller.AddWindow(shipsWindow);
-            controller.AddWindow(costsWindow);
-
-            int bought = 0;//buy mininum 1
-            string option = "";
-            while (option != "=>" || bought ==0)
-            {
-                option = controller.DrawAndStart().FirstOrDefault();
-                //Console.WriteLine(option);
-                //Console.WriteLine(costsWindow.GetComponent(0).GetOption());
-            }
-            return result;
         }
-            
-            
-            
-        /*    => _playerFraction switch
+        
+        private (int req, int en, ShipType type) GetShipPrice(string name)
         {
-            Fraction.Drukhari => new List<IShip>()
+            return name switch
             {
+                // Drukhari
+                "Reaver JetBike" => (160, 20, ShipType.Dr_JetBike),
+                "Raider" => (280, 20, ShipType.Dr_Raider),
+                "Ravanger" => (375, 30, ShipType.Dr_Ravanger),
+                "Dair of Destruction" => (720, 50, ShipType.Dr_Dair),
 
-            },
-            Fraction.BloodRavens => new List<IShip>() 
-            { 
-            
-            },
-            Fraction.BielTan => new List<IShip>() 
-            { 
-            
-            },
-            Fraction.SaxonyEmpire => new List<IShip>() 
-            { 
-            
-            }
-        };*/
+                // Saxony
+                "Eisenhans" => (450, 60, ShipType.Sax_Eisen),
+                "SdKS Grimbart" => (480, 40, ShipType.Battleship), 
+                "SdKS Isegrim" => (475, 50, ShipType.Battleship),
+                "Stormtrooper ship" => (160, 20, ShipType.Submarine),
+
+                // Blood Ravens
+                "Land Speeder" => (270, 40, ShipType.Battleship),
+                "Dreadnought" => (380, 50, ShipType.Battleship),
+                "Land Raider" => (850, 80, ShipType.Carrier),
+
+                // BielTan
+                "Falcon" => (300, 40, ShipType.Submarine),
+                "Vyper" => (200, 30, ShipType.Submarine),
+                "Fire Prism" => (600, 70, ShipType.Battleship),
+
+                _ => (0, 0, ShipType.Submarine) // jeśli nie znajdzie nazwy
+            };
+        }
         
         public List<int> GetShipSizes()
         {
             return new List<int> { 3};
+        }
+        
+        public List<IShip> BuyShip(Dictionary<string, int> wallet)
+        {
+            IWindowBuilder windowBuilder = new WindowBuilder();
+            windowBuilder.SetPosition(96, 2)
+                .ColorHighlights(ConsoleColor.Green, ConsoleColor.DarkGreen)
+                .ColorBorders(ConsoleColor.Cyan, ConsoleColor.DarkYellow);
+    
+            switch (_playerFraction) {
+                case Fraction.Drukhari: InsertDrukhariShipNames(windowBuilder); break;
+                case Fraction.BielTan: InsertSaxonyShipNames(windowBuilder); break;
+                case Fraction.BloodRavens: InsertEldarShipNames(windowBuilder); break;
+                case Fraction.SaxonyEmpire: InsertSpaceShipNames(windowBuilder); break;
+            }
+            
+            windowBuilder.AddComponent(new Button("POWROT"));
+            Window shipsWindow = windowBuilder.Build();
+            
+            windowBuilder.ResetBuilder();
+            windowBuilder.SetPosition(118, 2)
+                .ColorHighlights(ConsoleColor.Yellow, ConsoleColor.DarkMagenta)
+                .ColorBorders(ConsoleColor.Black, ConsoleColor.White);
+    
+            switch (_playerFraction) {
+                case Fraction.Drukhari: InsertDrukhariPrices(windowBuilder); break;
+                case Fraction.BielTan: InsertEldarPrices(windowBuilder); break;
+                case Fraction.BloodRavens: InsertSpacePrices(windowBuilder); break;
+                case Fraction.SaxonyEmpire: InsertSaxonyPrices(windowBuilder); break;
+            }
+            
+            Window costsWindow = windowBuilder.Build();
+
+            UIController controller = new UIController();
+            controller.AddWindow(shipsWindow);
+            controller.AddWindow(costsWindow);
+
+            List<IShip> boughtShips = new List<IShip>();
+            string option = "";
+
+            //zakupy
+            while (option != "POWROT")
+            {
+                //stan zasobów
+                Env.CursorPos(96, 1);
+                Console.Write($"PORTFEL - Req: {wallet["Requisition"]} | En: {wallet["Energy"]}      ");
+
+                option = controller.DrawAndStart().FirstOrDefault() ?? "";
+
+                if (option != "POWROT" && option != "")
+                {
+                    var (req, en, type) = GetShipPrice(option);
+
+                    if (wallet["Requisition"] >= req && wallet["Energy"] >= en)
+                    {
+                        wallet["Requisition"] -= req;
+                        wallet["Energy"] -= en;
+                        boughtShips.Add(ShipFactory.CreateShip(type));
+                        if (UserSettings.Instance.SfxEnabled) AudioManager.Instance.Play("stawianie");
+                    }
+                    else if (UserSettings.Instance.SfxEnabled) AudioManager.Instance.Play("wrong");
+                }
+            }
+            return boughtShips;
         }
     }
 

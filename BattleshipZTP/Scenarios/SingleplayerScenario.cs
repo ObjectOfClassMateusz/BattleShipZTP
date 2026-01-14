@@ -121,7 +121,7 @@ namespace BattleshipZTP.Scenarios
         
         public override void Act()
         {
-            if (UserSettings.Instance.MusicEnabled)
+             if (UserSettings.Instance.MusicEnabled)
             {
                 AudioManager.Instance.Stop("2-02 - Dark Calculation");
                 AudioManager.Instance.ChangeVolume(_gameMode.GameThemeAudio(), UserSettings.Instance.MusicVolume);
@@ -221,20 +221,34 @@ namespace BattleshipZTP.Scenarios
             ActionManager.Instance.Attach(logger);
             ActionManager.Instance.Attach(stats);
 
-            if (!_gameMode.RemeberArrowHit())
+           /* if (!_gameMode.RemeberArrowHit())
             {
                 Gameplay40kHandle(proxy,enemyProxy,ships ,enemyShips);
                 return;
-            }
+            }*/
             
             int totalShipsToSink = numberOfShipsPerPlayer; 
             int playerSunkCounter = 0;
             int aiSunkCounter = 0;
             bool nextTurn = true;
             bool victory = false;
+            Dictionary<string, int> playerWallet = _gameMode.AssignResources(); // zasoby na start w trybie 40k
 
-            while (!victory)
+            while (victory == false)
             {
+                if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.B)
+                {
+                    List<IShip> posilki = ((WarhammerGameMode)_gameMode).BuyShip(playerWallet);
+        
+                    foreach (var ship in posilki)
+                    {
+                        BeautifyHelper.ApplyFancyBodies(new List<IShip>{ship});
+                        PlaceCommand cmd = new PlaceCommand(board, ship, UserSettings.Instance.GetHashCode());
+                        var coords = proxy.PlaceCommand(cmd);
+                        cmd.Execute(coords);
+                    }
+                    proxy.Display();
+                }
                 // --- TURA GRACZA ---
                 while (nextTurn == true)
                 {

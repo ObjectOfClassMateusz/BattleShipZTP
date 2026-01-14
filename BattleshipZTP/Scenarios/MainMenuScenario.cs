@@ -20,8 +20,8 @@ namespace BattleshipZTP.Scenarios
             base.Act();
 
             //Decoration for main menu scene
-            Drawing.DrawASCII("mainMenuTitle", 18, 1, ConsoleColor.DarkGray);
-            Drawing.DrawASCII("mainMenuShip", 40, 12, background: ConsoleColor.DarkGreen);
+            Drawing.DrawASCII("mainMenuTitle", 10, 1, ConsoleColor.DarkGray);
+            Drawing.DrawASCII("mainMenuShip", 31, 12, background: ConsoleColor.DarkGreen);
 
             IWindowBuilder builder = new WindowBuilder();
             UIDirector director = new UIDirector(builder);
@@ -34,7 +34,6 @@ namespace BattleshipZTP.Scenarios
             controller.AddWindow(menu1);
             Env.CursorPos();
 
-            //Playing Dark Calculation
             AudioManager.Instance.ChangeVolume(
                 "2-02 - Dark Calculation", 
                 UserSettings.Instance.MusicVolume

@@ -13,8 +13,7 @@ namespace BattleshipZTP
     {
         public static void Main(string[] args)
         {
-            //Console.SetWindowSize(130, 45); 
-            //Console.SetBufferSize(130, 100); 
+            Console.SetWindowSize(160, 45); 
             Env.SetColor();
             Drawing.SetColors(ConsoleColor.White,ConsoleColor.Black);
             Env.Wait(300);
