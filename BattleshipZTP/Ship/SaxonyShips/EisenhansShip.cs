@@ -1,4 +1,5 @@
 ﻿using BattleshipZTP.GameAssets;
+using BattleshipZTP.Ship.Turrets;
 
 namespace BattleshipZTP.Ship.SaxonyShips
 {
@@ -15,29 +16,17 @@ namespace BattleshipZTP.Ship.SaxonyShips
             _colors = (ConsoleColor.DarkYellow, ConsoleColor.Black);
             _health = 310;
             _maxHealth = 310;
-
-            AudioManager.Instance.Add("086", "ships/Saxony/EisenhansShip");
+            _healthBar = new StatBar(_maxHealth, ConsoleColor.DarkYellow, 3);
+            _audioReady.Add("085");
             _audioReady.Add("086");
-            AudioManager.Instance.Add("087", "ships/Saxony/EisenhansShip");
             _audioReady.Add("087");
-            AudioManager.Instance.Add("088", "ships/Saxony/EisenhansShip");
             _audioReady.Add("088");
-        }
+            _audioReady.Add("089");
 
-        public override void AudioPlayReady()
-        {
-            Random rnd = new Random();
-            int r = rnd.Next(_audioReady.Count);
-            AudioManager.Instance.Play(_audioReady[r]);
-
-        }
-        public override void AudioPlayAttack()
-        {
-
-        }
-        public override void AudioPlayMove()
-        {
-
+            _audioAttack.Add("033");
+            _audioAttack.Add("034");
+            _audioAttack.Add("035");
+            _turrets.Add(new EisenhansArtyllery());
         }
     }
 }

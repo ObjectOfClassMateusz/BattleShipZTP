@@ -66,7 +66,7 @@ public class AttackCommand : ICommand
     {
         return new List<(string text, int offset)>()
         {
-            ("X",0)
+            ("+",0)
         };
     }
     public void SetBody(List<(string text, int offset)> body)

@@ -1,4 +1,5 @@
 ﻿using BattleshipZTP.GameAssets;
+using BattleshipZTP.Ship.Turrets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,14 @@ namespace BattleshipZTP.Ship.DarkEldarShips
 
             _health = 300;
             _maxHealth = 300;
+            _healthBar = new StatBar(_maxHealth, ConsoleColor.Magenta, 4);
+
+            _audioReady.Add("5000619");
+            _audioReady.Add("5000620b");
+            _audioReady.Add("5000624b");
+
+            _turrets.Add(new ShurikenCannon());
+
         }
     }
 }

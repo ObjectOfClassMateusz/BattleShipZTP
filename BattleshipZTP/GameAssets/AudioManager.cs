@@ -64,7 +64,7 @@ namespace BattleshipZTP.GameAssets
                     }
                     else
                     {
-                        outputDevice.Dispose();
+                        //outputDevice.Dispose();
                         _activePlayers.Remove(fileName);
                     }
                 };

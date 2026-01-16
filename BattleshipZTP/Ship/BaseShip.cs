@@ -4,7 +4,7 @@ public abstract class BaseShip : IShip
 {
     protected int size { get; private set; } 
     private List<Point> hits;
-    private List<Point> placement;
+    protected List<Point> placement;
     protected readonly List<(string text, int offset)> _body;
     protected (ConsoleColor foreground, ConsoleColor background) _colors;
     protected string _name;
@@ -56,7 +56,7 @@ public abstract class BaseShip : IShip
         placement = points;
     }
     
-    public HitResult TakeHit(Point coords)
+    public virtual HitResult TakeHit(Point coords, int damage=0)
     {
         if (!placement.Contains(coords))
         {
@@ -71,7 +71,7 @@ public abstract class BaseShip : IShip
         return HitResult.Hit;
     }
 
-    public bool IsSunk()
+    public virtual bool IsSunk()
     {
         return hits.Distinct().Count() == size;
     }

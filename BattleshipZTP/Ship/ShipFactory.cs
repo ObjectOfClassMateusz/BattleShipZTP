@@ -22,9 +22,12 @@ public class ShipFactory
             ShipType.Dr_Dair => new DairOfDestructionShip(emptyPlacement),
 
             ShipType.Sax_Eisen => new EisenhansShip(emptyPlacement),
+            ShipType.Sax_ship => new StormtroopersShip(emptyPlacement),
+            ShipType.Sax_sdksGrim => new GrimbartShip(emptyPlacement),
+            ShipType.Sax_sdksIse => new IsegrimShip(emptyPlacement),
 
 
-            _=> throw new ArgumentException("Invalid ship type")
+            _ => throw new ArgumentException("Invalid ship type")
         };
     }
 }

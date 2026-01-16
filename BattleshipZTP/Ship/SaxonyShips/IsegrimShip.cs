@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace BattleshipZTP.Ship.SaxonyShips
 {
-    internal class IsegrimShip
+    public class IsegrimShip : Advanced40KShip
     {
+        private const int IsegriSize = 8;
+        public IsegrimShip(List<Point> initialPlacement)
+            : base(IsegriSize, initialPlacement)
+        {
+            
+        }
     }
 }

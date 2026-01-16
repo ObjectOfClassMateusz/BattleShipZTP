@@ -1,4 +1,5 @@
 ﻿using BattleshipZTP.GameAssets;
+using BattleshipZTP.Ship.Turrets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +22,17 @@ namespace BattleshipZTP.Ship.DarkEldarShips
             _body.Add(("▇╫▇", 1));
             _body.Add(("{╫}", 1));
             _body.Add(("⤧=╫=⤧", 0));
-
             _colors = (ConsoleColor.DarkMagenta,ConsoleColor.Black);
             _name = "Raider";
-
             _health = 180;
             _maxHealth = 180;
+            _healthBar = new StatBar(_maxHealth, ConsoleColor.Magenta, 4);
+            _audioReady.Add("5000602");
+            _audioReady.Add("5000603b");
+            _audioReady.Add("5000604b");
+            
+
+            _turrets.Add(new ShurikenCannon());
         }
     }
 }

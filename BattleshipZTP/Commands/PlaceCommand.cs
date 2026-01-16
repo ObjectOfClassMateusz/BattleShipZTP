@@ -1,5 +1,7 @@
 ﻿using BattleshipZTP.GameAssets;
 using BattleshipZTP.Observers;
+using BattleshipZTP.Settings;
+using BattleshipZTP.Ship;
 using System.Collections.Generic;
 using System.Text;
 
@@ -20,6 +22,10 @@ public class PlaceCommand : ICommand
     
     public void Execute(List<(int x, int y)> coords)
     {
+        if(Ship is Advanced40KShip && UserSettings.Instance.SfxEnabled)
+        {
+            AudioManager.Instance.Play("ships/build");
+        }
         StringBuilder stringBuilder = new StringBuilder();
         foreach (var _body in Ship.GetBody())
             foreach (char character in _body.text)

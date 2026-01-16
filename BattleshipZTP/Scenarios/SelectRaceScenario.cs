@@ -40,7 +40,8 @@ namespace BattleshipZTP.Scenarios
 
             IWindowBuilder builder = new WindowBuilder();
             UIDirector director = new UIDirector(builder);
-            director.StandardWindowInit(89, 24, "Drukhari", "BielTan", "BloodRavens", "SaxonyEmpire");
+            //director.StandardWindowInit(89, 24, "Drukhari", "BielTan", "BloodRavens", "SaxonyEmpire");
+            director.StandardWindowInit(89, 24, "Drukhari", "SaxonyEmpire");
             Window window = builder.Build();
             UIController controller = new UIController();
             controller.AddWindow(window);

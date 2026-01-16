@@ -65,21 +65,23 @@ namespace BattleshipZTP.GameAssets
             }
             Console.ResetColor();
         }
-        public void Decrease(int decrease)
+        public int Decrease(int decrease)
         {
             this.currentValue -= decrease;
             if (this.currentValue < 0)
             {
                 this.currentValue = 0;
             }
+            return decrease;
         }
-        public void Increase(int increase)
+        public int Increase(int increase)
         {
             this.currentValue += increase;
             if (this.currentValue > this.value)
             {
                 this.currentValue = this.value;
             }
+            return increase;
         }
     }
 }
