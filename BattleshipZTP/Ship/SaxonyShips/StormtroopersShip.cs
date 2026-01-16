@@ -4,7 +4,6 @@ namespace BattleshipZTP.Ship.SaxonyShips
     public class StormtroopersShip : Advanced40KShip
     {
         private const int StormtroopersSize = 8;
-        //
         public StormtroopersShip(List<Point> initialPlacement)
             : base(StormtroopersSize, initialPlacement)
         {

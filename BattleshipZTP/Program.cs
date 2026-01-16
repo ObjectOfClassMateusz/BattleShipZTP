@@ -6,6 +6,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Linq;
 
 namespace BattleshipZTP
 {
@@ -13,26 +14,20 @@ namespace BattleshipZTP
     {
         public static void Main(string[] args)
         {
-<<<<<<< HEAD
-            Console.SetWindowSize(160, 45); 
-=======
             try
             {
                 if (OperatingSystem.IsWindows())
                 {
-                    // Ustawiamy szerokość na co najmniej 140, żeby pozycja 123 była bezpieczna
-                    Console.SetWindowSize(150, 45);
-                    Console.SetBufferSize(150, 45);
+                    Console.SetWindowSize(152, 45);
+                    Console.SetBufferSize(152, 45);
                 }
             }
             catch
             {
-                // Jeśli laptop ma za mały ekran na 150 znaków, program przynajmniej się nie wywali
                 Console.WriteLine("Uwaga: Nie można ustawić preferowanego rozmiaru okna.");
             }
 
-            Console.SetWindowSize(130, 45); 
->>>>>>> 807f7d14d1384161813338b14fb272a96ee6bbcc
+            //Console.SetWindowSize(130, 45); 
             Env.SetColor();
             Drawing.SetColors(ConsoleColor.White,ConsoleColor.Black);
             Env.Wait(300);
@@ -63,7 +58,35 @@ namespace BattleshipZTP
             AudioManager.Instance.Add("trafienie");
             AudioManager.Instance.Add("trafiony zatopiony");
             AudioManager.Instance.Add("2-11 - Blood of Man");
-            
+
+            AudioManager.Instance.Add("ships/shuriken");
+            AudioManager.Instance.Add("ships/build");
+            AudioManager.Instance.Add("ships/artillery");
+
+            AudioManager.Instance.Add("085", "ships/Saxony/EisenhansShip");
+            AudioManager.Instance.Add("086", "ships/Saxony/EisenhansShip");
+            AudioManager.Instance.Add("087", "ships/Saxony/EisenhansShip");
+            AudioManager.Instance.Add("088", "ships/Saxony/EisenhansShip");
+            AudioManager.Instance.Add("089", "ships/Saxony/EisenhansShip");
+            AudioManager.Instance.Add("033", "ships/Saxony/EisenhansShip/attack");
+            AudioManager.Instance.Add("034", "ships/Saxony/EisenhansShip/attack");
+            AudioManager.Instance.Add("035", "ships/Saxony/EisenhansShip/attack");
+
+            AudioManager.Instance.Add("5000588", $"ships/DarkEldar/ReaverJetBike");
+            AudioManager.Instance.Add("5000589b", $"ships/DarkEldar/ReaverJetBike");
+            AudioManager.Instance.Add("5000590b", $"ships/DarkEldar/ReaverJetBike");
+            AudioManager.Instance.Add("5000591", $"ships/DarkEldar/ReaverJetBike");
+            AudioManager.Instance.Add("5000592", $"ships/DarkEldar/ReaverJetBike");
+            AudioManager.Instance.Add("5000619", $"ships/DarkEldar/Ravanger");
+            AudioManager.Instance.Add("5000620b", $"ships/DarkEldar/Ravanger");
+            AudioManager.Instance.Add("5000624b", $"ships/DarkEldar/Ravanger");
+            AudioManager.Instance.Add("5000602", $"ships/DarkEldar/Raider");
+            AudioManager.Instance.Add("5000603b", $"ships/DarkEldar/Raider");
+            AudioManager.Instance.Add("5000604b", $"ships/DarkEldar/Raider");
+            AudioManager.Instance.Add("5000636", $"ships/DarkEldar/DairOfDestruction");
+            AudioManager.Instance.Add("5000637", $"ships/DarkEldar/DairOfDestruction");
+            AudioManager.Instance.Add("5000638", $"ships/DarkEldar/DairOfDestruction");
+
             //Declare Scenarios
             IScenario main = new MainMenuScenario();
             IScenario options = new OptionsScenario();

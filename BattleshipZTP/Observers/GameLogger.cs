@@ -17,9 +17,9 @@ public class GameLogger : IActionManager
     }
     public void Update(GameActionDetails details)
     {
-        string shooterName = (details.PlayerID == UserSettings.Instance.GetHashCode()) 
-            ? UserSettings.Instance.Nickname 
-            : "AI_ENEMY";
+        string shooterName = !string.IsNullOrEmpty(details.Nickname) 
+            ? details.Nickname 
+            : (details.PlayerID == UserSettings.Instance.GetHashCode() ? UserSettings.Instance.Nickname : "AI_ENEMY");
 
         string logEntry;
 

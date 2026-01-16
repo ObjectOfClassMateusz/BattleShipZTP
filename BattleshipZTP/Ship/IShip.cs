@@ -9,8 +9,7 @@ public interface IShip
     void Locate(List<(int x, int y)> coords);
     int Size { get; }
 
-
     int GetSize();
-    HitResult TakeHit(Point coords);
+    HitResult TakeHit(Point coords , int damage=0);
     bool IsSunk();
 }

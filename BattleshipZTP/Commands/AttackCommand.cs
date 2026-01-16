@@ -10,12 +10,14 @@ public class AttackCommand : ICommand
     public Point Target { get; }
     public int PlayerID { get; }
     public IGameMode GameMode { get; }
+    public string Nickname { get; }
 
-    public AttackCommand (IBattleBoard board, Point target, int playerId)
+    public AttackCommand (IBattleBoard board, Point target, int playerId, string nickname = "")
     {
         Board = board;
         Target = target;
         PlayerID = playerId;
+        Nickname = nickname;
     }
     
     public void Execute(List<(int x, int y)> coords)
@@ -45,6 +47,7 @@ public class AttackCommand : ICommand
 
         var details = new GameActionDetails {
             PlayerID = this.PlayerID,
+            Nickname = this.Nickname,
             ActionType = "Attack",
             Coords = Target,
             Result = hitResult
@@ -66,7 +69,7 @@ public class AttackCommand : ICommand
     {
         return new List<(string text, int offset)>()
         {
-            ("X",0)
+            ("+",0)
         };
     }
     public void SetBody(List<(string text, int offset)> body)

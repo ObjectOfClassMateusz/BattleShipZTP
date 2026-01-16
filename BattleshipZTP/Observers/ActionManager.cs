@@ -24,6 +24,11 @@ public class ActionManager
             observer.Update(details);
         }
     }
+    
+    public void ClearObservers()
+    {
+        _observers.Clear();
+    }
 
     public void LogAction(GameActionDetails details)
     {

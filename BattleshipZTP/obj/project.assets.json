@@ -498,40 +498,24 @@
     ]
   },
   "packageFolders": {
-<<<<<<< HEAD
     "C:\\Users\\matit\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
-=======
-    "C:\\Users\\Oliwia\\.nuget\\packages\\": {}
->>>>>>> 807f7d14d1384161813338b14fb272a96ee6bbcc
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-<<<<<<< HEAD
       "projectUniqueName": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\BattleshipZTP.csproj",
       "projectName": "BattleshipZTP",
       "projectPath": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\BattleshipZTP.csproj",
       "packagesPath": "C:\\Users\\matit\\.nuget\\packages\\",
       "outputPath": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\obj\\",
-=======
-      "projectUniqueName": "C:\\Users\\Oliwia\\source\\repos\\BattleShipZTP\\BattleshipZTP\\BattleshipZTP.csproj",
-      "projectName": "BattleshipZTP",
-      "projectPath": "C:\\Users\\Oliwia\\source\\repos\\BattleShipZTP\\BattleshipZTP\\BattleshipZTP.csproj",
-      "packagesPath": "C:\\Users\\Oliwia\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Oliwia\\source\\repos\\BattleShipZTP\\BattleshipZTP\\obj\\",
->>>>>>> 807f7d14d1384161813338b14fb272a96ee6bbcc
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-<<<<<<< HEAD
         "C:\\Users\\matit\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-=======
-        "C:\\Users\\Oliwia\\AppData\\Roaming\\NuGet\\NuGet.Config",
->>>>>>> 807f7d14d1384161813338b14fb272a96ee6bbcc
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -556,12 +540,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-<<<<<<< HEAD
       },
       "SdkAnalysisLevel": "9.0.300"
-=======
-      }
->>>>>>> 807f7d14d1384161813338b14fb272a96ee6bbcc
     },
     "frameworks": {
       "net8.0": {
@@ -592,12 +572,16 @@
             "privateAssets": "all"
           }
         },
-<<<<<<< HEAD
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
-=======
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
->>>>>>> 807f7d14d1384161813338b14fb272a96ee6bbcc
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Wystąpił problem podczas czytania pliku pamięci podręcznej H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\obj\\project.nuget.cache: '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
+    }
+  ]
 }

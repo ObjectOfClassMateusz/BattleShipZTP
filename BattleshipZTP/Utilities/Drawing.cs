@@ -61,6 +61,7 @@ namespace BattleshipZTP.Utilities
                 Env.CursorPos(x, y + i);
                 Console.Write(rect);
             }
+            Env.SetColor();
         }
 
         class ASCIIImage

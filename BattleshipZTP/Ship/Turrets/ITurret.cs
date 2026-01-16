@@ -9,5 +9,10 @@ namespace BattleshipZTP.Ship.Turrets
     public interface ITurret
     {
         List<(string text, int offset)> GetAimBody();
+        int MinDmg();
+        int MaxDmg();
+        string AudioFileName();
+        string GetName();
+        int ActionCost();
     }
 }

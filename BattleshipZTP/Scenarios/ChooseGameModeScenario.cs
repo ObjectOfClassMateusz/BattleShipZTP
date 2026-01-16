@@ -14,7 +14,7 @@ namespace BattleshipZTP.Scenarios
             base.Act();
             IWindowBuilder builder = new WindowBuilder();
             UIDirector director = new UIDirector(builder);
-            director.StandardWindowInit(69, 16, "Classic", "Single ship duel", "40K","Return");
+            director.StandardWindowInit(69, 16, "Classic", "Single ship duel", "40K", "Simulation", "Return");
             Window window1 = builder.Build();
             builder.ResetBuilder();
             Window window2 = builder.Build();
@@ -57,6 +57,13 @@ namespace BattleshipZTP.Scenarios
                     factory = new WarhammerModeFactory(chooseRace.GetRace());
                     var warhammerMode = factory.GetGameMode();
                     scenario = new SingleplayerScenario(warhammerMode, difficulty: ChooseDifficulty(),
+                         _scenarios["Main"]);
+                    scenario.Act();
+                    break;
+                case "Simulation":
+                    factory = new SimulationModeFactory();
+                    var simulationMode = factory.GetGameMode();
+                    scenario = new SimulationScenario(simulationMode, difficulty1: ChooseDifficulty(),difficulty2: ChooseDifficulty(),
                          _scenarios["Main"]);
                     scenario.Act();
                     break;

@@ -10,7 +10,7 @@ public class UserSettings
     public static UserSettings Instance => _instance ??= new UserSettings();
 
     public string Nickname { get; set; } = "PLAYER";
-    public int MusicVolume { get; set; } = 30;
+    public int MusicVolume { get; set; } = 40;
     public bool MusicEnabled { get; set; } = true;
     public bool SfxEnabled { get; set; } = true;
 

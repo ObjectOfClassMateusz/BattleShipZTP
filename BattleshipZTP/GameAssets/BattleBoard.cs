@@ -19,8 +19,7 @@ namespace BattleshipZTP.GameAssets
         Field GetField(int x, int y);
         bool IsNeighborHaveShipRef(Field field);
         
-
-        List<(int x, int y)> PlaceCommand(ICommand command);
+        List<(int x, int y)> PutCommand(ICommand command, bool silent = false);
         List<(int x, int y)> PlaceShip(IShip ship, int x, int y);
 
         Point ChooseAttackPoint();
@@ -79,7 +78,10 @@ namespace BattleshipZTP.GameAssets
             cornerY = cornerUp;
         }
 
-        public void EnableRotation(bool v) { _canRotate = v; }
+        public void EnableRotation(bool v) 
+        { 
+            _canRotate = v; 
+        }
 
         public void FieldsInitialization()
         {
@@ -228,7 +230,7 @@ namespace BattleshipZTP.GameAssets
             }
         }
 
-        public List<(int x, int y)> PlaceCommand(ICommand command)
+        public List<(int x, int y)> PutCommand(ICommand command , bool silent=false)
         {
             List<(string text, int offset)> Body = command.GetBody();
 
@@ -320,13 +322,21 @@ namespace BattleshipZTP.GameAssets
                 foreach (var point in pointsToRestore)
                 {
                     Env.CursorPos(point.x, point.y);
-                    Console.Write(_field[point.y - this.cornerY - 1, point.x - this.cornerX - 1]);
+                    var restoreField = _field[point.y - this.cornerY - 1, point.x - this.cornerX - 1];
+                    if (silent && (restoreField.Character != 'X' || restoreField.Character != '•'))
+                    {
+                        Console.Write(" ");
+                    }
+                    else
+                    {
+                        Console.Write(restoreField);
+                    }
                 }
             }
 
             return history;
         }
-
+      
         public Point ChooseAttackPoint()
         {
             int localX = 0;
@@ -471,9 +481,9 @@ namespace BattleshipZTP.GameAssets
                 _topLeftY = _board.cornerY;
             }
 
-            public List<(int x, int y)> PlaceCommand(ICommand command)
+            public List<(int x, int y)> PutCommand(ICommand command, bool silent = false)
             {
-                return _board.PlaceCommand(command);
+                return _board.PutCommand(command , silent);
             }
 
             public void FieldsInitialization()
@@ -506,7 +516,6 @@ namespace BattleshipZTP.GameAssets
                 return _board.AttackPoint(target);
             }
 
-            public BattleBoard GetBoard() => _board;
             
             public void Display()
             {
@@ -541,6 +550,11 @@ namespace BattleshipZTP.GameAssets
                 {
                     _board.Display();
                 }
+            }
+
+            public BattleBoard GetBattleBoard()
+            {
+                return _board;
             }
 
             public void DisplayField(int x, int y)
