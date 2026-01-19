@@ -7,7 +7,7 @@ Gra oferuje trzy unikalne tryby rozgrywki, od klasycznej bitwy po strategiczny w
 
 🎮 Tryby Rozgrywki (Gameplay Modes)
 
-Projekt oferuje trzy główne moduły, z których każdy wprowadza nowe mechaniki i wyzwania.
+Projekt oferuje rożne tryby gry, każdy z nich wprowadza nowe mechaniki i wyzwania na różnych poziomach trudności.
 
 1. Classic Mode (Klasyczna Bitwa)
    
@@ -42,6 +42,8 @@ Najbardziej rozbudowany tryb, który przekształca grę w statki w bitwę strate
   Wybór Armii: Możliwość gry różnymi frakcjami (np. Drukhari, Saxony Empire), które posiadają unikalne modele statków ASCII.
   
 <img width="1163" height="573" alt="image" src="https://github.com/user-attachments/assets/624e9a05-2205-49d8-a49f-d0f938764717" />
+
+Dodatkowo jest tryb symulacji dzięki któremu można zobaczyć grę AI vs AI na różnych poziomach trudności.
 
 🤖 Poziomy Trudności AI
 
