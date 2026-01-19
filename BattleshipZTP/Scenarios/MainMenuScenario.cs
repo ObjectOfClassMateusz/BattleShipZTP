@@ -17,46 +17,35 @@ namespace BattleshipZTP.Scenarios
         }
         public override void Act()
         {
-            bool exitMenu = false;
+            base.Act();
 
-            while (!exitMenu)
+            //Decoration for main menu scene
+            Drawing.DrawASCII("mainMenuTitle", 10, 1, ConsoleColor.DarkGray);
+            Drawing.DrawASCII("mainMenuShip", 31, 12, background: ConsoleColor.DarkGreen);
+
+            IWindowBuilder builder = new WindowBuilder();
+            UIDirector director = new UIDirector(builder);
+
+            director.MainMenuInit();
+            Window menu1 = builder.Build();
+            builder.ResetBuilder();
+
+            UIController controller = new UIController();
+            controller.AddWindow(menu1);
+            Env.CursorPos();
+
+            AudioManager.Instance.ChangeVolume(
+                "2-02 - Dark Calculation", 
+                UserSettings.Instance.MusicVolume
+            );
+            if (UserSettings.Instance.MusicEnabled == true)
             {
-                base.Act();
-        
-                if (UserSettings.Instance.MusicEnabled)
-                {
-                    AudioManager.Instance.ChangeVolume("2-02 - Dark Calculation", UserSettings.Instance.MusicVolume);
-                    AudioManager.Instance.Play("2-02 - Dark Calculation", true);
-                }
-                else
-                {
-                    AudioManager.Instance.Stop("2-02 - Dark Calculation");
-                }
-
-                Drawing.DrawASCII("mainMenuTitle", 10, 1, ConsoleColor.DarkGray);
-                Drawing.DrawASCII("mainMenuShip", 31, 12, background: ConsoleColor.DarkGreen);
-
-                IWindowBuilder builder = new WindowBuilder();
-                UIDirector director = new UIDirector(builder);
-                director.MainMenuInit();
-                Window menu1 = builder.Build();
-        
-                UIController controller = new UIController();
-                controller.AddWindow(menu1);
-
-                List<string> option = controller.DrawAndStart();
-                string selected = option.LastOrDefault() ?? "";
-
-                if (_scenarios.ContainsKey(selected))
-                {
-                    _scenarios[selected].Act(); 
-                }
-        
-                if (selected == "Exit" || selected == "Classic" || selected == "Simulation") 
-                {
-                    exitMenu = true;
-                }
+                AudioManager.Instance.Play("2-02 - Dark Calculation", true);
             }
+
+            List<string> option = controller.DrawAndStart();
+            IScenario scenario;
+            _scenarios[option.LastOrDefault()].Act();
         }
     }
 }

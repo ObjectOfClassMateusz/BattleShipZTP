@@ -120,10 +120,11 @@ namespace BattleshipZTP.UI
         bool _value = false;
         int _margin = 0;
         string _booleanName;
-        public CheckBox(string boolName, bool b)
+        public CheckBox(string boolName)
         {
             _booleanName = boolName;
         }
+
         public void SetMargin(int width)
         {
             _margin = width;
