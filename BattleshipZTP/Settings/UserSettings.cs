@@ -1,4 +1,5 @@
 ﻿using BattleshipZTP.GameAssets;
+using BattleshipZTP.Utilities;
 
 namespace BattleshipZTP.Settings;
 
@@ -16,26 +17,26 @@ public class UserSettings
 
     public void UpdateSettings(List<string> options)
     {
-        SfxEnabled = true;
-        MusicEnabled = true;
+        //SfxEnabled = true;
+        //MusicEnabled = true;
         foreach (var opt in options)
         {
             if (opt.Contains("input-Nickname"))
             {
-                Nickname = opt.Split("#:")[1];
+                Nickname = opt.Split("#:")[1];//ok
             }
-            else if (opt.Contains("slider-Music volume"))
+            if (opt.Contains("slider-Music volume"))
             {
-                MusicVolume = int.Parse(opt.Split("#:")[1]);
+                MusicVolume = int.Parse(opt.Split("#:")[1]);//ok
             }
-            else if (opt.Contains("checkbox-Turn off Music"))
+            if (opt.Contains("checkbox-Turn off Music"))
             {
-                MusicEnabled = false;
+                MusicEnabled = !bool.Parse(opt.Split("#:")[1]);//ok
                 AudioManager.Instance.Stop("2-02 - Dark Calculation");
             }
-            else if (opt.Contains("checkbox-Turn off SFX"))
+            if (opt.Contains("checkbox-Turn off SFX"))
             {
-                SfxEnabled = false;
+                SfxEnabled = bool.Parse(opt.Split("#:")[1]);//ok
             }
         }
     }

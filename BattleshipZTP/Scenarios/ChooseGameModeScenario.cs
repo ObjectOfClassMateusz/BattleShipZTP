@@ -8,7 +8,11 @@ namespace BattleshipZTP.Scenarios
 {
     public class ChooseGameModeScenario : Scenario
     {
-        public ChooseGameModeScenario() : base(){ }
+        bool _multi;
+        public ChooseGameModeScenario(bool multi=false) : base()
+        {
+            _multi = multi;
+        }
         public override void Act()
         {
             base.Act();

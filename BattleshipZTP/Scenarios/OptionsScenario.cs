@@ -11,6 +11,9 @@ namespace BattleshipZTP.Scenarios
         private UIController _controller;
         private MainMenuScenario _menuScenario;
 
+        bool _musicCheckPresses;
+        bool _sfxCheckPresses;
+
         public OptionsScenario() : base() 
         {
             _builder = new WindowBuilder();
@@ -39,18 +42,19 @@ namespace BattleshipZTP.Scenarios
         public override void Act()
         {
             base.Act();
+            _musicCheckPresses = false;
+            _sfxCheckPresses = false;
             Drawing.DrawASCII("optionImg", 5,1,ConsoleColor.DarkCyan,ConsoleColor.DarkBlue);
             List<string> option = _controller.DrawAndStart();
-            if (!UserSettings.Instance.MusicEnabled && option.Contains("checkbox-Turn off Music")) 
-            {
-                option.Remove("checkbox-Turn off Music");
-            }
-            if (!UserSettings.Instance.SfxEnabled && option.Contains("checkbox-Turn off SFX"))
-            {
-                option.Remove("checkbox-Turn off SFX");
-            }
             UserSettings.Instance.UpdateSettings(option);
-            _menuScenario.Act();
+            //
+            foreach (var o in option)
+            {
+                Console.WriteLine(o);
+            }
+            Console.ReadKey(true);
+            //
+            _menuScenario.AsyncAct();
         }
     }
 }

@@ -39,7 +39,7 @@ public class AuthorsScenario : Scenario
 
         List<string> option = controller.DrawAndStart();
         option[0] = "Main";
-        _scenarios[option.LastOrDefault()].Act();
+        _scenarios[option.LastOrDefault()].AsyncAct();
     }
 }
 

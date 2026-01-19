@@ -10,6 +10,7 @@ namespace BattleshipZTP.Scenarios
     public interface IScenario
     {
         void Act();
+        Task AsyncAct();
         void ConnectScenario(string key, IScenario scenario);
     }
 }

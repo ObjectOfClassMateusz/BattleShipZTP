@@ -159,13 +159,13 @@ namespace BattleshipZTP.UI
                 {
                     _booleanBody = "[ ]";//Uncheck
                     _value = false;
-                    return $"checkbox-{_booleanName}";
+                    return $"checkbox-{_booleanName}#:{_value}";
                 }
                 else 
                 {
                     _booleanBody = "[✓]";//Check
                     _value = true;
-                    return $"checkbox-{_booleanName}";
+                    return $"checkbox-{_booleanName}#:{_value}";
                 }
             }
             return "";//Skip
@@ -661,16 +661,19 @@ namespace BattleshipZTP.UI
                             OptionsReturns[index] = $"{inputId}#:{value}";
                         }
                     }
-                    else
+                    else if (optionHandlerString.Contains("checkbox-"))
                     {
                         //Handle CheckBox user inputs
-                        if (!OptionsReturns.Contains(optionHandlerString) && optionHandlerString != "none")
+                        string inputId = optionHandlerString.Split(new[] { "#:" }, StringSplitOptions.None)[0];
+                        string value = optionHandlerString.Split(new[] { "#:" }, StringSplitOptions.None)[1];
+                        if (!OptionsReturns.Any(s => s.Contains(inputId)))
                         {
-                            OptionsReturns.Add(optionHandlerString);
+                            OptionsReturns.Add($"{inputId}#:{value}");
                         }
                         else
                         {
-                            OptionsReturns.Remove(optionHandlerString);
+                            int index = OptionsReturns.FindIndex(s => s.Contains(inputId));
+                            OptionsReturns[index] = $"{inputId}#:{value}";
                         }
                     }
                     i--;

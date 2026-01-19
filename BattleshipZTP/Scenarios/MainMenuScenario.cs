@@ -15,10 +15,9 @@ namespace BattleshipZTP.Scenarios
         public MainMenuScenario() : base() 
         { 
         }
-        public override void Act()
+        public override async Task AsyncAct()
         {
             base.Act();
-
             //Decoration for main menu scene
             Drawing.DrawASCII("mainMenuTitle", 10, 1, ConsoleColor.DarkGray);
             Drawing.DrawASCII("mainMenuShip", 31, 12, background: ConsoleColor.DarkGreen);

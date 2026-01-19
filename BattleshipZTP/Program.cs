@@ -12,7 +12,7 @@ namespace BattleshipZTP
 {
     class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
@@ -90,19 +90,22 @@ namespace BattleshipZTP
             //Declare Scenarios
             IScenario main = new MainMenuScenario();
             IScenario options = new OptionsScenario();
-            IScenario chooseGamemode = new ChooseGameModeScenario();
+            IScenario singleplayer = new ChooseGameModeScenario();
+            IScenario multiplayer = new ChooseGameModeScenario(true);
             IScenario exit = new ExitScenario();
             IScenario authors = new AuthorsScenario();
 
             main.ConnectScenario("Options", options);
             main.ConnectScenario("Exit",exit);
             main.ConnectScenario("Authors", authors);
-            main.ConnectScenario("Singleplayer",chooseGamemode);
-            chooseGamemode.ConnectScenario("Main", main);
+            main.ConnectScenario("Singleplayer", singleplayer);
+            singleplayer.ConnectScenario("Main", main);
+            main.ConnectScenario("Multiplayer", multiplayer);
+            multiplayer.ConnectScenario("Main", main);
             options.ConnectScenario("Main",main);
             authors.ConnectScenario("Main",main);
 
-            main.Act();
+            await main.AsyncAct();
         }
     }
 }

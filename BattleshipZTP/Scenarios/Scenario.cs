@@ -20,6 +20,12 @@ namespace BattleshipZTP.Scenarios
             Env.Wait(200);
             Env.SetColor();
         }
+        public virtual async Task AsyncAct()
+        {
+            Console.Clear();
+            Env.Wait(200);
+            Env.SetColor();
+        }
         public virtual void ConnectScenario(string key , IScenario scenario)
         {
             _scenarios[key] = scenario;
