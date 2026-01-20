@@ -3,20 +3,16 @@
   "WorkspaceRootPath": "H:\\C#Projects\\BattleshipZTP\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\utilities\\drawing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\utilities\\drawing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\scenarios\\multiplayerscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\scenarios\\multiplayerscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\scenarios\\singleplayerscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\scenarios\\singleplayerscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\networking\\networkingproxy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\networking\\networkingproxy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\scenarios\\singleplayerscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\scenarios\\singleplayerscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,32 +22,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Drawing.cs",
-              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Utilities\\Drawing.cs",
-              "RelativeDocumentMoniker": "BattleshipZTP\\Utilities\\Drawing.cs",
-              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Utilities\\Drawing.cs",
-              "RelativeToolTip": "BattleshipZTP\\Utilities\\Drawing.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAowBcAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-20T02:13:02.888Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "NetworkingProxy.cs",
               "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Networking\\NetworkingProxy.cs",
               "RelativeDocumentMoniker": "BattleshipZTP\\Networking\\NetworkingProxy.cs",
               "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Networking\\NetworkingProxy.cs",
               "RelativeToolTip": "BattleshipZTP\\Networking\\NetworkingProxy.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABEAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-20T00:36:45.969Z",
+              "WhenOpened": "2026-01-20T03:58:57.379Z",
               "EditorCaption": ""
             },
             {
@@ -62,20 +45,20 @@
               "RelativeDocumentMoniker": "BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
               "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
               "RelativeToolTip": "BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAH0CAAA+AAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAK8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-20T00:23:58.114Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "MultiplayerScenario.cs",
               "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\MultiplayerScenario.cs",
               "RelativeDocumentMoniker": "BattleshipZTP\\Scenarios\\MultiplayerScenario.cs",
               "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\MultiplayerScenario.cs",
               "RelativeToolTip": "BattleshipZTP\\Scenarios\\MultiplayerScenario.cs",
-              "ViewState": "AgIAABEBAAAAAAAAAAAowCYBAAANAAAAAAAAAA==",
+              "ViewState": "AgIAALYAAAAAAAAAAAAAAMwAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-19T23:12:49.498Z",
               "EditorCaption": ""

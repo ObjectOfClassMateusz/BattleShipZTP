@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using System.Net.Sockets;
+using System.Text.Json;
 
 namespace BattleshipZTP.Networking
 {
     public interface INetworkingProxy 
     {
-        Task<(string, string)> NetworkWriteAndReadStrings(string v1, string v2);
+        Task<(string, string)> NetworkWriteAndReadStrings(string v1, string v2="");
+        Task<(T sent, T received)> NetworkWriteAndReadAsync<T>(T data);
+    }
+
+    public enum NetworkingTaskState
+    {
+        None,
+        NameShipment,
+        CountShips
     }
 
     public sealed class NetworkingProxy: INetworkingProxy
@@ -27,7 +29,7 @@ namespace BattleshipZTP.Networking
             _writer = writer;
             _role = role;
         }
-        public async Task<(string,string)> NetworkWriteAndReadStrings(string v1, string v2)
+        public async Task<(string,string)> NetworkWriteAndReadStrings(string v1, string v2="")
         {
             if (_role == "Server")
             {
@@ -39,10 +41,32 @@ namespace BattleshipZTP.Networking
                 v2 = await _reader.ReadLineAsync();
                 await _writer.WriteLineAsync(v1);
             }
-            return(v1,v2);
+            return (v1,v2);
         }
 
-    }
+        public async Task<(T sent, T received)> NetworkWriteAndReadAsync<T>(T data)
+        {
+            if (_role == "Server")
+            {
+                // Send first
+                string json = JsonSerializer.Serialize(data);
+                await _writer.WriteLineAsync(json);
+                // Receive
+                string receivedJson = await _reader.ReadLineAsync();
+                T received = JsonSerializer.Deserialize<T>(receivedJson);
 
-   
+                return (data, received);
+            }
+            else
+            {
+                // Receive first
+                string receivedJson = await _reader.ReadLineAsync();
+                T received = JsonSerializer.Deserialize<T>(receivedJson);
+                // Send
+                string json = JsonSerializer.Serialize(data);
+                await _writer.WriteLineAsync(json);
+                return (data, received);
+            }
+        }
+    }
 }

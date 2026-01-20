@@ -8,6 +8,7 @@ using BattleshipZTP.Utilities;
 using System.Net;
 using System.Net.Sockets;
 using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BattleshipZTP.Scenarios
 {
@@ -22,7 +23,7 @@ namespace BattleshipZTP.Scenarios
         IScenario _mainScenario;
         INetworkingProxy _network;
         Window _windowShipmentList = new Window();
-
+        NetworkingTaskState _taskState = NetworkingTaskState.None;
         public MultiplayerScenario(IGameMode gameMode, IScenario mainmenu)
         {
             _gameMode = gameMode;
@@ -32,6 +33,7 @@ namespace BattleshipZTP.Scenarios
         {
             Env.CursorPos(x, y);
             Console.Write(nickname);
+            Env.SetColor();
         }
 
         void DisplayShipmentTable(int x, int y, List<IShip> ships)
@@ -151,32 +153,9 @@ namespace BattleshipZTP.Scenarios
 
             await HandleConnection(client, "Client");
         }
-
-        async Task HandleConnection(TcpClient tcp, string role)
+        bool GameModeValidation(string mode1,string mode2)
         {
-            using var stream = tcp.GetStream();
-            using var reader = new StreamReader(stream);
-            using var writer = new StreamWriter(stream) { AutoFlush = true };
-            _network = new NetworkingProxy(tcp,reader, writer,role);
-
-
-            (string,string) gameModes = await _network.NetworkWriteAndReadStrings(_gameMode.Id().ToString(), null);
-            string myGameModeId = gameModes.Item1;
-            string otherGameModeId = gameModes.Item2;
-
-            //read and write gamemode ID
-            /*if (role == "Server")
-            {
-                await writer.WriteLineAsync(myGameModeId);
-                otherGameModeId = await reader.ReadLineAsync();
-            }
-            else
-            {
-                otherGameModeId = await reader.ReadLineAsync();
-                await writer.WriteLineAsync(myGameModeId);
-            }*/
-            //Game mode validation
-            if(myGameModeId != otherGameModeId)
+            if (mode1 != mode2)
             {
                 Env.CursorPos(61, 21);
                 Env.SetColor(ConsoleColor.DarkRed, ConsoleColor.Black);
@@ -184,30 +163,53 @@ namespace BattleshipZTP.Scenarios
                 IWindowBuilder builder = new WindowBuilder();
                 Env.SetColor();
                 Window window = builder.SetPosition(76, 23)
-                    .ColorHighlights(ConsoleColor.DarkRed,ConsoleColor.White)
-                    .ColorBorders(ConsoleColor.Black,ConsoleColor.White)
+                    .ColorHighlights(ConsoleColor.DarkRed, ConsoleColor.White)
+                    .ColorBorders(ConsoleColor.Black, ConsoleColor.White)
                     .AddComponent(new Button("Return")).Build();
                 builder.ResetBuilder();
                 UIController controller = new UIController();
                 controller.AddWindow(window);
                 controller.DrawAndStart();
-                _mainScenario.AsyncAct();
-                return;
+                return false;
             }
-            Console.Clear();
-            Env.SetColor();
+            return true;
+        }
+
+        async Task HandleConnection(TcpClient tcp, string role)
+        {
+            using var stream = tcp.GetStream();
+            using var reader = new StreamReader(stream);
+            using var writer = new StreamWriter(stream){ AutoFlush = true };
+            _network = new NetworkingProxy(tcp,reader, writer,role);
 
             _ = Task.Run(async () =>
             {
                 try
                 {
-                    /*while (true)
+                    while (true)
                     {
+                        if(_taskState == NetworkingTaskState.None)
+                        {
+                            continue;
+                        }
                         string line = await reader.ReadLineAsync();
-                        if (line == null) { break; }
-                        Console.WriteLine($"\n[{OtherRole(role)}] Otrzymano: {line}");
-                        Console.WriteLine(">");
-                    }*/
+                        if (_taskState == NetworkingTaskState.NameShipment) 
+                        {
+                            if (line == null) { break; }
+                            if (role == "Server")
+                            {
+                                Env.CursorPos(20, 20);
+                            }
+                            else 
+                            {
+                                Env.CursorPos(60, 20);
+                            }
+                            Console.WriteLine($"\n[{OtherRole(role)}] Otrzymano: {line}");
+                        }
+                        //if (line == null) { break; }
+                        //Console.WriteLine($"\n[{OtherRole(role)}] Otrzymano: {line}");
+                        //Console.WriteLine(">");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -216,44 +218,64 @@ namespace BattleshipZTP.Scenarios
             });
 
 
-            string name1 = UserSettings.Instance.Nickname;
-            string name2 = null;
-            if (role == "Server")
-            {
-                await writer.WriteLineAsync(name1);
-                name2 = await reader.ReadLineAsync();
-            }
-            else
-            {
-                name2 = await reader.ReadLineAsync();
-                await writer.WriteLineAsync(name1);
-            }
-            CoordsToDrawBoard boardCoords1 = _gameMode.BoardCoords();
-            if (role == "Server")
-            {
-                WriteNickNameOnConsole(boardCoords1.XAxis_Player1, boardCoords1.YAxis_Player1, name1);
-            }
-            else
-            {
-                WriteNickNameOnConsole(boardCoords1.XAxis_Player2, boardCoords1.YAxis_Player2, name1);
-            }
+            //read and write gamemode ID
+            (string,string) gameModes = await _network.NetworkWriteAndReadStrings(_gameMode.Id().ToString(), null);
+            string myGameModeId = gameModes.Item1;
+            string otherGameModeId = gameModes.Item2;
 
-            
-            /*
-            BattleBoard board = _gameMode.CreateBoard(boardCoords1.XAxis_Player1, boardCoords1.YAxis_Player1 + 1);
-            BattleBoard.BattleBoardProxy proxy = new BattleBoard.BattleBoardProxy(board);
+            //Game mode validation
+            if (!GameModeValidation(myGameModeId, otherGameModeId))
+            {
+                _mainScenario.AsyncAct();
+                return;
+            }
+            Console.Clear();
+            Env.SetColor();
+
+            //read and write players nicknames
+            var names = await _network.NetworkWriteAndReadStrings(UserSettings.Instance.Nickname);
+            string name1 = names.Item1;
+            string name2 = names.Item2;
+            CoordsToDrawBoard boardCoords = _gameMode.BoardCoords();
+
+            //Placing Boards
+            BattleBoard board;
+            BattleBoard.BattleBoardProxy proxy;
+            BattleBoard enemyBoard;
+            BattleBoard.BattleBoardProxy enemyProxy;
+            if (role == "Server")
+            {
+                Env.SetColor(ConsoleColor.Green);
+                WriteNickNameOnConsole(boardCoords.XAxis_Player1, boardCoords.YAxis_Player1, name1);
+                board = _gameMode.CreateBoard(boardCoords.XAxis_Player1, boardCoords.YAxis_Player1 + 1);
+            }
+            else
+            {
+                Env.SetColor(ConsoleColor.Green);
+                WriteNickNameOnConsole(boardCoords.XAxis_Player2, boardCoords.YAxis_Player2, name1);
+                board = _gameMode.CreateBoard(boardCoords.XAxis_Player2, boardCoords.YAxis_Player2 + 1);
+            }
+            proxy = new BattleBoard.BattleBoardProxy(board);
             Initialize(proxy);
-
-            WriteNickNameOnConsole(boardCoords2.XAxis_Player2, boardCoords2.YAxis_Player2, name2);
-            BattleBoard enemyBoard = _gameMode.CreateBoard(boardCoords2.XAxis_Player2, boardCoords2.YAxis_Player2 + 1);
-            BattleBoard.BattleBoardProxy enemyProxy = new BattleBoard.BattleBoardProxy(enemyBoard);
+            if (role == "Server")
+            {
+                Env.SetColor(ConsoleColor.Red);
+                WriteNickNameOnConsole(boardCoords.XAxis_Player2, boardCoords.YAxis_Player2, name2);
+                enemyBoard = _gameMode.CreateBoard(boardCoords.XAxis_Player2, boardCoords.YAxis_Player2 + 1);
+            }
+            else
+            {
+                Env.SetColor(ConsoleColor.Red);
+                WriteNickNameOnConsole(boardCoords.XAxis_Player1, boardCoords.YAxis_Player1, name2);
+                enemyBoard = _gameMode.CreateBoard(boardCoords.XAxis_Player1, boardCoords.YAxis_Player1 + 1);
+            }
+            enemyProxy = new BattleBoard.BattleBoardProxy(enemyBoard);
             Initialize(enemyProxy);
 
+            //Shipment
             List<IShip> ships = _gameMode.ShipmentDelivery();
+            List<IShip> enemyShips = _gameMode.ShipmentDelivery();
             int totalShipsToSink = ships.Count;
-            List<IShip> enemyShips  = _gameMode.ShipmentDelivery();
-            int totalEnemiesToSink = enemyShips.Count;
-
             if (_gameMode.RemeberArrowHit())
             {
                 BeautifyHelper.ApplyFancyBodies(ships);
@@ -264,41 +286,45 @@ namespace BattleshipZTP.Scenarios
             UIController uI = new UIController();
             uI.AddWindow(_windowShipmentList);
             uI.DrawAndEndSequence();
+
             Drawing.SetColors(ConsoleColor.Black, ConsoleColor.Black);
-            if (role == "Server")
+            _taskState = NetworkingTaskState.NameShipment;
+            foreach (IShip ship in ships)
             {
-                foreach (IShip ship in ships)
-                {
-                    uI.DrawAndEndSequence();
-                    PlaceCommand command = new PlaceCommand(board, ship, UserSettings.Instance.GetHashCode());
-                    var coords = proxy.PutCommand(command);
-                    command.Execute(coords);
-                    Drawing.DrawRectangleArea(tablePos.x, tablePos.y + 2, _windowShipmentList.Width, _windowShipmentList.Height);
-                    _windowShipmentList.Remove(0);
-                }
-            }
-            else
-            {
-                foreach (IShip ship in enemyShips)
-                {
-                    uI.DrawAndEndSequence();
-                    PlaceCommand command = new PlaceCommand(enemyBoard, ship, UserSettings.Instance.GetHashCode());
-                    var coords = proxy.PutCommand(command);
-                    command.Execute(coords);
-                    Drawing.DrawRectangleArea(tablePos.x, tablePos.y + 2, _windowShipmentList.Width, _windowShipmentList.Height);
-                    _windowShipmentList.Remove(0);
-                }
+                uI.DrawAndEndSequence();
+                PlaceCommand command = new PlaceCommand(board, ship, UserSettings.Instance.GetHashCode());
+                var coords = proxy.PutCommand(command);
+                command.Execute(coords);
+                //uwu
+                await writer.WriteLineAsync(ship.Name());
+                //
+                Drawing.DrawRectangleArea(tablePos.x, tablePos.y + 2, _windowShipmentList.Width, _windowShipmentList.Height);
+                _windowShipmentList.Remove(0);
             }
             Drawing.DrawRectangleArea(tablePos.x - 1, tablePos.y, _windowShipmentList.Width + 6, _windowShipmentList.Height + 3);
             Env.SetColor();
 
-            Drawing.SetColors(ConsoleColor.Black, ConsoleColor.Black);
+
+            //await enemy place ships
+            /*List<IShip> enemyShips = _gameMode.ShipmentDelivery(true);
+            if (_gameMode.RemeberArrowHit())
+            {
+                BeautifyHelper.ApplyFancyBodies(enemyShips);
+            }
+            PlaceShipsRandomly(enemyProxy, enemyShips);*/
+
+            /*Drawing.SetColors(ConsoleColor.Black, ConsoleColor.Black);
             Drawing.DrawRectangleArea(
-                boardCoords1.XAxis_Player2 + 1,
-                boardCoords1.YAxis_Player2 + 2,
+                boardCoords.XAxis_Player2 + 1,
+                boardCoords.YAxis_Player2 + 2,
                 proxy.Width, proxy.Height
-            );
-            */
+            );*/
+
+
+
+
+
+
 
 
 
