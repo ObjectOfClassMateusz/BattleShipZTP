@@ -188,42 +188,7 @@ namespace BattleshipZTP.Scenarios
             BattleBoard enemyBoard;
             BattleBoard.BattleBoardProxy enemyProxy;
 
-            _ = Task.Run(async () =>
-            {
-                try
-                {
-                    while (true)
-                    {
-                        if(_taskState == NetworkingTaskState.None)
-                        {
-                            continue;
-                        }
-                        string line = await reader.ReadLineAsync();
-                        if (_taskState == NetworkingTaskState.NameShipment) 
-                        {
-                            Env.SetColor();
-                            if (OtherRole(role) == "Server")
-                            {
-                                Env.CursorPos(10, 23);
-                            }
-                            else
-                            {
-                                Env.CursorPos(60, 23);
-                            }
-                            if (line == null) { break; }
-                            
-                            Console.Write($"[{OtherRole(role)}] Otrzymano: {line}");
-                        }
-                        //if (line == null) { break; }
-                        //Console.WriteLine($"\n[{OtherRole(role)}] Otrzymano: {line}");
-                        //Console.WriteLine(">");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            });
+            
 
 
             //read and write gamemode ID
@@ -292,6 +257,78 @@ namespace BattleshipZTP.Scenarios
             uI.AddWindow(_windowShipmentList);
             uI.DrawAndEndSequence();
 
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    while (true)
+                    {
+                        if (_taskState == NetworkingTaskState.None)
+                        {
+                            continue;
+                        }
+                        string line = await reader.ReadLineAsync();
+                        if (_taskState == NetworkingTaskState.NameShipment)
+                        {
+                            Env.SetColor();
+                            if (OtherRole(role) == "Server")
+                            {
+                                Env.CursorPos(10, 23);
+                            }
+                            else
+                            {
+                                Env.CursorPos(60, 23);
+                            }
+                            if (line == null) { break; }
+                            string[] parts = line.Split(';', StringSplitOptions.RemoveEmptyEntries);
+                            string shipName = parts[0];
+                            // 2. Współrzędne
+                            List<(int x, int y)> coords = new();
+                            int index = 1;
+                            while (parts[index].Contains("_") && parts[index].Count(c => c == '_') == 1
+                                   && char.IsDigit(parts[index].Split('_')[0][0]))
+                            {
+                                var xy = parts[index].Split('_');
+                                coords.Add((int.Parse(xy[0]), int.Parse(xy[1])));
+                                index++;
+                            }
+                            // 3. Ilość elementów body
+                            int bodyCount = int.Parse(parts[index]);
+                            index++;
+                            // 4. Body → List<(string,int)>
+                            List<(string text, int offset)> body = new();
+                            for (int i = 0; i < bodyCount; i++)
+                            {
+                                var split = parts[index + i].Split('_');
+                                string text = split[0];
+                                int offset = int.Parse(split[1]);
+
+                                body.Add((text, offset));
+                            }
+                            var ship = ShipFactory.CreateShip(shipName);
+                            ship.SetBody(body);
+                            PlaceCommand cmd = new PlaceCommand(enemyProxy.GetBattleBoard(), ship, name2.GetHashCode());
+                            var resultCoords = enemyProxy.PlaceShip(ship, coords[0].x, coords[0].y);
+                            cmd.Execute(resultCoords);
+
+                            proxy.Display();
+                            enemyProxy.Display();
+
+                            Console.WriteLine();
+                            Console.WriteLine();
+                            Console.Write($"[{OtherRole(role)}] Otrzymano: {line}");
+                        }
+                        //if (line == null) { break; }
+                        //Console.WriteLine($"\n[{OtherRole(role)}] Otrzymano: {line}");
+                        //Console.WriteLine(">");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            });
+
             Drawing.SetColors(ConsoleColor.Black, ConsoleColor.Black);
             _taskState = NetworkingTaskState.NameShipment;
             Env.SetColor();
@@ -301,27 +338,30 @@ namespace BattleshipZTP.Scenarios
                 PlaceCommand command = new PlaceCommand(board, ship, UserSettings.Instance.GetHashCode());
                 var coords = proxy.PutCommand(command);
                 command.Execute(coords);
-                //uwu
                 StringBuilder sb = new StringBuilder();
                 sb.Append(ship.Name() + ";");
                 foreach(var c in coords)
                 {
-                    sb.Append(c.x+"_"+c.y+";");
+                    sb.Append(
+                        (c.x - board.cornerX -1) 
+                        +"_"+
+                        (c.y - board.cornerY - 1)
+                        +
+                        ";");
                 }
                 sb.Append(ship.GetBody().Count.ToString()+";");
                 foreach(var b in ship.GetBody())
                 {
-                    sb.Append(b + ";");
+                    sb.Append(b.text+"_"+b.offset + ";");
                 }
-
                 await writer.WriteLineAsync(sb.ToString());
-                //
                 Drawing.DrawRectangleArea(tablePos.x, tablePos.y + 2, _windowShipmentList.Width, _windowShipmentList.Height);
                 _windowShipmentList.Remove(0);
             }
             Drawing.DrawRectangleArea(tablePos.x - 1, tablePos.y, _windowShipmentList.Width + 6, _windowShipmentList.Height + 3);
-            
 
+            Console.WriteLine(_windowShipmentList.ComponentsLenght());
+            
 
             //await enemy place ships
             /*List<IShip> enemyShips = _gameMode.ShipmentDelivery(true);

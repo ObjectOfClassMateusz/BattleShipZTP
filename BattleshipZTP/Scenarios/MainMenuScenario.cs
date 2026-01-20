@@ -14,8 +14,8 @@ namespace BattleshipZTP.Scenarios
         {
             await base.AsyncAct();
             //Decoration for main menu scene
-            Drawing.DrawASCII("mainMenuTitle", 10, 1, ConsoleColor.DarkGray);
-            Drawing.DrawASCII("mainMenuShip", 31, 12, background: ConsoleColor.DarkGreen);
+            Drawing.DrawASCII("mainMenuTitle", 15, 1, ConsoleColor.DarkGray);
+            Drawing.DrawASCII("mainMenuShip", 38, 12, background: ConsoleColor.DarkGreen);
 
             IWindowBuilder builder = new WindowBuilder();
             UIDirector director = new UIDirector(builder);
