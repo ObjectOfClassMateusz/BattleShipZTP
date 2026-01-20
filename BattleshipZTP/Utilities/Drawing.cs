@@ -20,6 +20,24 @@ namespace BattleshipZTP.Utilities
             XAxis_Player1 = Pl1x; YAxis_Player1 = Pl1y;
             XAxis_Player2 = Pl2x; YAxis_Player2 = Pl2y;
         }
+        public override string ToString()
+        {
+            return $"{XAxis_Player1}|{YAxis_Player1}|{XAxis_Player2}|{YAxis_Player2}";
+        }
+        public static CoordsToDrawBoard FromString(string data)
+        {
+            var parts = data.Split('|');
+
+            if (parts.Length != 4)
+                throw new ArgumentException("Invalid coordinate format");
+
+            return new CoordsToDrawBoard(
+                int.Parse(parts[0]),
+                int.Parse(parts[1]),
+                int.Parse(parts[2]),
+                int.Parse(parts[3])
+            );
+        }
     }
 
     public class Drawing

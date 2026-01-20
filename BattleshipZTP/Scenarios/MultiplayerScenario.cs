@@ -1,4 +1,6 @@
-﻿using BattleshipZTP.GameAssets;
+﻿using BattleshipZTP.Commands;
+using BattleshipZTP.GameAssets;
+using BattleshipZTP.Networking;
 using BattleshipZTP.Observers;
 using BattleshipZTP.Settings;
 using BattleshipZTP.UI;
@@ -18,7 +20,9 @@ namespace BattleshipZTP.Scenarios
     {
         IGameMode _gameMode;
         IScenario _mainScenario;
+        INetworkingProxy _network;
         Window _windowShipmentList = new Window();
+
         public MultiplayerScenario(IGameMode gameMode, IScenario mainmenu)
         {
             _gameMode = gameMode;
@@ -137,6 +141,7 @@ namespace BattleshipZTP.Scenarios
                 }
             }
             Env.SetColor(ConsoleColor.Green, ConsoleColor.Black);
+
             using TcpClient client = new TcpClient();
             Console.WriteLine("[...] Client Connecting");
             Env.Wait(2137);
@@ -152,10 +157,15 @@ namespace BattleshipZTP.Scenarios
             using var stream = tcp.GetStream();
             using var reader = new StreamReader(stream);
             using var writer = new StreamWriter(stream) { AutoFlush = true };
+            _network = new NetworkingProxy(tcp,reader, writer,role);
 
-            string myGameModeId = _gameMode.Id().ToString();
-            string otherGameModeId = null;
-            if (role == "Server")
+
+            (string,string) gameModes = await _network.NetworkWriteAndReadStrings(_gameMode.Id().ToString(), null);
+            string myGameModeId = gameModes.Item1;
+            string otherGameModeId = gameModes.Item2;
+
+            //read and write gamemode ID
+            /*if (role == "Server")
             {
                 await writer.WriteLineAsync(myGameModeId);
                 otherGameModeId = await reader.ReadLineAsync();
@@ -164,8 +174,8 @@ namespace BattleshipZTP.Scenarios
             {
                 otherGameModeId = await reader.ReadLineAsync();
                 await writer.WriteLineAsync(myGameModeId);
-            }
-
+            }*/
+            //Game mode validation
             if(myGameModeId != otherGameModeId)
             {
                 Env.CursorPos(61, 21);
@@ -185,8 +195,26 @@ namespace BattleshipZTP.Scenarios
                 return;
             }
             Console.Clear();
+            Env.SetColor();
 
-            CoordsToDrawBoard boardCoords = _gameMode.BoardCoords();
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    /*while (true)
+                    {
+                        string line = await reader.ReadLineAsync();
+                        if (line == null) { break; }
+                        Console.WriteLine($"\n[{OtherRole(role)}] Otrzymano: {line}");
+                        Console.WriteLine(">");
+                    }*/
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            });
+
 
             string name1 = UserSettings.Instance.Nickname;
             string name2 = null;
@@ -200,21 +228,77 @@ namespace BattleshipZTP.Scenarios
                 name2 = await reader.ReadLineAsync();
                 await writer.WriteLineAsync(name1);
             }
-            WriteNickNameOnConsole(boardCoords.XAxis_Player1, boardCoords.YAxis_Player1, name1);
-            BattleBoard board = _gameMode.CreateBoard(boardCoords.XAxis_Player1, boardCoords.YAxis_Player1 + 1);
+            CoordsToDrawBoard boardCoords1 = _gameMode.BoardCoords();
+            if (role == "Server")
+            {
+                WriteNickNameOnConsole(boardCoords1.XAxis_Player1, boardCoords1.YAxis_Player1, name1);
+            }
+            else
+            {
+                WriteNickNameOnConsole(boardCoords1.XAxis_Player2, boardCoords1.YAxis_Player2, name1);
+            }
+
+            
+            /*
+            BattleBoard board = _gameMode.CreateBoard(boardCoords1.XAxis_Player1, boardCoords1.YAxis_Player1 + 1);
             BattleBoard.BattleBoardProxy proxy = new BattleBoard.BattleBoardProxy(board);
             Initialize(proxy);
-            WriteNickNameOnConsole(boardCoords.XAxis_Player2, boardCoords.YAxis_Player2, name2);
-            BattleBoard enemyBoard = _gameMode.CreateBoard(boardCoords.XAxis_Player2, boardCoords.YAxis_Player2 + 1);
+
+            WriteNickNameOnConsole(boardCoords2.XAxis_Player2, boardCoords2.YAxis_Player2, name2);
+            BattleBoard enemyBoard = _gameMode.CreateBoard(boardCoords2.XAxis_Player2, boardCoords2.YAxis_Player2 + 1);
             BattleBoard.BattleBoardProxy enemyProxy = new BattleBoard.BattleBoardProxy(enemyBoard);
             Initialize(enemyProxy);
 
             List<IShip> ships = _gameMode.ShipmentDelivery();
             int totalShipsToSink = ships.Count;
-            Console.WriteLine(totalShipsToSink);
-            //List<IShip> enemyShips  = _gameMode.ShipmentDelivery();
-            //int totalShipsToSink = enemyShips.Count;
+            List<IShip> enemyShips  = _gameMode.ShipmentDelivery();
+            int totalEnemiesToSink = enemyShips.Count;
 
+            if (_gameMode.RemeberArrowHit())
+            {
+                BeautifyHelper.ApplyFancyBodies(ships);
+                BeautifyHelper.ApplyFancyBodies(enemyShips);
+            }
+            (int x, int y) tablePos = _gameMode.RemeberArrowHit() ? (71, 7) : (96, 22);
+            DisplayShipmentTable(tablePos.x, tablePos.y, ships);
+            UIController uI = new UIController();
+            uI.AddWindow(_windowShipmentList);
+            uI.DrawAndEndSequence();
+            Drawing.SetColors(ConsoleColor.Black, ConsoleColor.Black);
+            if (role == "Server")
+            {
+                foreach (IShip ship in ships)
+                {
+                    uI.DrawAndEndSequence();
+                    PlaceCommand command = new PlaceCommand(board, ship, UserSettings.Instance.GetHashCode());
+                    var coords = proxy.PutCommand(command);
+                    command.Execute(coords);
+                    Drawing.DrawRectangleArea(tablePos.x, tablePos.y + 2, _windowShipmentList.Width, _windowShipmentList.Height);
+                    _windowShipmentList.Remove(0);
+                }
+            }
+            else
+            {
+                foreach (IShip ship in enemyShips)
+                {
+                    uI.DrawAndEndSequence();
+                    PlaceCommand command = new PlaceCommand(enemyBoard, ship, UserSettings.Instance.GetHashCode());
+                    var coords = proxy.PutCommand(command);
+                    command.Execute(coords);
+                    Drawing.DrawRectangleArea(tablePos.x, tablePos.y + 2, _windowShipmentList.Width, _windowShipmentList.Height);
+                    _windowShipmentList.Remove(0);
+                }
+            }
+            Drawing.DrawRectangleArea(tablePos.x - 1, tablePos.y, _windowShipmentList.Width + 6, _windowShipmentList.Height + 3);
+            Env.SetColor();
+
+            Drawing.SetColors(ConsoleColor.Black, ConsoleColor.Black);
+            Drawing.DrawRectangleArea(
+                boardCoords1.XAxis_Player2 + 1,
+                boardCoords1.YAxis_Player2 + 2,
+                proxy.Width, proxy.Height
+            );
+            */
 
 
 

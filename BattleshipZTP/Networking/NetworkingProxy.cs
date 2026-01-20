@@ -2,21 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace BattleshipZTP.Networking
 {
-    public interface INetworkingProxy : IAsyncDisposable
+    public interface INetworkingProxy 
     {
-        bool IsConnected { get; }
-
-        Task ConnectAsync(string host, int port);
-        Task SendAsync(string message);
-        Task DisconnectAsync();
-
-        event Action<string> MessageReceived;
-        event Action Disconnected;
+        Task<(string, string)> NetworkWriteAndReadStrings(string v1, string v2);
     }
 
     public sealed class NetworkingProxy: INetworkingProxy
@@ -24,74 +19,30 @@ namespace BattleshipZTP.Networking
         private TcpClient _client;
         private StreamReader _reader;
         private StreamWriter _writer;
-        private CancellationTokenSource _cts;
-
-        public bool IsConnected => _client?.Connected == true;
-
-        public event Action<string> MessageReceived;
-        public event Action Disconnected;
-
-        public async Task ConnectAsync(string host, int port)
+        private string _role;
+        public NetworkingProxy(TcpClient client , StreamReader reader , StreamWriter writer,string role)
         {
-            _client = new TcpClient();
-            _cts = new CancellationTokenSource();
-
-            await _client.ConnectAsync(host, port);
-
-            var stream = _client.GetStream();
-            _reader = new StreamReader(stream);
-            _writer = new StreamWriter(stream) { AutoFlush = true };
-
-            _ = Task.Run(ReadLoop);
+            _client = client;
+            _reader = reader;
+            _writer = writer;
+            _role = role;
         }
-        public async Task SendAsync(string message)
+        public async Task<(string,string)> NetworkWriteAndReadStrings(string v1, string v2)
         {
-            if (!IsConnected)
+            if (_role == "Server")
             {
-                throw new InvalidOperationException("Not connected");
+                await _writer.WriteLineAsync(v1);
+                v2 = await _reader.ReadLineAsync();
             }
-            await _writer.WriteLineAsync(message);
-        }
-        private async Task ReadLoop()
-        {
-            try
+            else
             {
-                while (!_cts.IsCancellationRequested)
-                {
-                    var line = await _reader.ReadLineAsync();
-                    if (line == null)
-                    {
-                        break;
-                    }
-                    MessageReceived?.Invoke(line);
-                }
+                v2 = await _reader.ReadLineAsync();
+                await _writer.WriteLineAsync(v1);
             }
-            catch
-            {
-                // log
-            }
-            finally
-            {
-                Disconnected?.Invoke();
-            }
+            return(v1,v2);
         }
-        public Task DisconnectAsync()
-        {
-            _cts?.Cancel();
-            _client?.Close();
-            return Task.CompletedTask;
-        }
-        public ValueTask DisposeAsync()
-        {
-            return new ValueTask(DisconnectAsync());
-        }
+
     }
 
-    public interface ITcpServerProxy
-    {
-        Task StartAsync(int port);
-        Task StopAsync();
-
-        event Action<INetworkingProxy> ClientConnected;
-    }
+   
 }
