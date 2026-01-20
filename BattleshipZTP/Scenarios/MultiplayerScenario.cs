@@ -5,9 +5,15 @@ using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
 using System.Net;
 using System.Net.Sockets;
+using System.Xml.Linq;
 
 namespace BattleshipZTP.Scenarios
 {
+    /*public class Player
+    {
+        public Player() { }
+    }*/
+
     public class MultiplayerScenario : Scenario
     {
         IGameMode _gameMode;
@@ -18,7 +24,6 @@ namespace BattleshipZTP.Scenarios
             _gameMode = gameMode;
             _mainScenario = mainmenu;
         }
-
         void WriteNickNameOnConsole(int x, int y, string nickname)
         {
             Env.CursorPos(x, y);
@@ -87,17 +92,17 @@ namespace BattleshipZTP.Scenarios
             const int port = 5000;
             var listener = new TcpListener(IPAddress.Any, port);
             listener.Start();
-            Env.CursorPos(68, 21);
+            Env.CursorPos(61, 15);
             Env.SetColor(ConsoleColor.Green, ConsoleColor.Black);
             Console.WriteLine("The server is waiting for a connection");
             using TcpClient client = await listener.AcceptTcpClientAsync();
+            Env.CursorPos(61, 16);
             Console.WriteLine("Connected to Client");
             await HandleConnection(client, "Server");
         }
         async Task RunClient()
         {
             const int port = 5000;
-            //
             IWindowBuilder windowBuilder = new WindowBuilder();
             Button button = new Button("Ok");
             button.SetMargin(3);
@@ -136,6 +141,7 @@ namespace BattleshipZTP.Scenarios
             Console.WriteLine("[...] Client Connecting");
             Env.Wait(2137);
             await client.ConnectAsync(IPAddress.Parse(serverIp), port);
+            Env.CursorPos(68, 21);
             Console.WriteLine("Connected to server");
 
             await HandleConnection(client, "Client");
@@ -149,7 +155,6 @@ namespace BattleshipZTP.Scenarios
 
             string myGameModeId = _gameMode.Id().ToString();
             string otherGameModeId = null;
-
             if (role == "Server")
             {
                 await writer.WriteLineAsync(myGameModeId);
@@ -163,45 +168,61 @@ namespace BattleshipZTP.Scenarios
 
             if(myGameModeId != otherGameModeId)
             {
+                Env.CursorPos(61, 21);
+                Env.SetColor(ConsoleColor.DarkRed, ConsoleColor.Black);
                 Console.WriteLine("Players choosen different game modes!");
+                IWindowBuilder builder = new WindowBuilder();
+                Env.SetColor();
+                Window window = builder.SetPosition(76, 23)
+                    .ColorHighlights(ConsoleColor.DarkRed,ConsoleColor.White)
+                    .ColorBorders(ConsoleColor.Black,ConsoleColor.White)
+                    .AddComponent(new Button("Return")).Build();
+                builder.ResetBuilder();
+                UIController controller = new UIController();
+                controller.AddWindow(window);
+                controller.DrawAndStart();
+                _mainScenario.AsyncAct();
+                return;
             }
+            Console.Clear();
 
+            CoordsToDrawBoard boardCoords = _gameMode.BoardCoords();
 
-            /*_ = Task.Run(async () =>
+            string name1 = UserSettings.Instance.Nickname;
+            string name2 = null;
+            if (role == "Server")
             {
-                try
-                {
-                    while (true)
-                    {
-                        string line = await reader.ReadLineAsync();
-                        if (line == null) { break; }
-                        Console.WriteLine($"\n[{OtherRole(role)}] Otrzymano: {line}");
-                        Console.WriteLine(">");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            });
-
-            while (true)
+                await writer.WriteLineAsync(name1);
+                name2 = await reader.ReadLineAsync();
+            }
+            else
             {
-                Console.WriteLine("> ");
-                string input = Console.ReadLine();
-                if (input?.ToLower() == "exit")
-                {
-                    break;
-                }
-                if (int.TryParse(input, out int number))
-                {
-                    await writer.WriteLineAsync(number.ToString());
-                }
-                else
-                {
-                    Console.WriteLine("wpisz int albo exit");
-                }
-            }*/
+                name2 = await reader.ReadLineAsync();
+                await writer.WriteLineAsync(name1);
+            }
+            WriteNickNameOnConsole(boardCoords.XAxis_Player1, boardCoords.YAxis_Player1, name1);
+            BattleBoard board = _gameMode.CreateBoard(boardCoords.XAxis_Player1, boardCoords.YAxis_Player1 + 1);
+            BattleBoard.BattleBoardProxy proxy = new BattleBoard.BattleBoardProxy(board);
+            Initialize(proxy);
+            WriteNickNameOnConsole(boardCoords.XAxis_Player2, boardCoords.YAxis_Player2, name2);
+            BattleBoard enemyBoard = _gameMode.CreateBoard(boardCoords.XAxis_Player2, boardCoords.YAxis_Player2 + 1);
+            BattleBoard.BattleBoardProxy enemyProxy = new BattleBoard.BattleBoardProxy(enemyBoard);
+            Initialize(enemyProxy);
+
+            List<IShip> ships = _gameMode.ShipmentDelivery();
+            int totalShipsToSink = ships.Count;
+            Console.WriteLine(totalShipsToSink);
+            //List<IShip> enemyShips  = _gameMode.ShipmentDelivery();
+            //int totalShipsToSink = enemyShips.Count;
+
+
+
+
+
+
+
+
+            Console.ReadKey(true);
             tcp.Close();
         }
 
