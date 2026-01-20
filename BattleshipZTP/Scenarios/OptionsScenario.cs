@@ -36,13 +36,13 @@ namespace BattleshipZTP.Scenarios
             _menuScenario = (MainMenuScenario)_scenarios.FirstOrDefault().Value;
         }
 
-        public override void Act()
+        public override async Task AsyncAct()
         {
-            base.Act();
+            await base.AsyncAct();
             Drawing.DrawASCII("optionImg", 5,1,ConsoleColor.DarkCyan,ConsoleColor.DarkBlue);
             List<string> option = _controller.DrawAndStart();
             UserSettings.Instance.UpdateSettings(option);
-            _menuScenario.AsyncAct();
+            await _menuScenario.AsyncAct();
         }
     }
 }

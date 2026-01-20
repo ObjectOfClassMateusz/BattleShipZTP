@@ -12,7 +12,7 @@ namespace BattleshipZTP.Scenarios
         }
         public override async Task AsyncAct()
         {
-            base.Act();
+            await base.AsyncAct();
             //Decoration for main menu scene
             Drawing.DrawASCII("mainMenuTitle", 10, 1, ConsoleColor.DarkGray);
             Drawing.DrawASCII("mainMenuShip", 31, 12, background: ConsoleColor.DarkGreen);
@@ -34,11 +34,7 @@ namespace BattleshipZTP.Scenarios
                 AudioManager.Instance.Play("2-02 - Dark Calculation", true);
             }
             string option = controller.DrawAndStart().LastOrDefault();
-            if(option == "Multiplayer" || option == "Singleplayer")
-            {
-                await _scenarios[option].AsyncAct();
-            }
-            _scenarios[option].Act();
+            await _scenarios[option].AsyncAct();
         }
     }
 }

@@ -15,7 +15,7 @@ namespace BattleshipZTP.Scenarios
         }
         public override async Task AsyncAct()
         {
-            base.AsyncAct();
+            await base.AsyncAct();
             IWindowBuilder builder = new WindowBuilder();
             UIDirector director = new UIDirector(builder);
             if (_multi) {
@@ -37,7 +37,7 @@ namespace BattleshipZTP.Scenarios
             switch (option.FirstOrDefault())
             {
                 case "Return":
-                    _scenarios["Main"].AsyncAct();
+                    await _scenarios["Main"].AsyncAct();
                     break;
                 case "Classic":
                     factory = new ClassicModeFactory();

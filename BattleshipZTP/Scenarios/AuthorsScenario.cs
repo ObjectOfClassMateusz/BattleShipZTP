@@ -6,7 +6,7 @@ public class AuthorsScenario : Scenario
 {
     private List<string> _authors = new List<string> {"Mateusz Tręda", "Oliwia Sieradzka"};
     public AuthorsScenario() : base() { }
-    public override void Act()
+    public override async Task AsyncAct()
     {
         base.Act();
         Drawing.DrawASCII("skull", 15, 9,ConsoleColor.DarkGray);
@@ -25,7 +25,7 @@ public class AuthorsScenario : Scenario
 
         List<string> option = controller.DrawAndStart();
         option[0] = "Main";
-        _scenarios[option.LastOrDefault()].AsyncAct();
+        await _scenarios[option.LastOrDefault()].AsyncAct();
     }
 }
 
