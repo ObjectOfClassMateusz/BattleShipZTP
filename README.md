@@ -1,7 +1,7 @@
 ⚓ Battleship
 
 Projekt zaawansowanej gry w statki zrealizowany w języku C#, wykorzystujący architekturę opartą na wzorcach projektowych. 
-Gra oferuje trzy unikalne tryby rozgrywki, od klasycznej bitwy po strategiczny wariant w świecie Warhammer 40k.
+Gra oferuje trzy unikalne tryby rozgrywki, od klasycznej bitwy po strategiczny wariant w świecie Warhammer 40k. 
 
 <img width="1220" height="766" alt="1" src="https://github.com/user-attachments/assets/3def3687-9a70-4df8-ad14-71aab86687c9" />
 
@@ -43,8 +43,6 @@ Najbardziej rozbudowany tryb, który przekształca grę w statki w bitwę strate
   
 <img width="1163" height="573" alt="image" src="https://github.com/user-attachments/assets/624e9a05-2205-49d8-a49f-d0f938764717" />
 
-Dodatkowo jest tryb symulacji dzięki któremu można zobaczyć grę AI vs AI na różnych poziomach trudności.
-
 🤖 Poziomy Trudności AI
 
 Gra oferuje trzy inteligentne tryby przeciwnika, z których każdy wykorzystuje inne algorytmy decyzyjne:
@@ -54,6 +52,12 @@ Gra oferuje trzy inteligentne tryby przeciwnika, z których każdy wykorzystuje 
   🟡 Medium (Medium AI): Wykorzystuje algorytm przeszukiwania obszarów (BFS), aby identyfikować największe puste przestrzenie na planszy i tam kierować ogień.
   
   🔴 Hard (Hard AI): Najbardziej efektywny tryb. Łączy analizę obszarów z metodą szachownicy (strzały co drugie pole), co pozwala mu wykryć każdy statek przy minimalnej liczbie prób.
+
+  Dodatkowo jest tryb symulacji dzięki któremu można zobaczyć grę AI vs AI na różnych poziomach trudności.
+
+🤺 Wired Multiplayer
+
+Stabilna rozgrywka wieloosobowa przez bezpośrednie połączenie kablowe z wykorzystaniem asynchronicznej wymiany danych.
 
 ⌨️ Obsługa i Skróty 
 
