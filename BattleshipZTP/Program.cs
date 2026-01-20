@@ -1,12 +1,7 @@
 ﻿using BattleshipZTP.GameAssets;
 using BattleshipZTP.Scenarios;
-using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Text;
-using System.Xml.Linq;
 
 namespace BattleshipZTP
 {

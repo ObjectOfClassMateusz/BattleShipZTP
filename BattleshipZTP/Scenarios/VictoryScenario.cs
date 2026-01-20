@@ -94,7 +94,7 @@ namespace BattleshipZTP.Scenarios
             }
             else if (choice == "POWROT DO MENU")
             {
-                _scenarios["Main"].Act();
+                _scenarios["Main"].AsyncAct();
             }
         }
     }

@@ -1,22 +1,13 @@
-﻿using BattleshipZTP.Networking;
-using BattleshipZTP.Ship;
+﻿using BattleshipZTP.Ship;
 using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BattleshipZTP.Scenarios
 {
     public class SelectRaceScenario : Scenario
     {
         string _raceToString;
-        public SelectRaceScenario()
-        {
-            
-        }
+        public SelectRaceScenario(){}
 
         public Fraction GetRace()
         {
@@ -29,7 +20,6 @@ namespace BattleshipZTP.Scenarios
                 _ => throw new Exception("Non exist race")
             };
         }
-        
         public override void Act()
         {
             base.Act();
@@ -40,8 +30,7 @@ namespace BattleshipZTP.Scenarios
 
             IWindowBuilder builder = new WindowBuilder();
             UIDirector director = new UIDirector(builder);
-            //director.StandardWindowInit(89, 24, "Drukhari", "BielTan", "BloodRavens", "SaxonyEmpire");
-            director.StandardWindowInit(89, 24, "Drukhari", "SaxonyEmpire");
+            director.StandardWindowInit(89, 24, "Drukhari", "BielTan", "BloodRavens", "SaxonyEmpire");
             Window window = builder.Build();
             UIController controller = new UIController();
             controller.AddWindow(window);

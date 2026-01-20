@@ -108,7 +108,7 @@ public class ReplayScenario : Scenario
         string choice = results.LastOrDefault();
         if (choice == "POWROT DO MENU")
         {
-            _mainMenu.Act();
+            _mainMenu.AsyncAct();
         }
     }
     

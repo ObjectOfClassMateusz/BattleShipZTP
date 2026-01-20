@@ -252,6 +252,11 @@ namespace BattleshipZTP.UI
                 _value += (char)('0' + (key - ConsoleKey.D0));
                 return $"input-{_option}#:{_value}";
             }
+            else if (key == ConsoleKey.OemPeriod)
+            {
+                _value += ".";
+                return $"input-{_option}#:{_value}";
+            }
             // Numpad digits
             else if (key >= ConsoleKey.NumPad0 && key <= ConsoleKey.NumPad9)
             {

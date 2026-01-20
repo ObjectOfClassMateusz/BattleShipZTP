@@ -13,46 +13,59 @@ namespace BattleshipZTP.Scenarios
         {
             _multi = multi;
         }
-        public override void Act()
+        public override async Task AsyncAct()
         {
-            base.Act();
+            base.AsyncAct();
             IWindowBuilder builder = new WindowBuilder();
             UIDirector director = new UIDirector(builder);
-            director.StandardWindowInit(69, 16, "Classic", "Single ship duel", "40K", "Simulation", "Return");
+            if (_multi) {
+                director.StandardWindowInit(69, 16, "Classic", "Single ship duel", "40K", "Return");
+            }else {
+                director.StandardWindowInit(69, 16, "Classic", "Single ship duel", "40K", "Simulation", "Return");
+            }
             Window window1 = builder.Build();
-            builder.ResetBuilder();
-            Window window2 = builder.Build();
             builder.ResetBuilder();
             UIController controller = new UIController();
             controller.AddWindow(window1);
-            controller.AddWindow(window2);
             Drawing.DrawASCII("gameModeShip", 41, 0, ConsoleColor.Black , ConsoleColor.Red);
             Env.CursorPos(70, 14);
             Console.WriteLine("Choose game mode");
 
             GameModeFactory factory;
-
             List<string> option = controller.DrawAndStart();
             IScenario scenario;
-
             switch (option.FirstOrDefault())
             {
                 case "Return":
-                    _scenarios["Main"].Act();
+                    _scenarios["Main"].AsyncAct();
                     break;
                 case "Classic":
                     factory = new ClassicModeFactory();
                     var gameMode = factory.GetGameMode();
-                    scenario = new SingleplayerScenario(gameMode, difficulty: ChooseDifficulty(),
-                         _scenarios["Main"]);
-                    scenario.Act();
+                    if (_multi)
+                    {
+                        scenario = new MultiplayerScenario(gameMode, _scenarios["Main"]);
+                        await scenario.AsyncAct();
+                    }
+                    else
+                    {
+                        scenario = new SingleplayerScenario(gameMode, difficulty: ChooseDifficulty(),_scenarios["Main"]);
+                        scenario.Act();
+                    }
                     break;
                 case "Single ship duel":
                     factory = new DuelModeFactory();
                     var duelMode = factory.GetGameMode();
-                    scenario = new SingleplayerScenario(duelMode, difficulty: ChooseDifficulty(),
-                         _scenarios["Main"]);
-                    scenario.Act();
+                    if (_multi)
+                    {
+                        scenario = new MultiplayerScenario(duelMode, _scenarios["Main"]);
+                        await scenario.AsyncAct();
+                    }
+                    else
+                    {
+                        scenario = new SingleplayerScenario(duelMode, difficulty: ChooseDifficulty(), _scenarios["Main"]);
+                        scenario.Act();
+                    }
                     break;
                 case "40K":
                     var chooseRace = new SelectRaceScenario();
@@ -60,19 +73,26 @@ namespace BattleshipZTP.Scenarios
                     Fraction fraction = chooseRace.GetRace();
                     factory = new WarhammerModeFactory(chooseRace.GetRace());
                     var warhammerMode = factory.GetGameMode();
-                    scenario = new SingleplayerScenario(warhammerMode, difficulty: ChooseDifficulty(),
-                         _scenarios["Main"]);
-                    scenario.Act();
+                    if (_multi)
+                    {
+                        scenario = new MultiplayerScenario(warhammerMode, _scenarios["Main"]);
+                        await scenario.AsyncAct();
+                    }
+                    else 
+                    {
+                        scenario = new SingleplayerScenario(warhammerMode, difficulty: ChooseDifficulty(), _scenarios["Main"]);
+                        scenario.Act();
+                    }
                     break;
                 case "Simulation":
                     factory = new SimulationModeFactory();
                     var simulationMode = factory.GetGameMode();
-                    scenario = new SimulationScenario(simulationMode, difficulty1: ChooseDifficulty(),difficulty2: ChooseDifficulty(),
-                         _scenarios["Main"]);
+                    scenario = new SimulationScenario(simulationMode, difficulty1: ChooseDifficulty(),difficulty2: ChooseDifficulty(),_scenarios["Main"]);
                     scenario.Act();
                     break;
             }
         }
+
         private AIDifficulty ChooseDifficulty()
         {
             IWindowBuilder builder = new WindowBuilder();

@@ -2,11 +2,6 @@
 using BattleshipZTP.Settings;
 using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BattleshipZTP.Scenarios
 {
@@ -33,18 +28,17 @@ namespace BattleshipZTP.Scenarios
             controller.AddWindow(menu1);
             Env.CursorPos();
 
-            AudioManager.Instance.ChangeVolume(
-                "2-02 - Dark Calculation", 
-                UserSettings.Instance.MusicVolume
-            );
+            AudioManager.Instance.ChangeVolume("2-02 - Dark Calculation", UserSettings.Instance.MusicVolume);
             if (UserSettings.Instance.MusicEnabled == true)
             {
                 AudioManager.Instance.Play("2-02 - Dark Calculation", true);
             }
-
-            List<string> option = controller.DrawAndStart();
-            IScenario scenario;
-            _scenarios[option.LastOrDefault()].Act();
+            string option = controller.DrawAndStart().LastOrDefault();
+            if(option == "Multiplayer" || option == "Singleplayer")
+            {
+                await _scenarios[option].AsyncAct();
+            }
+            _scenarios[option].Act();
         }
     }
 }

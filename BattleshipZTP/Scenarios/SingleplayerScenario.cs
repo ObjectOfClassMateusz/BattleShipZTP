@@ -7,11 +7,6 @@ using BattleshipZTP.Ship;
 using BattleshipZTP.Ship.Turrets;
 using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
-using NAudio.Codecs;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
-using System.Xml.Linq;
 
 namespace BattleshipZTP.Scenarios
 {
