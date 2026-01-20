@@ -1,4 +1,7 @@
 ﻿
+using BattleshipZTP.GameAssets;
+using BattleshipZTP.Ship.Turrets;
+
 namespace BattleshipZTP.Ship.SaxonyShips
 {
     public class StormtroopersShip : Advanced40KShip
@@ -14,6 +17,9 @@ namespace BattleshipZTP.Ship.SaxonyShips
             _colors = (ConsoleColor.DarkYellow, ConsoleColor.Black);
             _health = 150;
             _maxHealth = 150;
+            _healthBar = new StatBar(_maxHealth, ConsoleColor.DarkYellow, 1);
+
+            //_turrets.Add(new Guns());
         }
     }
 }

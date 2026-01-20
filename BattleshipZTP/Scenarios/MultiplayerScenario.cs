@@ -7,6 +7,7 @@ using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -112,7 +113,7 @@ namespace BattleshipZTP.Scenarios
             IWindowBuilder windowBuilder = new WindowBuilder();
             Button button = new Button("Ok");
             button.SetMargin(3);
-            TextBox box = new TextBox("IP", 15, "0.0.0.0");
+            TextBox box = new TextBox("IP", 15, "192.168.1.10");
             box.SetMargin(3);
             TextOutput output = new TextOutput("Enter the server IP");
             output.SetMargin(3);
@@ -182,6 +183,11 @@ namespace BattleshipZTP.Scenarios
             using var writer = new StreamWriter(stream){ AutoFlush = true };
             _network = new NetworkingProxy(tcp,reader, writer,role);
 
+            BattleBoard board;
+            BattleBoard.BattleBoardProxy proxy;
+            BattleBoard enemyBoard;
+            BattleBoard.BattleBoardProxy enemyProxy;
+
             _ = Task.Run(async () =>
             {
                 try
@@ -195,16 +201,18 @@ namespace BattleshipZTP.Scenarios
                         string line = await reader.ReadLineAsync();
                         if (_taskState == NetworkingTaskState.NameShipment) 
                         {
+                            Env.SetColor();
+                            if (OtherRole(role) == "Server")
+                            {
+                                Env.CursorPos(10, 23);
+                            }
+                            else
+                            {
+                                Env.CursorPos(60, 23);
+                            }
                             if (line == null) { break; }
-                            if (role == "Server")
-                            {
-                                Env.CursorPos(20, 20);
-                            }
-                            else 
-                            {
-                                Env.CursorPos(60, 20);
-                            }
-                            Console.WriteLine($"\n[{OtherRole(role)}] Otrzymano: {line}");
+                            
+                            Console.Write($"[{OtherRole(role)}] Otrzymano: {line}");
                         }
                         //if (line == null) { break; }
                         //Console.WriteLine($"\n[{OtherRole(role)}] Otrzymano: {line}");
@@ -239,10 +247,7 @@ namespace BattleshipZTP.Scenarios
             CoordsToDrawBoard boardCoords = _gameMode.BoardCoords();
 
             //Placing Boards
-            BattleBoard board;
-            BattleBoard.BattleBoardProxy proxy;
-            BattleBoard enemyBoard;
-            BattleBoard.BattleBoardProxy enemyProxy;
+            
             if (role == "Server")
             {
                 Env.SetColor(ConsoleColor.Green);
@@ -278,8 +283,8 @@ namespace BattleshipZTP.Scenarios
             int totalShipsToSink = ships.Count;
             if (_gameMode.RemeberArrowHit())
             {
-                BeautifyHelper.ApplyFancyBodies(ships);
-                BeautifyHelper.ApplyFancyBodies(enemyShips);
+                //BeautifyHelper.ApplyFancyBodies(ships);
+                //BeautifyHelper.ApplyFancyBodies(enemyShips);
             }
             (int x, int y) tablePos = _gameMode.RemeberArrowHit() ? (71, 7) : (96, 22);
             DisplayShipmentTable(tablePos.x, tablePos.y, ships);
@@ -289,6 +294,7 @@ namespace BattleshipZTP.Scenarios
 
             Drawing.SetColors(ConsoleColor.Black, ConsoleColor.Black);
             _taskState = NetworkingTaskState.NameShipment;
+            Env.SetColor();
             foreach (IShip ship in ships)
             {
                 uI.DrawAndEndSequence();
@@ -296,13 +302,25 @@ namespace BattleshipZTP.Scenarios
                 var coords = proxy.PutCommand(command);
                 command.Execute(coords);
                 //uwu
-                await writer.WriteLineAsync(ship.Name());
+                StringBuilder sb = new StringBuilder();
+                sb.Append(ship.Name() + ";");
+                foreach(var c in coords)
+                {
+                    sb.Append(c.x+"_"+c.y+";");
+                }
+                sb.Append(ship.GetBody().Count.ToString()+";");
+                foreach(var b in ship.GetBody())
+                {
+                    sb.Append(b + ";");
+                }
+
+                await writer.WriteLineAsync(sb.ToString());
                 //
                 Drawing.DrawRectangleArea(tablePos.x, tablePos.y + 2, _windowShipmentList.Width, _windowShipmentList.Height);
                 _windowShipmentList.Remove(0);
             }
             Drawing.DrawRectangleArea(tablePos.x - 1, tablePos.y, _windowShipmentList.Width + 6, _windowShipmentList.Height + 3);
-            Env.SetColor();
+            
 
 
             //await enemy place ships
@@ -319,18 +337,6 @@ namespace BattleshipZTP.Scenarios
                 boardCoords.YAxis_Player2 + 2,
                 proxy.Width, proxy.Height
             );*/
-
-
-
-
-
-
-
-
-
-
-
-
 
             Console.ReadKey(true);
             tcp.Close();

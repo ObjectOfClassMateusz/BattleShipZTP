@@ -35,6 +35,7 @@ namespace BattleshipZTP.Ship.DarkEldarShips
             _healthBar = new StatBar(_maxHealth, ConsoleColor.Magenta, 6);
 
             _turrets.Add(new ShurikenCannon());
+            //_turrets.Add(new TerrorCannon());
         }
     }
 }

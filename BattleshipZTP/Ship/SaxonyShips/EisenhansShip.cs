@@ -12,11 +12,13 @@ namespace BattleshipZTP.Ship.SaxonyShips
             _body.Add(("[-]", 0));
             _body.Add(("◓⬚◓", 0));
             _body.Add(("⋐▥⋑", 0));
+
             _name = "Eisanhans";
             _colors = (ConsoleColor.DarkYellow, ConsoleColor.Black);
             _health = 310;
             _maxHealth = 310;
             _healthBar = new StatBar(_maxHealth, ConsoleColor.DarkYellow, 3);
+
             _audioReady.Add("085");
             _audioReady.Add("086");
             _audioReady.Add("087");

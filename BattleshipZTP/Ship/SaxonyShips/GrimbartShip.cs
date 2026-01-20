@@ -19,11 +19,14 @@ namespace BattleshipZTP.Ship.SaxonyShips
             _body.Add(("▛▇▜║", 0));
             _body.Add(("▋✠_║", 0));
             _body.Add(("▙▅▟║", 0));
+
             _name = "Grimbart";
             _colors = (ConsoleColor.DarkYellow, ConsoleColor.Black);
             _health = 500;
             _maxHealth = 500;
             _healthBar = new StatBar(_maxHealth, ConsoleColor.DarkYellow, 5);
+
+            //_turrets.Add(new MachineGuns());
         }
     }
 }

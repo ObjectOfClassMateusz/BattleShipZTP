@@ -26,6 +26,30 @@ public class ShipFactory
             ShipType.Sax_sdksGrim => new GrimbartShip(emptyPlacement),
             ShipType.Sax_sdksIse => new IsegrimShip(emptyPlacement),
 
+            _ => throw new ArgumentException("Invalid ship type")
+        };
+    }
+
+    static public IShip CreateShip(string shipType)
+    {
+        var emptyPlacement = new List<Point>();
+
+        return shipType switch
+        {
+            "Carrier" => new CarrierShip(emptyPlacement),
+            "Battleship" => new BattleshipShip(emptyPlacement),
+            "Destroyer" => new DestroyerShip(emptyPlacement),
+            "Submarine" => new SubmarineShip(emptyPlacement),
+
+            "ReaverJetBike" => new ReaverJetBikeShip(emptyPlacement),
+            "Raider" => new RaiderShip(emptyPlacement),
+            "Ravanger" => new RavangerShip(emptyPlacement),
+            "DairOfDestruction" => new DairOfDestructionShip(emptyPlacement),
+
+            "Eisanhans" => new EisenhansShip(emptyPlacement),
+            "Stormstrooper" => new StormtroopersShip(emptyPlacement),
+            "Grimbart" => new GrimbartShip(emptyPlacement),
+            "Isegrim" => new IsegrimShip(emptyPlacement),
 
             _ => throw new ArgumentException("Invalid ship type")
         };

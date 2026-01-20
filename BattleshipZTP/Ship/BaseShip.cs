@@ -10,7 +10,7 @@ public abstract class BaseShip : IShip
     protected string _name;
     public int Size => size;
 
-    public BaseShip(int size, List<Point> initialPlacement)
+    public BaseShip(int size, List<Point> initialPlacement )
     {
         this.size = size;
         this.placement = initialPlacement;
@@ -18,7 +18,6 @@ public abstract class BaseShip : IShip
         _body = new List<(string, int)>();
         _colors = (ConsoleColor.White, ConsoleColor.Black);
     }
-
     public string Name() => _name;
 
     public List<(string text,int offset)> GetBody()
