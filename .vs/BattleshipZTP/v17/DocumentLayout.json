@@ -7,8 +7,16 @@
       "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\scenarios\\multiplayerscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\scenarios\\choosegamemodescenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\scenarios\\choosegamemodescenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\networking\\networkingproxy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\networking\\networkingproxy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\gameassets\\gamemode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\gameassets\\gamemode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\scenarios\\singleplayerscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\scenarios\\singleplayerscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,8 +26,47 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 3,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "GameMode.cs",
+              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\GameAssets\\GameMode.cs",
+              "RelativeDocumentMoniker": "BattleshipZTP\\GameAssets\\GameMode.cs",
+              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\GameAssets\\GameMode.cs",
+              "RelativeToolTip": "BattleshipZTP\\GameAssets\\GameMode.cs",
+              "ViewState": "AgIAADYAAAAAAAAAAAAAAJUAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-20T00:46:40.633Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "NetworkingProxy.cs",
+              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Networking\\NetworkingProxy.cs",
+              "RelativeDocumentMoniker": "BattleshipZTP\\Networking\\NetworkingProxy.cs",
+              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Networking\\NetworkingProxy.cs",
+              "RelativeToolTip": "BattleshipZTP\\Networking\\NetworkingProxy.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-20T00:36:45.969Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "SingleplayerScenario.cs",
+              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
+              "RelativeDocumentMoniker": "BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
+              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
+              "RelativeToolTip": "BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
+              "ViewState": "AgIAAGsAAAAAAAAAAAAAAIEAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-20T00:23:58.114Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -28,22 +75,9 @@
               "RelativeDocumentMoniker": "BattleshipZTP\\Scenarios\\MultiplayerScenario.cs",
               "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\MultiplayerScenario.cs",
               "RelativeToolTip": "BattleshipZTP\\Scenarios\\MultiplayerScenario.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAAAowEMAAAAwAAAAAAAAAA==",
+              "ViewState": "AgIAAJUAAAAAAAAAAAAYwJ8AAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-19T23:12:49.498Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ChooseGameModeScenario.cs",
-              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\ChooseGameModeScenario.cs",
-              "RelativeDocumentMoniker": "BattleshipZTP\\Scenarios\\ChooseGameModeScenario.cs",
-              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\ChooseGameModeScenario.cs",
-              "RelativeToolTip": "BattleshipZTP\\Scenarios\\ChooseGameModeScenario.cs",
-              "ViewState": "AgIAAEUAAAAAAAAAAAAAACcAAAAyAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-19T22:33:25.738Z",
               "EditorCaption": ""
             }
           ]

@@ -92,7 +92,6 @@ namespace BattleshipZTP.Scenarios
                     break;
             }
         }
-
         private AIDifficulty ChooseDifficulty()
         {
             IWindowBuilder builder = new WindowBuilder();

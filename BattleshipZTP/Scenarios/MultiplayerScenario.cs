@@ -1,4 +1,6 @@
 ﻿using BattleshipZTP.GameAssets;
+using BattleshipZTP.Observers;
+using BattleshipZTP.Settings;
 using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
 using System.Net;
@@ -80,12 +82,13 @@ namespace BattleshipZTP.Scenarios
         {
             return role == "Server" ? "Client" : "Server";
         }
-
         async Task RunServer()
         {
             const int port = 5000;
             var listener = new TcpListener(IPAddress.Any, port);
             listener.Start();
+            Env.CursorPos(68, 21);
+            Env.SetColor(ConsoleColor.Green, ConsoleColor.Black);
             Console.WriteLine("The server is waiting for a connection");
             using TcpClient client = await listener.AcceptTcpClientAsync();
             Console.WriteLine("Connected to Client");
@@ -137,12 +140,34 @@ namespace BattleshipZTP.Scenarios
 
             await HandleConnection(client, "Client");
         }
+
         async Task HandleConnection(TcpClient tcp, string role)
         {
             using var stream = tcp.GetStream();
             using var reader = new StreamReader(stream);
             using var writer = new StreamWriter(stream) { AutoFlush = true };
-            _ = Task.Run(async () =>
+
+            string myGameModeId = _gameMode.Id().ToString();
+            string otherGameModeId = null;
+
+            if (role == "Server")
+            {
+                await writer.WriteLineAsync(myGameModeId);
+                otherGameModeId = await reader.ReadLineAsync();
+            }
+            else
+            {
+                otherGameModeId = await reader.ReadLineAsync();
+                await writer.WriteLineAsync(myGameModeId);
+            }
+
+            if(myGameModeId != otherGameModeId)
+            {
+                Console.WriteLine("Players choosen different game modes!");
+            }
+
+
+            /*_ = Task.Run(async () =>
             {
                 try
                 {
@@ -159,6 +184,7 @@ namespace BattleshipZTP.Scenarios
                     Console.WriteLine(ex.Message);
                 }
             });
+
             while (true)
             {
                 Console.WriteLine("> ");
@@ -175,15 +201,20 @@ namespace BattleshipZTP.Scenarios
                 {
                     Console.WriteLine("wpisz int albo exit");
                 }
-            }
+            }*/
             tcp.Close();
-            Console.WriteLine("Uwu");
         }
 
         public override async Task AsyncAct()
         {
-            base.AsyncAct();
-
+            ActionManager.Instance.ClearObservers();
+            if (UserSettings.Instance.MusicEnabled)
+            {
+                AudioManager.Instance.Stop("2-02 - Dark Calculation");
+                AudioManager.Instance.ChangeVolume(_gameMode.GameThemeAudio(), UserSettings.Instance.MusicVolume);
+                AudioManager.Instance.Play(_gameMode.GameThemeAudio(), true);
+            }
+            await base.AsyncAct();
             IWindowBuilder builder = new WindowBuilder();
             builder
                 .SetPosition(65, 9)
@@ -199,7 +230,6 @@ namespace BattleshipZTP.Scenarios
             UIController controller = new UIController();
             controller.AddWindow(roleWindow);
             string role = controller.DrawAndStart().LastOrDefault();
-
             if(role == "Server")
             {
                 await RunServer();

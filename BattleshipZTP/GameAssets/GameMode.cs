@@ -9,6 +9,7 @@ namespace BattleshipZTP.GameAssets
 {
     public interface IGameMode
     {
+        int Id();
         BattleBoard CreateBoard(int x , int y);
         bool RemeberArrowHit();
         Dictionary<string, int> AssignResources();
@@ -23,6 +24,7 @@ namespace BattleshipZTP.GameAssets
 
     public class ClassicGameMode : IGameMode
     {
+        public int Id() => 66011;
         readonly List<(int x, int y)> _coords = new List<(int x, int y)>();
         public CoordsToDrawBoard BoardCoords() => new CoordsToDrawBoard(52, 7, 88, 7);
         public string GameThemeAudio() => "Pixel War Overlord";
@@ -59,6 +61,7 @@ namespace BattleshipZTP.GameAssets
 
     public class SimulationMode : IGameMode
     {
+        public int Id() => 12;
         readonly List<(int x, int y)> _coords = new List<(int x, int y)>();
         public CoordsToDrawBoard BoardCoords() => new CoordsToDrawBoard(52, 7, 88, 7);
         public string GameThemeAudio() => "Pixel War Overlord";
@@ -100,6 +103,7 @@ namespace BattleshipZTP.GameAssets
         {
             _type = type;
         }
+        public int Id() => 6611;
         readonly (int x, int y) _coords;
         public List<(int x, int y)> GetShipmentPlacementCoords()
         {
@@ -143,6 +147,7 @@ namespace BattleshipZTP.GameAssets
 
     public class WarhammerGameMode : IGameMode
     {
+        public int Id() => 9090;
         readonly List<(int x, int y)> _coords = new List<(int x, int y)>();
         readonly Fraction _playerFraction;
         Dictionary<string, int> _resources;

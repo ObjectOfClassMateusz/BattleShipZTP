@@ -120,7 +120,6 @@ namespace BattleshipZTP.Scenarios
         public override void Act()
         {
             ActionManager.Instance.ClearObservers();
-            
             if (UserSettings.Instance.MusicEnabled)
             {
                 AudioManager.Instance.Stop("2-02 - Dark Calculation");
