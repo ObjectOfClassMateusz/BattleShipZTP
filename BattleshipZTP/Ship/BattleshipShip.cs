@@ -11,6 +11,6 @@ public class BattleshipShip : BaseShip
         string reader = file.ReadLine();
         _body.Add((reader, 0));
         _name = "Battleship";
-        _colors = (ConsoleColor.Blue,ConsoleColor.DarkGray);
+        _colors = (ConsoleColor.Yellow,ConsoleColor.Black);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BattleshipZTP.GameAssets;
+using BattleshipZTP.Ship.Turrets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,16 @@ namespace BattleshipZTP.Ship.SaxonyShips
             _maxHealth = 500;
             _healthBar = new StatBar(_maxHealth, ConsoleColor.DarkYellow, 5);
 
+            _audioReady.Add("12");
+            _audioReady.Add("13");
+            _audioReady.Add("14");
+            _audioReady.Add("15");
+
+            _audioAttack.Add("66");
+            _audioAttack.Add("67");
+
             //_turrets.Add(new MachineGuns());
+            _turrets.Add(new ShurikenCannon());
         }
     }
 }

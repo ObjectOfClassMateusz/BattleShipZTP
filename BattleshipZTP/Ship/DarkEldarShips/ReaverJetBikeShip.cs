@@ -21,20 +21,22 @@ namespace BattleshipZTP.Ship.DarkEldarShips
             _body.Add(("༺☫༻", 1));
             _body.Add(("☽=☾", 1));
             _body.Add(("◿═══◺", 0));
-
             _name = "ReaverJetBike";
             _colors = (ConsoleColor.DarkMagenta, ConsoleColor.Black);
-
             _health = 90;
             _maxHealth = 90;
             _healthBar = new StatBar(_maxHealth, ConsoleColor.Magenta, 2);
-
             _audioReady.Add("5000588");
             _audioReady.Add("5000589b");
             _audioReady.Add("5000590b");
             _audioReady.Add("5000591");
             _audioReady.Add("5000592");
-
+            _audioAttack.Add("5000578b");
+            _audioAttack.Add("5000579");
+            _audioAttack.Add("5000580b");
+            _audioMove.Add("5000582b");
+            _audioMove.Add("5000583b");
+            _audioMove.Add("5000584");
             _turrets.Add(new ShurikenCannon());
         }
     }

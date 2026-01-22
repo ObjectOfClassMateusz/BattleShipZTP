@@ -15,8 +15,10 @@ public class AuthorsScenario : Scenario
 
         director.AuthorsInit();
         builder.AddComponent(new TextOutput("Authors of the game: ©️"));
-        builder.AddComponent(new TextOutput($"- {_authors[0]}"));
-        builder.AddComponent(new TextOutput($"- {_authors[1]}"));
+        foreach (var author in _authors) 
+        {
+            builder.AddComponent(new TextOutput($"- {author}"));
+        }
         builder.AddComponent(new Button("Return to Main Menu"));
         Window authorsWindow = builder.Build();
         builder.ResetBuilder();

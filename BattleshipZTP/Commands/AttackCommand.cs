@@ -24,9 +24,13 @@ public class AttackCommand : ICommand
     {
         var field = Board.GetField(Target.X, Target.Y);
         if (field == null) return;
-        if (field.Character == 'X' || field.Character == '•' && UserSettings.Instance.SfxEnabled == true) 
+        //if (field.Character == 'X' || field.Character == '•') 
+        if (field.ArrowHit)
         {
-            AudioManager.Instance.Play("wrong");
+            if (UserSettings.Instance.SfxEnabled)
+            {
+                AudioManager.Instance.Play("wrong");
+            }
             return;
         }
         HitResult hitResult = Board.AttackPoint(Target);
@@ -59,7 +63,6 @@ public class AttackCommand : ICommand
     {
         AudioManager.Instance.Play("trafiony");
     }
-
     public void PlayMissSound()
     {
         AudioManager.Instance.Play("miss");

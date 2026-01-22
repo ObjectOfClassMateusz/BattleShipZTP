@@ -96,7 +96,7 @@ namespace BattleshipZTP.Scenarios
                 {
                     int x = rand.Next(0, enemyProxy.Width);
                     int y = rand.Next(0, enemyProxy.Height);
-    
+
                     if (rand.Next(2) == 0 && _gameMode.RemeberArrowHit()) 
                     {
                         ship.SetBody(BattleBoard.RotateBody(ship.GetBody())); 
@@ -219,7 +219,6 @@ namespace BattleshipZTP.Scenarios
             int aiSunkCounter = 0;
             bool nextTurn = true;
             bool victory = false;
-            Dictionary<string, int> playerWallet = _gameMode.AssignResources(); // zasoby na start w trybie 40k
 
             while (victory == false)
             {
@@ -318,8 +317,6 @@ namespace BattleshipZTP.Scenarios
                     {
                         nextTurn = true; 
                     }
-
-                    proxy.Display();
                     if (playerSunkCounter >= totalShipsToSink || aiSunkCounter >= totalShipsToSink) 
                     {
                         victory = true;
@@ -403,7 +400,7 @@ namespace BattleshipZTP.Scenarios
             controller.AddWindow(window);
             string option = controller.DrawAndStart().FirstOrDefault();
             Drawing.SetColors(ConsoleColor.Black,ConsoleColor.Black);
-            Drawing.DrawRectangleArea(96,25,window.Width+1,window.Height+1);
+            Drawing.DrawRectangleArea(96,22,window.Width+11,window.Height+5);
             return option;
         }
 
@@ -420,10 +417,8 @@ namespace BattleshipZTP.Scenarios
             {
                 enemyAdvanced40KShips.Add((Advanced40KShip)shipItem);
             }
-
             BattleBoardMemento playerMemento = proxy.GetBattleBoard().GetSaveState();
             BattleBoardMemento enemyMemento = enemyProxy.GetBattleBoard().GetSaveState();
-
 
             int totalShipsToSink = numberOfShipsPerPlayer;
             int playerSunkCounter = 0;
@@ -431,13 +426,13 @@ namespace BattleshipZTP.Scenarios
             bool victory = false;
             bool nextTurn = true;
             Dictionary<string, int> playerWallet = _gameMode.AssignResources();
-            int actionPointIncrease = playerWallet["Action Points"]-1;
+            int actionPointIncrease = playerWallet["Action Points"];
+            //ataki nadpisują X na statkach
 
             while (!victory)
             {
                 while (nextTurn == true)
                 {
-                    playerWallet["Action Points"] = actionPointIncrease;
                     Env.CursorPos(1, 40);
                     Env.SetColor(ConsoleColor.DarkMagenta, ConsoleColor.Gray);
                     Console.Write($" Action Points {playerWallet["Action Points"]} ");
@@ -445,20 +440,30 @@ namespace BattleshipZTP.Scenarios
                     Env.SetColor(ConsoleColor.DarkBlue, ConsoleColor.DarkCyan);
                     Console.Write($" Requisition {playerWallet["Requisition"]} ");
                     Env.CursorPos(51, 40);
-                    Env.SetColor(ConsoleColor.DarkGreen, ConsoleColor.Green);
+                    Env.SetColor(ConsoleColor.Green, ConsoleColor.DarkGreen);
                     Console.Write($" Energy {playerWallet["Energy"]} ");
                     Env.SetColor();
                     string selected = SelectAdvancedShipOrAction(advanced40KShips);
-                    if(selected == "End Turn")
+                    if(selected == "End Turn")// Gracz dobrowolnie kończy turę
                     {
-                        nextTurn = false; // Gracz dobrowolnie kończy turę
+                        nextTurn = false; 
+                        actionPointIncrease++;
+                        playerWallet["Action Points"] = actionPointIncrease;
                         break;
                     }
                     else if (selected == "Buy Shipment")
                     {
+                        if (playerWallet["Action Points"] == 0)
+                        {
+                            AudioManager.Instance.Play("wrong");
+                            continue;
+                            //actionPointIncrease++;
+                        }
+                        //
                         List<IShip> reinforcement = _gameMode.BuyShip(playerWallet);
                         if (reinforcement != null && reinforcement.Count > 0)
                         {
+                            playerWallet["Action Points"] -= 1;
                             foreach (var s in reinforcement)
                             {
                                 PlaceCommand cmd = new PlaceCommand(proxy.GetBattleBoard(), s, UserSettings.Instance.GetHashCode());
@@ -476,9 +481,40 @@ namespace BattleshipZTP.Scenarios
                     int finalIndex = Convert.ToInt32(selected);
                     Advanced40KShip ship = advanced40KShips[finalIndex];
                     string action = GetActionFromAdvancedShip(ship);
+                    Drawing.SetColors(ConsoleColor.Black, ConsoleColor.Black);
+                    Drawing.DrawRectangleArea(96, 24, 32, 10);
+                    
 
-                    if(action == "Move")
+                    if (action == "Move")
                     {
+                        Drawing.SetColors(ConsoleColor.Black, ConsoleColor.Black);
+                        Drawing.DrawRectangleArea(96, 24, 32, 12);
+                        int moveCost = 2;
+                        if (playerWallet["Action Points"] >= moveCost)
+                        {
+                            proxy.Display();
+
+                            MoveCommand moveCmd = new MoveCommand(
+                                proxy.GetBattleBoard(),
+                                ship,
+                                UserSettings.Instance.GetHashCode(),
+                                UserSettings.Instance.Nickname
+                            );
+                            var newCoords = proxy.PutCommand(moveCmd, false);
+
+                            if (newCoords != null && newCoords.Count > 0)
+                            {
+                                moveCmd.Execute(newCoords);
+                                playerWallet["Action Points"] -= moveCost;
+                                proxy.Display();
+                            }
+                            proxy.Display();
+                            continue;
+                        }
+                        else
+                        {
+                            AudioManager.Instance.Play("wrong");
+                        }
                         continue;
                     }
                     else if (action == "Return")
@@ -501,8 +537,14 @@ namespace BattleshipZTP.Scenarios
                         command.Execute(coords);
 
                         playerWallet["Action Points"] -= actionCost;
+                        continue;
                     }
-                    
+                    else
+                    {
+                        //print that cannot attack
+                        AudioManager.Instance.Play("wrong");
+                        continue;
+                    }
 
 
                     //Console.WriteLine(turretReference.GetName());
@@ -559,7 +601,10 @@ namespace BattleshipZTP.Scenarios
                         victoryScen.Act();
                         break;
                     }*/
+
                     actionPointIncrease++;
+                    //playerWallet["Action Points"] = actionPointIncrease;
+                    //playerWallet["Action Points"] = actionPointIncrease;
                 }
                 if (victory) 
                     break;

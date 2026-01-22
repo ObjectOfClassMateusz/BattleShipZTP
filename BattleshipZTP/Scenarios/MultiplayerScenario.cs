@@ -358,8 +358,8 @@ namespace BattleshipZTP.Scenarios
                 Drawing.DrawRectangleArea(tablePos.x, tablePos.y + 2, _windowShipmentList.Width, _windowShipmentList.Height);
                 _windowShipmentList.Remove(0);
             }
+            Drawing.SetColors(ConsoleColor.Black, ConsoleColor.Black);
             Drawing.DrawRectangleArea(tablePos.x - 1, tablePos.y, _windowShipmentList.Width + 6, _windowShipmentList.Height + 3);
-
             Console.WriteLine(_windowShipmentList.ComponentsLenght());
             
 

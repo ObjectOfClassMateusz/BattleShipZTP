@@ -1,11 +1,6 @@
 ﻿using BattleshipZTP.GameAssets;
 using BattleshipZTP.Settings;
 using BattleshipZTP.Ship.Turrets;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BattleshipZTP.Ship
 {
@@ -14,27 +9,24 @@ namespace BattleshipZTP.Ship
         protected StatBar _healthBar;
         protected int _health;
         protected int _maxHealth;
-        protected List<ITurret> _turrets;
+        protected readonly List<ITurret> _turrets;
 
-        protected List<string> _audioReady = new List<string>();
-        protected List<string> _audioAttack = new List<string>();
-
+        protected readonly List<string> _audioReady = new List<string>();
+        protected readonly List<string> _audioAttack = new List<string>();
+        protected readonly List<string> _audioMove = new List<string>();
+        
+        public Advanced40KShip(int size, List<Point> initialPlacement) : base(size, initialPlacement)
+        {
+            _turrets = new List<ITurret>();
+        }
         public void ShowHealthBar()
         {
             _healthBar.Show();
         }
-
-        public Advanced40KShip(int size, List<Point> initialPlacement) 
-            : base(size, initialPlacement)
-        {
-            _turrets = new List<ITurret>();
-            /*
-            bar.Decrease(297);
-            bar.Show();*/
-        }
         public List<ITurret> GetTurrets()
         {
-            return _turrets;
+            var turretCount = _turrets.Count;
+            return (turretCount > 0 ? _turrets : throw new Exception("Ship doesn't have any turrets"));
         }
         public ITurret GetTurret(int index)
         {
@@ -46,8 +38,7 @@ namespace BattleshipZTP.Ship
         }
         public override bool IsSunk()
         {
-            if( _health == 0) {  return true; }
-            return false;
+            return _health == 0 ? true : false;
         }
         public override HitResult TakeHit(Point coords, int damage = 0)
         {
@@ -66,6 +57,7 @@ namespace BattleshipZTP.Ship
             }
             return HitResult.Hit;
         }
+
         public virtual void AudioPlayReady()
         {
             if (!UserSettings.Instance.SfxEnabled)
@@ -86,6 +78,9 @@ namespace BattleshipZTP.Ship
         {
             if (!UserSettings.Instance.SfxEnabled)
                 return;
+            Random rnd = new Random();
+            int r = rnd.Next(_audioMove.Count);
+            AudioManager.Instance.Play(_audioMove[r]);
         }
     }
 }

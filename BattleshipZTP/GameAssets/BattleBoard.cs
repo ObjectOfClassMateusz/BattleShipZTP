@@ -18,13 +18,14 @@ namespace BattleshipZTP.GameAssets
         void DisplayField(int x, int y);
         Field GetField(int x, int y);
         bool IsNeighborHaveShipRef(Field field);
-        
+
         List<(int x, int y)> PutCommand(ICommand command, bool silent = false);
         List<(int x, int y)> PlaceShip(IShip ship, int x, int y);
 
         Point ChooseAttackPoint();
         HitResult AttackPoint(Point target);
         void PlaceMarker(Point actionCoords, HitResult actionResult);
+        void RemoveShip(IShip ship);
     }
 
     public class Field
@@ -227,6 +228,20 @@ namespace BattleshipZTP.GameAssets
             {
                 field.Character = '•';
                 field.colors = (ConsoleColor.Blue, ConsoleColor.Black);
+            }
+        }
+
+        public void RemoveShip(IShip ship)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    if (_field[y, x].ShipReference == ship)
+                    {
+                        _field[y, x].ShipReference = null;
+                    }
+                }
             }
         }
 
@@ -515,8 +530,11 @@ namespace BattleshipZTP.GameAssets
             {
                 return _board.AttackPoint(target);
             }
+            public void RemoveShip(IShip ship)
+            {
+                _board.RemoveShip(ship);
+            }
 
-            
             public void Display()
             {
                 Drawing.SetColors(ConsoleColor.Black, ConsoleColor.DarkGray);

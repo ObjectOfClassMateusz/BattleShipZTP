@@ -6,7 +6,7 @@ namespace BattleshipZTP.Scenarios
 {
     public class SelectRaceScenario : Scenario
     {
-        string _raceToString;
+        string _raceToString = "";
         public SelectRaceScenario(){}
 
         public Fraction GetRace()
@@ -37,7 +37,7 @@ namespace BattleshipZTP.Scenarios
             Env.CursorPos(89, 22);
             Console.WriteLine("Select Fraction:");
             List<string> options = controller.DrawAndStart();
-            _raceToString = options.FirstOrDefault();
+            _raceToString = options.FirstOrDefault() ?? throw new Exception("Couldn't drawn out an option");
         }
     }
 }

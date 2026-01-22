@@ -28,12 +28,16 @@ namespace BattleshipZTP.Ship.DarkEldarShips
             _colors = (ConsoleColor.DarkMagenta, ConsoleColor.Black);
             _health = 770;
             _maxHealth = 770;
-
+            _healthBar = new StatBar(_maxHealth, ConsoleColor.Magenta, 6);
             _audioReady.Add("5000636");
             _audioReady.Add("5000637");
             _audioReady.Add("5000638");
-            _healthBar = new StatBar(_maxHealth, ConsoleColor.Magenta, 6);
-
+            _audioMove.Add("5000630");
+            _audioMove.Add("5000631");
+            _audioMove.Add("5000640");
+            _audioAttack.Add("5000626");
+            _audioAttack.Add("5000627");
+            _audioAttack.Add("5000629");
             _turrets.Add(new ShurikenCannon());
             //_turrets.Add(new TerrorCannon());
         }

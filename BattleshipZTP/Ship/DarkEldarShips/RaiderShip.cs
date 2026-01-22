@@ -22,7 +22,6 @@ namespace BattleshipZTP.Ship.DarkEldarShips
             _body.Add(("▇╫▇", 1));
             _body.Add(("{╫}", 1));
             _body.Add(("⤧=╫=⤧", 0));
-
             _colors = (ConsoleColor.DarkMagenta,ConsoleColor.Black);
             _name = "Raider";
             _health = 180;
@@ -31,7 +30,12 @@ namespace BattleshipZTP.Ship.DarkEldarShips
             _audioReady.Add("5000602");
             _audioReady.Add("5000603b");
             _audioReady.Add("5000604b");
-            
+            _audioAttack.Add("5000594b");
+            _audioAttack.Add("5000595");
+            _audioMove.Add("5000596");
+            _audioMove.Add("5000597");
+            _audioMove.Add("5000598");
+
             _turrets.Add(new ShurikenCannon());
             //_turrets.Add(new RaiderCannon());
         }
