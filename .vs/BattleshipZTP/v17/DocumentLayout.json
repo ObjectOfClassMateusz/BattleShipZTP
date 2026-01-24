@@ -3,24 +3,16 @@
   "WorkspaceRootPath": "H:\\C#Projects\\BattleshipZTP\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\scenarios\\singleplayerscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\scenarios\\singleplayerscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\commands\\placecommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\commands\\placecommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\commands\\turretattackcommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\commands\\turretattackcommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\commands\\movecommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\commands\\movecommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\scenarios\\singleplayerscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\scenarios\\singleplayerscenario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\gameassets\\battleboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\gameassets\\battleboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|h:\\c#projects\\battleshipztp\\battleshipztp\\commands\\movecommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79D72BB8-FB30-423E-BABC-25701FEA9566}|BattleshipZTP\\BattleshipZTP.csproj|solutionrelative:battleshipztp\\commands\\movecommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,71 +22,43 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "MoveCommand.cs",
               "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Commands\\MoveCommand.cs",
               "RelativeDocumentMoniker": "BattleshipZTP\\Commands\\MoveCommand.cs",
               "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Commands\\MoveCommand.cs",
               "RelativeToolTip": "BattleshipZTP\\Commands\\MoveCommand.cs",
-              "ViewState": "AgIAACoAAAAAAAAAAAAAADUAAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAgwAwAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-22T15:08:06.072Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-22T15:08:06.072Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "PlaceCommand.cs",
-              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Commands\\PlaceCommand.cs",
-              "RelativeDocumentMoniker": "BattleshipZTP\\Commands\\PlaceCommand.cs",
-              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Commands\\PlaceCommand.cs",
-              "RelativeToolTip": "BattleshipZTP\\Commands\\PlaceCommand.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAQwB4AAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-22T13:16:58.365Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "TurretAttackCommand.cs",
-              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Commands\\TurretAttackCommand.cs",
-              "RelativeDocumentMoniker": "BattleshipZTP\\Commands\\TurretAttackCommand.cs",
-              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Commands\\TurretAttackCommand.cs",
-              "RelativeToolTip": "BattleshipZTP\\Commands\\TurretAttackCommand.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAC0AAAA1AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-22T14:17:10.466Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
               "Title": "SingleplayerScenario.cs",
               "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
               "RelativeDocumentMoniker": "BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
               "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
               "RelativeToolTip": "BattleshipZTP\\Scenarios\\SingleplayerScenario.cs",
-              "ViewState": "AgIAAKQBAAAAAAAAAAAgwLMBAAApAAAAAAAAAA==",
+              "ViewState": "AgIAAAECAAAAAAAAAAAAABECAABOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-22T13:01:58.772Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-22T13:01:58.772Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "BattleBoard.cs",
-              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\GameAssets\\BattleBoard.cs",
-              "RelativeDocumentMoniker": "BattleshipZTP\\GameAssets\\BattleBoard.cs",
-              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\GameAssets\\BattleBoard.cs",
-              "RelativeToolTip": "BattleshipZTP\\GameAssets\\BattleBoard.cs",
-              "ViewState": "AgIAAFoBAAAAAAAAAAAAAGIBAAAoAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "TurretAttackCommand.cs",
+              "DocumentMoniker": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Commands\\TurretAttackCommand.cs",
+              "RelativeDocumentMoniker": "BattleshipZTP\\Commands\\TurretAttackCommand.cs",
+              "ToolTip": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\Commands\\TurretAttackCommand.cs",
+              "RelativeToolTip": "BattleshipZTP\\Commands\\TurretAttackCommand.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-22T13:01:34.223Z",
+              "WhenOpened": "2026-01-22T14:17:10.466Z",
               "EditorCaption": ""
             }
           ]

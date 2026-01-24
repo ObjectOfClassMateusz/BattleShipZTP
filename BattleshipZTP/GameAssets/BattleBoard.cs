@@ -233,6 +233,7 @@ namespace BattleshipZTP.GameAssets
 
         public void RemoveShip(IShip ship)
         {
+            //ship.
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
@@ -240,6 +241,9 @@ namespace BattleshipZTP.GameAssets
                     if (_field[y, x].ShipReference == ship)
                     {
                         _field[y, x].ShipReference = null;
+                        _field[y, x].Character = ' ';
+                        _field[y,x].colors = (ConsoleColor.White, ConsoleColor.Black);
+                        //_field[y,x].
                     }
                 }
             }
