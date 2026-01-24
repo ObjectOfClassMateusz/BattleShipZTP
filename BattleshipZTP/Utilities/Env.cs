@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace BattleshipZTP.Utilities
 {
+    /**Environment Interface and Implementation for Console Applications
+     * @brief This interface defines methods for interacting with the environment,
+     * such as setting console colors, positioning the cursor, and introducing delays.
+     */
     public interface IEnv//Enviroment Interface
     {
         /*Methods can be different for other software enviroment:
@@ -23,6 +27,7 @@ namespace BattleshipZTP.Utilities
         static abstract void CursorPos(int x = 0, int y = 0);
         static abstract void Wait(int milisecs);
     }
+
 
     public class Env : IEnv
     {

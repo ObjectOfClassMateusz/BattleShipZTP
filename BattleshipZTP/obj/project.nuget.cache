@@ -1,30 +1,20 @@
 {
   "version": 2,
-  "dgSpecHash": "qZhsH7l2V0I=",
+  "dgSpecHash": "kW41VzxbTS4=",
   "success": true,
   "projectFilePath": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\BattleshipZTP.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\matit\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
-    "C:\\Users\\matit\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\matit\\.nuget\\packages\\naudio\\2.2.1\\naudio.2.2.1.nupkg.sha512",
     "C:\\Users\\matit\\.nuget\\packages\\naudio.asio\\2.2.1\\naudio.asio.2.2.1.nupkg.sha512",
     "C:\\Users\\matit\\.nuget\\packages\\naudio.core\\2.2.1\\naudio.core.2.2.1.nupkg.sha512",
     "C:\\Users\\matit\\.nuget\\packages\\naudio.midi\\2.2.1\\naudio.midi.2.2.1.nupkg.sha512",
     "C:\\Users\\matit\\.nuget\\packages\\naudio.wasapi\\2.2.1\\naudio.wasapi.2.2.1.nupkg.sha512",
     "C:\\Users\\matit\\.nuget\\packages\\naudio.winmm\\2.2.1\\naudio.winmm.2.2.1.nupkg.sha512",
-    "C:\\Users\\matit\\.nuget\\packages\\system.security.accesscontrol\\4.7.0\\system.security.accesscontrol.4.7.0.nupkg.sha512",
-    "C:\\Users\\matit\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512",
-    "C:\\Users\\matit\\.nuget\\packages\\system.windows.extensions\\10.0.0\\system.windows.extensions.10.0.0.nupkg.sha512"
+    "C:\\Users\\matit\\.nuget\\packages\\system.windows.extensions\\10.0.0\\system.windows.extensions.10.0.0.nupkg.sha512",
+    "C:\\Users\\matit\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.23\\microsoft.windowsdesktop.app.ref.8.0.23.nupkg.sha512",
+    "C:\\Users\\matit\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.23\\microsoft.netcore.app.ref.8.0.23.nupkg.sha512",
+    "C:\\Users\\matit\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.23\\microsoft.aspnetcore.app.ref.8.0.23.nupkg.sha512",
+    "C:\\Users\\matit\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.23\\microsoft.netcore.app.host.win-x64.8.0.23.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "message": "Wystąpił problem podczas czytania pliku pamięci podręcznej H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\obj\\project.nuget.cache: '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
-      "projectPath": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\BattleshipZTP.csproj",
-      "warningLevel": 1,
-      "filePath": "H:\\C#Projects\\BattleshipZTP\\BattleshipZTP\\BattleshipZTP.csproj",
-      "targetGraphs": []
-    }
-  ]
+  "logs": []
 }

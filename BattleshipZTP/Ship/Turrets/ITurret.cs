@@ -14,5 +14,9 @@ namespace BattleshipZTP.Ship.Turrets
         string AudioFileName();
         string GetName();
         int ActionCost();
+
+        void Use();
+        void Renew();
+        bool IsReady();
     }
 }

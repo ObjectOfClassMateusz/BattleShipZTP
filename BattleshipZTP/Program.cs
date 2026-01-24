@@ -91,11 +91,15 @@ namespace BattleshipZTP
             AudioManager.Instance.Add("5000578b", $"ships/DarkEldar/ReaverJetBike/attack");
             AudioManager.Instance.Add("5000579", $"ships/DarkEldar/ReaverJetBike/attack");
             AudioManager.Instance.Add("5000580b", $"ships/DarkEldar/ReaverJetBike/attack");
-
             AudioManager.Instance.Add("5000619", $"ships/DarkEldar/Ravanger");
             AudioManager.Instance.Add("5000620b", $"ships/DarkEldar/Ravanger");
             AudioManager.Instance.Add("5000624b", $"ships/DarkEldar/Ravanger");
-
+            AudioManager.Instance.Add("5000612", $"ships/DarkEldar/Ravanger/move");
+            AudioManager.Instance.Add("5000613b", $"ships/DarkEldar/Ravanger/move");
+            AudioManager.Instance.Add("5000609b", $"ships/DarkEldar/Ravanger/attack");
+            AudioManager.Instance.Add("5000610b", $"ships/DarkEldar/Ravanger/attack");
+            AudioManager.Instance.Add("5000611", $"ships/DarkEldar/Ravanger/attack");
+            AudioManager.Instance.Add("5000615b", $"ships/DarkEldar/Ravanger/attack");
             AudioManager.Instance.Add("5000594b", $"ships/DarkEldar/Raider/attack");
             AudioManager.Instance.Add("5000595", $"ships/DarkEldar/Raider/attack");
             AudioManager.Instance.Add("5000598", $"ships/DarkEldar/Raider/move");
@@ -104,7 +108,6 @@ namespace BattleshipZTP
             AudioManager.Instance.Add("5000602", $"ships/DarkEldar/Raider");
             AudioManager.Instance.Add("5000603b", $"ships/DarkEldar/Raider");
             AudioManager.Instance.Add("5000604b", $"ships/DarkEldar/Raider");
-
             AudioManager.Instance.Add("5000636", $"ships/DarkEldar/DairOfDestruction");
             AudioManager.Instance.Add("5000637", $"ships/DarkEldar/DairOfDestruction");
             AudioManager.Instance.Add("5000638", $"ships/DarkEldar/DairOfDestruction");

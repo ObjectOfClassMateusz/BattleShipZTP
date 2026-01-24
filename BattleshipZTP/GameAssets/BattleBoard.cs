@@ -23,7 +23,7 @@ namespace BattleshipZTP.GameAssets
         List<(int x, int y)> PlaceShip(IShip ship, int x, int y);
 
         Point ChooseAttackPoint();
-        HitResult AttackPoint(Point target);
+        HitResult AttackPoint(Point target, bool silent = false);
         void PlaceMarker(Point actionCoords, HitResult actionResult);
         void RemoveShip(IShip ship);
     }
@@ -342,7 +342,10 @@ namespace BattleshipZTP.GameAssets
                 {
                     Env.CursorPos(point.x, point.y);
                     var restoreField = _field[point.y - this.cornerY - 1, point.x - this.cornerX - 1];
-                    if (silent && (restoreField.Character != 'X' || restoreField.Character != '•'))
+                    if (silent && 
+                        (restoreField.Character != 'X' || restoreField.Character != '•') &&
+                        (restoreField.ShipReference != null && !restoreField.ShipReference.IsSunk())//???
+                    )
                     {
                         Console.Write(" ");
                     }
@@ -419,22 +422,22 @@ namespace BattleshipZTP.GameAssets
             return history;
         }
 
-        // csharp
-        public HitResult AttackPoint(Point target)
+        public HitResult AttackPoint(Point target,bool silent=false)
         {
             if (target.X >= 0 && target.X < width && target.Y >= 0 && target.Y < height)
             {
                 Field field = _field[target.Y, target.X];
-
                 if (field.ShipReference != null)
                 {
                     if (field.Character == 'X') {
                         DisplayField(target.X, target.Y);
                         return HitResult.Hit;
                     } 
-
                     HitResult result = field.ShipReference.TakeHit(target);
-                    field.Character = 'X';
+                    if (!silent)
+                    {
+                        field.Character = 'X';
+                    }
                     if (result == HitResult.HitAndSunk)
                     {
                         for (int i = 0; i < height; i++)
@@ -459,10 +462,16 @@ namespace BattleshipZTP.GameAssets
                 }
                 else
                 {
+                    if (silent)
+                    {
+                        Env.CursorPos(target.X+cornerX+1, target.Y+cornerY+1);
+                        Env.SetColor(ConsoleColor.Blue, ConsoleColor.Black);
+                        Console.Write('•');
+                        return HitResult.Miss;
+                    }
                     field.Character = '•';
                     field.colors = (ConsoleColor.Blue, ConsoleColor.Black);
                     DisplayField(target.X, target.Y);
-                    //Console.Write('c');
                     return HitResult.Miss;
                 }
             }
@@ -530,9 +539,9 @@ namespace BattleshipZTP.GameAssets
 
             }
             
-            public HitResult AttackPoint(Point target)
+            public HitResult AttackPoint(Point target,bool silent= false)
             {
-                return _board.AttackPoint(target);
+                return _board.AttackPoint(target,silent);
             }
             public void RemoveShip(IShip ship)
             {

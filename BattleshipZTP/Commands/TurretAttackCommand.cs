@@ -10,11 +10,14 @@ namespace BattleshipZTP.Commands
         ITurret _turret;
         public BattleBoard Board { get; }
         public int PlayerID { get; }
+        public string Nickname { get; }
 
-        public TurretAttackCommand(ITurret turret,BattleBoard board)
+        public TurretAttackCommand(ITurret turret,BattleBoard board,int playerId, string nickname = "")
         {
             Board = board;
             _turret = turret;
+            PlayerID = playerId;
+            Nickname = nickname;
         }
         public void Execute(List<(int x, int y)> coords)
         {
@@ -30,7 +33,7 @@ namespace BattleshipZTP.Commands
                 int localX = h.x - Board.cornerX - 1;
                 Point localPoint = new Point(localX, localY);
                 Field localField = Board.GetField(localX, localY);
-                HitResult hitResult = Board.AttackPoint(localPoint);
+                HitResult hitResult = Board.AttackPoint(localPoint,true);
 
                 if(hitResult == HitResult.Hit)
                 {
@@ -38,9 +41,11 @@ namespace BattleshipZTP.Commands
                     overallResult = localField.ShipReference.TakeHit(localPoint, damage);
                 }
             }
+            _turret.Use();
             var details = new GameActionDetails
             {
                 PlayerID = this.PlayerID,
+                Nickname = this.Nickname,
                 ActionType = "Attack",
                 Coords = new Point(
                     coords[0].x - Board.cornerY - 1, 

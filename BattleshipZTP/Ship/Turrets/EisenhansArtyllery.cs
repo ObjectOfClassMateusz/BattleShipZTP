@@ -8,18 +8,19 @@ namespace BattleshipZTP.Ship.Turrets
 {
     public class EisenhansArtyllery : ITurret
     {
+        bool _ready = true;
         public EisenhansArtyllery() { }
         public int MinDmg()
         {
-            return 53;
+            return 33;
         }
         public int MaxDmg()
         {
-            return 61;
+            return 55;
         }
         public int ActionCost()
         {
-            return 3;
+            return 5;
         }
         public List<(string text, int offset)> GetAimBody()
         {
@@ -38,5 +39,15 @@ namespace BattleshipZTP.Ship.Turrets
         {
             return "artillery";
         }
+
+        public void Use()
+        {
+            _ready = false;
+        }
+        public void Renew()
+        {
+            _ready = true;
+        }
+        public bool IsReady() => _ready;
     }
 }

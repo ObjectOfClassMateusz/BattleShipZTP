@@ -24,7 +24,6 @@ public class AttackCommand : ICommand
     {
         var field = Board.GetField(Target.X, Target.Y);
         if (field == null) return;
-        //if (field.Character == 'X' || field.Character == '•') 
         if (field.ArrowHit)
         {
             if (UserSettings.Instance.SfxEnabled)
@@ -47,7 +46,6 @@ public class AttackCommand : ICommand
         {
             AudioManager.Instance.Play("miss");
         }
-
 
         var details = new GameActionDetails {
             PlayerID = this.PlayerID,

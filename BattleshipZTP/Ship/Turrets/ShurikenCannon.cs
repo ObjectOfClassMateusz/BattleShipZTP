@@ -8,6 +8,7 @@ namespace BattleshipZTP.Ship.Turrets
 {
     public class ShurikenCannon : ITurret
     {
+        bool _ready = true;
         public ShurikenCannon() { }
         public int MinDmg()
         {
@@ -19,7 +20,7 @@ namespace BattleshipZTP.Ship.Turrets
         }
         public int ActionCost()
         {
-            return 1;
+            return 2;
         }
         public List<(string text, int offset)> GetAimBody()
         {
@@ -37,5 +38,15 @@ namespace BattleshipZTP.Ship.Turrets
         {
             return "shuriken";
         }
+
+        public void Use()
+        {
+            _ready = false;
+        }
+        public void Renew()
+        {
+            _ready = true;
+        }
+        public bool IsReady() => _ready;
     }
 }

@@ -180,7 +180,7 @@ namespace BattleshipZTP.Scenarios
                 boardCoords.YAxis_Player2+2,
                 proxy.Width,proxy.Height
             );
-            ////delete me soon
+
             BattleBoardMemento playerMemento = board.GetSaveState();
             BattleBoardMemento enemyMemento = enemyBoard.GetSaveState();
 
@@ -422,12 +422,13 @@ namespace BattleshipZTP.Scenarios
 
             int totalShipsToSink = numberOfShipsPerPlayer;
             int playerSunkCounter = 0;
+            int playerShipsToSink = numberOfShipsPerPlayer;
             int aiSunkCounter = 0;
+            int aiSunkShipsToSink = numberOfShipsPerPlayer;
             bool victory = false;
             bool nextTurn = true;
             Dictionary<string, int> playerWallet = _gameMode.AssignResources();
             int actionPointIncrease = playerWallet["Action Points"];
-            //ataki nadpisują X na statkach
 
             while (!victory)
             {
@@ -483,8 +484,6 @@ namespace BattleshipZTP.Scenarios
                     string action = GetActionFromAdvancedShip(ship);
                     Drawing.SetColors(ConsoleColor.Black, ConsoleColor.Black);
                     Drawing.DrawRectangleArea(96, 24, 32, 10);
-                    
-
                     if (action == "Move")
                     {
                         Drawing.SetColors(ConsoleColor.Black, ConsoleColor.Black);
@@ -529,13 +528,14 @@ namespace BattleshipZTP.Scenarios
                     {
                         TurretAttackCommand command = new TurretAttackCommand(
                             turretReference, 
-                            enemyProxy.GetBattleBoard()
+                            enemyProxy.GetBattleBoard(),
+                            UserSettings.Instance.GetHashCode(),
+                            UserSettings.Instance.Nickname
                         );
                         var coords = enemyProxy.PutCommand(command, true);
                         ship.AudioPlayAttack();
                         Env.Wait(900);
                         command.Execute(coords);
-
                         playerWallet["Action Points"] -= actionCost;
                         continue;
                     }

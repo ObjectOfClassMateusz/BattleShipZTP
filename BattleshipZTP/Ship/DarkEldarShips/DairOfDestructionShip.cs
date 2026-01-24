@@ -13,7 +13,7 @@ namespace BattleshipZTP.Ship.DarkEldarShips
         static public int RequisitionCost = 720;
         static public int EnergyCost = 120;
         
-        private const int DairOfDestructionSize = 7;
+        private const int DairOfDestructionSize = 29;
         public DairOfDestructionShip( List<Point> initialPlacement)
             : base(DairOfDestructionSize, initialPlacement)
         {
@@ -38,6 +38,7 @@ namespace BattleshipZTP.Ship.DarkEldarShips
             _audioAttack.Add("5000626");
             _audioAttack.Add("5000627");
             _audioAttack.Add("5000629");
+
             _turrets.Add(new ShurikenCannon());
             //_turrets.Add(new TerrorCannon());
         }

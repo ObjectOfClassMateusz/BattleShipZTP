@@ -13,7 +13,7 @@ namespace BattleshipZTP.Ship.DarkEldarShips
         static public int RequisitionCost = 375;
         static public int EnergyCost = 30;
         
-        private const int RavangerSize = 5;
+        private const int RavangerSize = 13;
         public RavangerShip(List<Point> initialPlacement)
             : base(RavangerSize, initialPlacement)
         {
@@ -22,18 +22,20 @@ namespace BattleshipZTP.Ship.DarkEldarShips
             _body.Add(("|", 2));
             _body.Add(("◿╳◺", 1));
             _body.Add(("⇙▓⇘", 1));
-
             _name = "Ravanger";
             _colors = (ConsoleColor.DarkMagenta, ConsoleColor.Black);
-
             _health = 300;
             _maxHealth = 300;
             _healthBar = new StatBar(_maxHealth, ConsoleColor.Magenta, 4);
-
             _audioReady.Add("5000619");
             _audioReady.Add("5000620b");
             _audioReady.Add("5000624b");
-
+            _audioMove.Add("5000612");
+            _audioMove.Add("5000613b");
+            _audioAttack.Add("5000609b");
+            _audioAttack.Add("5000610b");
+            _audioAttack.Add("5000611");
+            _audioAttack.Add("5000615b");
             _turrets.Add(new ShurikenCannon());
         }
     }
