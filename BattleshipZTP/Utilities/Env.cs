@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace BattleshipZTP.Utilities
 {
-    /**Environment Interface and Implementation for Console Applications
-     * @brief This interface defines methods for interacting with the environment,
-     * such as setting console colors, positioning the cursor, and introducing delays.
+    /**Interfejs środowiska i implementacja dla aplikacji konsolowych
+     * @brief Ten interfejs definiuje metody interakcji ze środowiskiem, takie jak ustawianie kolorów konsoli, pozycjonowanie kursora i wprowadzanie opóźnień.
      */
     public interface IEnv//Enviroment Interface
     {

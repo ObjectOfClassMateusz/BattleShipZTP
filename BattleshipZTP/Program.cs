@@ -44,7 +44,6 @@ namespace BattleshipZTP
             //Register all sounds
 
             AudioManager.Instance.Add("2-02 - Dark Calculation");
-
             AudioManager.Instance.Add("victory_sound");
             AudioManager.Instance.Add("miss");
             AudioManager.Instance.Add("wrong");
@@ -58,6 +57,8 @@ namespace BattleshipZTP
             AudioManager.Instance.Add("ships/shuriken");
             AudioManager.Instance.Add("ships/build");
             AudioManager.Instance.Add("ships/artillery");
+            AudioManager.Instance.Add("ships/ravanger_shot");
+            AudioManager.Instance.Add("ships/dair_of_destrc_laser");
 
             //https://kingart-games.com/games/7-iron-harvest/
             AudioManager.Instance.Add("085", "ships/Saxony/EisenhansShip");

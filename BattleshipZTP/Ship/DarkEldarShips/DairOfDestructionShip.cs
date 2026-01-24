@@ -40,7 +40,7 @@ namespace BattleshipZTP.Ship.DarkEldarShips
             _audioAttack.Add("5000629");
 
             _turrets.Add(new ShurikenCannon());
-            //_turrets.Add(new TerrorCannon());
+            _turrets.Add(new TerrorCannon());
         }
     }
 }

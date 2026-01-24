@@ -1,20 +1,21 @@
 ﻿namespace BattleshipZTP.Utilities
 {
     /**
-    * @brief Utility class for applying visual customizations to ships
-    * @details Provides helper methods to enhance the visual representation of ships
-    * in the console by setting custom body characters and formatting.
-    */
+* @brief Klasa narzędziowa do stosowania wizualnych modyfikacji statków
+* @details Udostępnia metody pomocnicze do ulepszania wizualnej reprezentacji statków
+* w konsoli poprzez ustawianie niestandardowych znaków kadłuba i formatowanie.
+*/
+
     public static class BeautifyHelper
     {
         /**
-        * @brief Applies fancy visual bodies to all ships in a collection
-        * @param ships List of ships to customize with visual bodies
-        * @details Sets each ship's body to display using a bullet character (●).
-        * The ship body is represented as a string of repeated characters, with length
-        * matching the ship's size. The character can be changed by modifying the shipChar variable.
-        * Supported characters include: #, O, ●, ▓
-        * @note Applied only on Classic and duel modes.
+        * @brief Zastosowuje efektowne wizualne kadłuby dla wszystkich statków w kolekcji
+        * @param ships Lista statków do spersonalizowania wizualnie
+        * @details Ustawia kadłub każdego statku do wyświetlania przy użyciu znaku punktu (●).
+        * Kadłub statku jest reprezentowany jako ciąg powtarzanych znaków, o długości
+        * odpowiadającej rozmiarowi statku. Znak można zmienić, modyfikując zmienną shipChar.
+        * Obsługiwane znaki to: #, O, ●, ▓
+        * @note Zastosowanie tylko w trybach Classic i Duel.
         */
         public static void ApplyFancyBodies(List<IShip> ships)
         {
