@@ -79,6 +79,9 @@ namespace BattleshipZTP
             AudioManager.Instance.Add("15", "ships/Saxony/SdKS49Grimbart");
             AudioManager.Instance.Add("66", "ships/Saxony/SdKS49Grimbart/attack");
             AudioManager.Instance.Add("67", "ships/Saxony/SdKS49Grimbart/attack");
+            AudioManager.Instance.Add("111", "ships/Saxony/SdKS49Grimbart/move");
+            AudioManager.Instance.Add("112", "ships/Saxony/SdKS49Grimbart/move");
+            AudioManager.Instance.Add("113", "ships/Saxony/SdKS49Grimbart/move");
 
             //https://sounds.spriters-resource.com/pc_computer/warhammer40000dawnofwar/
             AudioManager.Instance.Add("5000588", $"ships/DarkEldar/ReaverJetBike");

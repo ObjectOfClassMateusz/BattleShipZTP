@@ -7,6 +7,7 @@ using BattleshipZTP.Ship;
 using BattleshipZTP.Ship.Turrets;
 using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
+using NAudio.Codecs;
 using System.Collections.Generic;
 
 namespace BattleshipZTP.Scenarios
@@ -431,10 +432,12 @@ namespace BattleshipZTP.Scenarios
             BattleBoardMemento enemyMemento = enemyProxy.GetBattleBoard().GetSaveState();
 
             int totalShipsToSink = numberOfShipsPerPlayer;
+
             int playerSunkCounter = 0;
             int playerShipsToSink = numberOfShipsPerPlayer;
-            int aiSunkCounter = 0;
-            int aiSunkShipsToSink = numberOfShipsPerPlayer;
+            int enemySunkCounter = 0;
+            int enemyShipsToSink = numberOfShipsPerPlayer;
+
             bool victory = false;
             bool nextTurn = true;
             Dictionary<string, int> playerWallet = _gameMode.AssignResources();
@@ -442,10 +445,9 @@ namespace BattleshipZTP.Scenarios
 
             while (!victory)
             {
-                while (nextTurn == true)
+                while (nextTurn)
                 {
-                    enemyProxy.Display();
-
+                    //enemyProxy.Display();
                     Env.CursorPos(1, 40);
                     Env.SetColor(ConsoleColor.DarkMagenta, ConsoleColor.Gray);
                     Console.Write($" Action Points {playerWallet["Action Points"]} ");
@@ -462,11 +464,10 @@ namespace BattleshipZTP.Scenarios
                         nextTurn = false; 
                         actionPointIncrease++;
                         playerWallet["Action Points"] = actionPointIncrease;
+                        Random random = new Random();
+                        playerWallet["Energy"] += random.Next(15,89);
+                        playerWallet["Requisition"] += random.Next(9, 49);
                         RenewAllTurrets(advanced40KShips);
-                        //
-                        Env.CursorPos(70,10);
-                        Console.WriteLine(enemyAdvanced40KShips[0].GetHealth());
-
                         //Koniec tury
                         break;
                     }
@@ -526,7 +527,8 @@ namespace BattleshipZTP.Scenarios
                         }
                         else
                         {
-                            AudioManager.Instance.Play("wrong");
+                            if (UserSettings.Instance.SfxEnabled)
+                            { AudioManager.Instance.Play("wrong"); }
                         }
                         continue;
                     }
@@ -541,7 +543,7 @@ namespace BattleshipZTP.Scenarios
                     if (actionCost <= playerWallet["Action Points"])
                     {
                         TurretAttackCommand command = new TurretAttackCommand(
-                            turretReference, 
+                            turretReference,
                             enemyProxy.GetBattleBoard(),
                             UserSettings.Instance.GetHashCode(),
                             UserSettings.Instance.Nickname
@@ -552,73 +554,34 @@ namespace BattleshipZTP.Scenarios
                         command.Execute(coords);
                         playerWallet["Action Points"] -= actionCost;
                         turretReference.Use();
+                        foreach (var c in coords)
+                        {
+                            var localX = c.x - enemyProxy.GetBattleBoard().cornerX - 1;
+                            var localY = c.y - enemyProxy.GetBattleBoard().cornerY - 1;
+                            var searachShip = (Advanced40KShip)enemyProxy.GetField(localX, localY).ShipReference;
+
+                            if (searachShip != null && searachShip.IsSunk() && enemyAdvanced40KShips.Contains(searachShip))
+                            {
+                                enemyAdvanced40KShips.Remove(searachShip);
+                                playerWallet["Energy"] += 270;
+                                playerWallet["Requisition"] += 100;
+                            }
+                        }
+                        if (enemyAdvanced40KShips.Count == 0)
+                        {
+                            Env.Wait(1100);
+                            victory = true;
+                            nextTurn = false;
+                            break;
+                        }
                         continue;
                     }
                     else
                     {
-                        AudioManager.Instance.Play("wrong");
+                        if (UserSettings.Instance.SfxEnabled) 
+                        { AudioManager.Instance.Play("wrong"); }
                         continue;
                     }
-
-                    
-                    
-
-                    //List<Point> playerTarget = enemyProxy.ChooseMultipleAttackPoints(turretReference.GetAimBody());
-
-
-
-                    //
-                    /*
-                    
-                    AttackCommand playerAttack = new AttackCommand(enemyProxy, playerTarget, UserSettings.Instance.GetHashCode());
-                    playerAttack.Execute(new List<(int x, int y)>());
-
-                    var fieldAtTarget = enemyProxy.GetField(playerTarget.X, playerTarget.Y);
-
-                    if (fieldAtTarget.ShipReference != null)
-                    {
-                        HitResult playerResult = fieldAtTarget.ShipReference.IsSunk() ? HitResult.HitAndSunk : HitResult.Hit;
-                        if (fieldAtTarget.ShipReference.IsSunk()) playerSunkCounter++;
-                    }
-                    else
-                    {
-                        nextTurn = false;
-                    }
-                    if (playerSunkCounter >= totalShipsToSink || aiSunkCounter >= totalShipsToSink)
-                    {
-                        victory = true;
-
-                        BattleBoard rawPlayer = new BattleBoard(52, 8, board.width, board.height);
-                        BattleBoard rawEnemy = new BattleBoard(88, 8, enemyBoard.width, enemyBoard.height);
-
-                        rawPlayer.FieldsInitialization();
-                        rawEnemy.FieldsInitialization();
-
-                        rawPlayer.Restore(playerMemento);
-                        rawEnemy.Restore(enemyMemento);
-
-                        var replayPlayerProxy = new BattleBoard.BattleBoardProxy(rawPlayer);
-                        var replayEnemyProxy = new BattleBoard.BattleBoardProxy(rawEnemy);
-
-                        Env.Wait(900);
-
-                        string winnerName = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.Nickname : "AI_ENEMY";
-                        int winnerId = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.GetHashCode() : "AI_ENEMY".GetHashCode();
-
-                        var victoryScen = new VictoryScenario(winnerName, winnerId, stats, replayPlayerProxy, replayEnemyProxy, board.height, board.width);
-
-                        victoryScen.ConnectScenario("Main", _mainScenario);
-
-                        ActionManager.Instance.Detach(stats);
-                        ActionManager.Instance.Detach(logger);
-                        Env.SetColor();
-                        victoryScen.Act();
-                        break;
-                    }*/
-
-                    
-                    //playerWallet["Action Points"] = actionPointIncrease;
-                    //playerWallet["Action Points"] = actionPointIncrease;
                 }
                 if (victory) 
                     break;
@@ -646,7 +609,7 @@ namespace BattleshipZTP.Scenarios
                                 AudioManager.Instance.Play("trafiony zatopiony");
                             }
                             _ai.ClearTargets();
-                            aiSunkCounter++;
+                            enemySunkCounter++;
                         }
                         else if (aiResult == HitResult.Hit)
                         {
@@ -667,40 +630,61 @@ namespace BattleshipZTP.Scenarios
                     }
 
                     proxy.Display();
-                    if (playerSunkCounter >= totalShipsToSink || aiSunkCounter >= totalShipsToSink)
+                    if (playerSunkCounter >= playerShipsToSink || enemySunkCounter >= enemyShipsToSink)
                     {
                         victory = true;
 
-                        BattleBoard rawPlayer = new BattleBoard(52, 8, proxy.GetBattleBoard().width, proxy.GetBattleBoard().height);
-                        BattleBoard rawEnemy = new BattleBoard(88, 8, enemyProxy.GetBattleBoard().width, enemyProxy.GetBattleBoard().height);
+                        BattleBoard lrawPlayer = new BattleBoard(52, 8, proxy.GetBattleBoard().width, proxy.GetBattleBoard().height);
+                        BattleBoard lrawEnemy = new BattleBoard(88, 8, enemyProxy.GetBattleBoard().width, enemyProxy.GetBattleBoard().height);
 
-                        rawPlayer.FieldsInitialization();
-                        rawEnemy.FieldsInitialization();
+                        lrawPlayer.FieldsInitialization();
+                        lrawEnemy.FieldsInitialization();
 
-                        rawPlayer.Restore(playerMemento);
-                        rawEnemy.Restore(enemyMemento);
+                        lrawPlayer.Restore(playerMemento);
+                        lrawEnemy.Restore(enemyMemento);
 
-                        var replayPlayerProxy = new BattleBoard.BattleBoardProxy(rawPlayer);
-                        var replayEnemyProxy = new BattleBoard.BattleBoardProxy(rawEnemy);
+                        var lreplayPlayerProxy = new BattleBoard.BattleBoardProxy(lrawPlayer);
+                        var lreplayEnemyProxy = new BattleBoard.BattleBoardProxy(lrawEnemy);
 
                         Env.Wait(900);
 
-                        string winnerName = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.Nickname : "AI_ENEMY";
-                        int winnerId = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.GetHashCode() : "AI_ENEMY".GetHashCode();
+                        string lwinnerName = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.Nickname : "AI_ENEMY";
+                        int lwinnerId = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.GetHashCode() : "AI_ENEMY".GetHashCode();
 
-                        var victoryScen = new VictoryScenario(winnerName, winnerId, stats, replayPlayerProxy, replayEnemyProxy, proxy.GetBattleBoard().height, proxy.GetBattleBoard().width);
+                        var lvictoryScen = new VictoryScenario(lwinnerName, lwinnerId, stats, lreplayPlayerProxy, lreplayEnemyProxy, proxy.GetBattleBoard().height, proxy.GetBattleBoard().width);
 
-                        victoryScen.ConnectScenario("Main", _mainScenario);
+                        lvictoryScen.ConnectScenario("Main", _mainScenario);
                         
                         Env.SetColor();
                         ActionManager.Instance.Detach(stats);
                         ActionManager.Instance.Detach(logger);
-                        victoryScen.Act();
+                        lvictoryScen.Act();
                         break;
                     }
                     
                 }
             }
+            var board = proxy.GetBattleBoard();
+            var enemyBoard = enemyProxy.GetBattleBoard();
+            BattleBoard rawPlayer = new BattleBoard(52, 8, board.width, board.height);
+            BattleBoard rawEnemy = new BattleBoard(88, 8, enemyBoard.width, enemyBoard.height);
+            rawPlayer.FieldsInitialization();
+            rawEnemy.FieldsInitialization();
+            rawPlayer.Restore(playerMemento);
+            rawEnemy.Restore(enemyMemento);
+            var replayPlayerProxy = new BattleBoard.BattleBoardProxy(rawPlayer);
+            var replayEnemyProxy = new BattleBoard.BattleBoardProxy(rawEnemy);
+            Env.Wait(1100);
+            string winnerName = (enemyAdvanced40KShips.Count == 0) ? UserSettings.Instance.Nickname : "AI_ENEMY";
+            int winnerId = (enemyAdvanced40KShips.Count == 0) ? UserSettings.Instance.GetHashCode() : "AI_ENEMY".GetHashCode();
+            var victoryScen = new VictoryScenario(winnerName, winnerId, stats, replayPlayerProxy, replayEnemyProxy, board.height, board.width);
+            victoryScen.ConnectScenario("Main", _mainScenario);
+            Env.SetColor();
+            ActionManager.Instance.Detach(stats);
+            ActionManager.Instance.Detach(logger);
+            victoryScen.Act();
+
+            //koniec xd
         }
     }
 }

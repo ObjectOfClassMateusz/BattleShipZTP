@@ -33,7 +33,9 @@ namespace BattleshipZTP.Ship.SaxonyShips
             _audioReady.Add("15");
             _audioAttack.Add("66");
             _audioAttack.Add("67");
-            _audioMove.Add("");
+            _audioMove.Add("111");
+            _audioMove.Add("112");
+            _audioMove.Add("113");
 
             //_turrets.Add(new MachineGun());
             _turrets.Add(new ShurikenCannon());

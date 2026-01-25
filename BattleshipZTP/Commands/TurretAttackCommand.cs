@@ -35,7 +35,16 @@ namespace BattleshipZTP.Commands
                 Field localField = Board.GetField(localX, localY);
                 var damage = random.Next(_turret.MinDmg(), _turret.MaxDmg());
                 HitResult hitResult = Board.AttackPoint(localPoint,true,damage);
-                overallResult = hitResult;
+                if (overallResult == HitResult.Hit && hitResult == HitResult.Miss) 
+                {
+                    continue;
+                }
+
+                if(overallResult != HitResult.HitAndSunk)
+                {
+                    overallResult = hitResult;
+                }
+                
             }
             _turret.Use();
             //
