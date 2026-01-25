@@ -7,6 +7,7 @@ using BattleshipZTP.Ship;
 using BattleshipZTP.Ship.Turrets;
 using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
+using System.Collections.Generic;
 
 namespace BattleshipZTP.Scenarios
 {
@@ -32,13 +33,11 @@ namespace BattleshipZTP.Scenarios
             };
             _aiDifficultyName = difficulty.ToString();
         }
-
         void WriteNickNameOnConsole(int x , int y , string nickname)
         {
             Env.CursorPos(x, y);
             Console.Write(nickname);
         }
-
         void DisplayShipmentTable(int x , int y, List<IShip> ships)
         {
             Env.CursorPos(x-1, y);
@@ -57,13 +56,11 @@ namespace BattleshipZTP.Scenarios
             }
             _windowShipmentList = windowBuilder.Build();
         }
-
         void Initialize(BattleBoard.BattleBoardProxy board)
         {
             board.FieldsInitialization();
             board.Display();
         }
-        
         private bool CanPlaceAt(BattleBoard.BattleBoardProxy proxy, IShip ship, int x, int y)
         {
             var body = ship.GetBody();
@@ -85,7 +82,6 @@ namespace BattleshipZTP.Scenarios
             }
             return true;
         }
-
         private void PlaceShipsRandomly(BattleBoard.BattleBoardProxy enemyProxy, List<IShip> ships)
         {
             Random rand = new Random();
@@ -212,6 +208,7 @@ namespace BattleshipZTP.Scenarios
            {
                 Gameplay40kHandle(proxy,enemyProxy,ships ,enemyShips,logger , stats);
                 return;
+                ////////////////////////////////////////////////////////////////////////////
            }
             
             int totalShipsToSink = numberOfShipsPerPlayer; 
@@ -352,6 +349,16 @@ namespace BattleshipZTP.Scenarios
             }
         }
 
+        void RenewAllTurrets(List<Advanced40KShip> advanced40KShips)
+        {
+            for (int i = 0; i < advanced40KShips.Count; i++) 
+            {
+                foreach (var turret in advanced40KShips[i].GetTurrets()) 
+                {
+                    turret.Renew();
+                }
+            }
+        }
         string GetActionFromAdvancedShip(Advanced40KShip ship)
         {
             Env.CursorPos(96, 24);
@@ -364,7 +371,11 @@ namespace BattleshipZTP.Scenarios
             int turretsCount = ship.GetTurrets().Count;
             for (int i = 0; i < turretsCount; i++) 
             {
-                builder.AddComponent(new MaskedButton(ship.GetTurret(i).GetName(), i.ToString()));
+                var turret = ship.GetTurret(i);
+                if (turret.IsReady())
+                {
+                    builder.AddComponent(new MaskedButton(turret.GetName(), i.ToString()));
+                }
             }
             builder.AddComponent(new Button("Move"));
             builder.AddComponent(new Button("Return"));
@@ -375,7 +386,6 @@ namespace BattleshipZTP.Scenarios
             controller.AddWindow(window);
             return controller.DrawAndStart().FirstOrDefault();
         }
-
         string SelectAdvancedShipOrAction(List<Advanced40KShip> ships)
         {
             IWindowBuilder builder = new WindowBuilder();
@@ -434,6 +444,8 @@ namespace BattleshipZTP.Scenarios
             {
                 while (nextTurn == true)
                 {
+                    enemyProxy.Display();
+
                     Env.CursorPos(1, 40);
                     Env.SetColor(ConsoleColor.DarkMagenta, ConsoleColor.Gray);
                     Console.Write($" Action Points {playerWallet["Action Points"]} ");
@@ -450,6 +462,12 @@ namespace BattleshipZTP.Scenarios
                         nextTurn = false; 
                         actionPointIncrease++;
                         playerWallet["Action Points"] = actionPointIncrease;
+                        RenewAllTurrets(advanced40KShips);
+                        //
+                        Env.CursorPos(70,10);
+                        Console.WriteLine(enemyAdvanced40KShips[0].GetHealth());
+
+                        //Koniec tury
                         break;
                     }
                     else if (selected == "Buy Shipment")
@@ -458,7 +476,6 @@ namespace BattleshipZTP.Scenarios
                         {
                             AudioManager.Instance.Play("wrong");
                             continue;
-                            //actionPointIncrease++;
                         }
                         //
                         List<IShip> reinforcement = _gameMode.BuyShip(playerWallet);
@@ -472,11 +489,8 @@ namespace BattleshipZTP.Scenarios
                                 cmd.Execute(placeCoords);
                             }
                             advanced40KShips.Add((Advanced40KShip)reinforcement.FirstOrDefault());
-                            
-                            proxy.Display();
-                            enemyProxy.Display();
+                            playerShipsToSink++;
                         }
-                        
                         continue; // Wraca na początek wyboru
                     }
                     int finalIndex = Convert.ToInt32(selected);
@@ -537,17 +551,17 @@ namespace BattleshipZTP.Scenarios
                         Env.Wait(900);
                         command.Execute(coords);
                         playerWallet["Action Points"] -= actionCost;
+                        turretReference.Use();
                         continue;
                     }
                     else
                     {
-                        //print that cannot attack
                         AudioManager.Instance.Play("wrong");
                         continue;
                     }
 
-
-                    //Console.WriteLine(turretReference.GetName());
+                    
+                    
 
                     //List<Point> playerTarget = enemyProxy.ChooseMultipleAttackPoints(turretReference.GetAimBody());
 
@@ -602,7 +616,7 @@ namespace BattleshipZTP.Scenarios
                         break;
                     }*/
 
-                    actionPointIncrease++;
+                    
                     //playerWallet["Action Points"] = actionPointIncrease;
                     //playerWallet["Action Points"] = actionPointIncrease;
                 }

@@ -31,11 +31,11 @@ namespace BattleshipZTP.Ship.SaxonyShips
             _audioReady.Add("13");
             _audioReady.Add("14");
             _audioReady.Add("15");
-
             _audioAttack.Add("66");
             _audioAttack.Add("67");
+            _audioMove.Add("");
 
-            //_turrets.Add(new MachineGuns());
+            //_turrets.Add(new MachineGun());
             _turrets.Add(new ShurikenCannon());
         }
     }

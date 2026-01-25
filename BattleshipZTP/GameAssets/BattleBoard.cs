@@ -23,7 +23,7 @@ namespace BattleshipZTP.GameAssets
         List<(int x, int y)> PlaceShip(IShip ship, int x, int y);
 
         Point ChooseAttackPoint();
-        HitResult AttackPoint(Point target, bool silent = false);
+        HitResult AttackPoint(Point target, bool silent = false, int damage = 0);
         void PlaceMarker(Point actionCoords, HitResult actionResult);
         void RemoveShip(IShip ship);
     }
@@ -422,18 +422,18 @@ namespace BattleshipZTP.GameAssets
             return history;
         }
 
-        public HitResult AttackPoint(Point target,bool silent=false)
+        public HitResult AttackPoint(Point target,bool silent=false, int damage=0)
         {
             if (target.X >= 0 && target.X < width && target.Y >= 0 && target.Y < height)
             {
                 Field field = _field[target.Y, target.X];
-                if (field.ShipReference != null)
+                if (field.ShipReference != null)//Hit an Ship
                 {
                     if (field.Character == 'X') {
                         DisplayField(target.X, target.Y);
                         return HitResult.Hit;
                     } 
-                    HitResult result = field.ShipReference.TakeHit(target);
+                    HitResult result = field.ShipReference.TakeHit(target, damage);
                     if (!silent)
                     {
                         field.Character = 'X';
@@ -460,7 +460,7 @@ namespace BattleshipZTP.GameAssets
                     DisplayField(target.X, target.Y);
                     return result;
                 }
-                else
+                else//Missed Hit
                 {
                     if (silent)
                     {
@@ -539,9 +539,9 @@ namespace BattleshipZTP.GameAssets
 
             }
             
-            public HitResult AttackPoint(Point target,bool silent= false)
+            public HitResult AttackPoint(Point target,bool silent= false, int damage = 0)
             {
-                return _board.AttackPoint(target,silent);
+                return _board.AttackPoint(target,silent,damage);
             }
             public void RemoveShip(IShip ship)
             {

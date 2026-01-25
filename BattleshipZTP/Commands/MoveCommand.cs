@@ -55,7 +55,7 @@ namespace BattleshipZTP.Commands
                 Nickname = _nickname,
                 ActionType = "Move",
                 Coords = new Point(newCoords[0].x, newCoords[0].y),
-                Result = HitResult.Miss // Ruch nie jest strzałem
+                Result = HitResult.Move // Ruch nie jest strzałem
             };
             ActionManager.Instance.LogAction(details);
         }

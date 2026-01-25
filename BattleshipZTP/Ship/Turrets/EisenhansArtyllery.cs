@@ -20,7 +20,7 @@ namespace BattleshipZTP.Ship.Turrets
         }
         public int ActionCost()
         {
-            return 5;
+            return 10;
         }
         public List<(string text, int offset)> GetAimBody()
         {

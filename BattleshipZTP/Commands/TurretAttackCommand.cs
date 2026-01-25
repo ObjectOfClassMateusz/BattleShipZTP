@@ -33,15 +33,14 @@ namespace BattleshipZTP.Commands
                 int localX = h.x - Board.cornerX - 1;
                 Point localPoint = new Point(localX, localY);
                 Field localField = Board.GetField(localX, localY);
-                HitResult hitResult = Board.AttackPoint(localPoint,true);
-
-                if(hitResult == HitResult.Hit)
-                {
-                    var damage = random.Next(_turret.MinDmg(), _turret.MaxDmg());
-                    overallResult = localField.ShipReference.TakeHit(localPoint, damage);
-                }
+                var damage = random.Next(_turret.MinDmg(), _turret.MaxDmg());
+                HitResult hitResult = Board.AttackPoint(localPoint,true,damage);
+                overallResult = hitResult;
             }
             _turret.Use();
+            //
+
+            //
             var details = new GameActionDetails
             {
                 PlayerID = this.PlayerID,
