@@ -415,6 +415,26 @@ namespace BattleshipZTP.Scenarios
             return option;
         }
 
+        List<(int x, int y)> AIAttackTurret(Point point , List<(string text,int offset)> body, BattleBoard board)
+        {
+            List<(int x,int y)> result = new List<(int x,int y)> ();
+            int localX = point.X +1+2;
+            int localY = point.Y +1+21;
+            foreach (var line in body) 
+            {
+                for (int i = 0; i < line.text.Length; i++) 
+                {
+                    if (localX >= 0 && localX < board.width + 1 + 2 && localY >= 0 && localY < board.height + 1 + 21)
+                    {
+                        result.Add((line.offset + localX++,localY));
+                    }
+                }
+                localX = point.X + 1 + 2;
+                localY++;
+            }
+            return result;
+        }
+
         void Gameplay40kHandle(BattleBoard.BattleBoardProxy proxy , BattleBoard.BattleBoardProxy enemyProxy,
         List<IShip> ships , List<IShip> enemyships , GameLogger logger, StatisticTracker stats)
         {
@@ -447,7 +467,6 @@ namespace BattleshipZTP.Scenarios
             {
                 while (nextTurn)
                 {
-                    //enemyProxy.Display();
                     Env.CursorPos(1, 40);
                     Env.SetColor(ConsoleColor.DarkMagenta, ConsoleColor.Gray);
                     Console.Write($" Action Points {playerWallet["Action Points"]} ");
@@ -465,8 +484,8 @@ namespace BattleshipZTP.Scenarios
                         actionPointIncrease++;
                         playerWallet["Action Points"] = actionPointIncrease;
                         Random random = new Random();
-                        playerWallet["Energy"] += random.Next(15,89);
-                        playerWallet["Requisition"] += random.Next(9, 49);
+                        playerWallet["Energy"] += random.Next(6,19);
+                        playerWallet["Requisition"] += random.Next(15, 40);
                         RenewAllTurrets(advanced40KShips);
                         //Koniec tury
                         break;
@@ -506,7 +525,7 @@ namespace BattleshipZTP.Scenarios
                         int moveCost = 2;
                         if (playerWallet["Action Points"] >= moveCost)
                         {
-                            proxy.Display();
+                            //proxy.Display();
 
                             MoveCommand moveCmd = new MoveCommand(
                                 proxy.GetBattleBoard(),
@@ -522,7 +541,7 @@ namespace BattleshipZTP.Scenarios
                                 playerWallet["Action Points"] -= moveCost;
                                 proxy.Display();
                             }
-                            proxy.Display();
+                            //proxy.Display();
                             continue;
                         }
                         else
@@ -553,7 +572,6 @@ namespace BattleshipZTP.Scenarios
                         Env.Wait(900);
                         command.Execute(coords);
                         playerWallet["Action Points"] -= actionCost;
-                        turretReference.Use();
                         foreach (var c in coords)
                         {
                             var localX = c.x - enemyProxy.GetBattleBoard().cornerX - 1;
@@ -589,79 +607,36 @@ namespace BattleshipZTP.Scenarios
                 while (nextTurn == false)
                 {
                     Env.Wait(900);
-                    
+
+                    Advanced40KShip enemyShip = enemyAdvanced40KShips.FirstOrDefault();
+                    ITurret enemyTurret = enemyShip.GetTurrets().FirstOrDefault();
                     Point aiTarget = _ai.GetNextMove(proxy.GetBattleBoard().width, proxy.GetBattleBoard().height, proxy.GetBattleBoard());
-                    AttackCommand aiAttack = new AttackCommand(proxy, aiTarget, "AI_ENEMY".GetHashCode());
+                    TurretAttackCommand command = new TurretAttackCommand(
+                       enemyTurret,
+                       proxy.GetBattleBoard(),
+                       "AI_ENEMY".GetHashCode(),
+                       "AI_ENEMY"
+                    );
+                    List<(int x, int y)> coords = AIAttackTurret(aiTarget, enemyTurret.GetAimBody(), proxy.GetBattleBoard());
+  
+                    command.Execute(coords);
 
-                    aiAttack.Execute(new List<(int x, int y)>());
-
-                    var aiField = proxy.GetField(aiTarget.X, aiTarget.Y);
-                    HitResult aiResult = HitResult.Miss;
-
-                    if (aiField != null && aiField.ShipReference != null)
+                    foreach (var c in coords)
                     {
-                        aiResult = aiField.ShipReference.IsSunk() ? HitResult.HitAndSunk : HitResult.Hit;
-
-                        if (aiResult == HitResult.HitAndSunk)
+                        var localX = c.x -1 - proxy.GetBattleBoard().cornerX;
+                        var localY = c.y -1 - proxy.GetBattleBoard().cornerY;
+                        var searachShip = (Advanced40KShip)proxy.GetField(localX, localY).ShipReference;
+                        if (searachShip != null && searachShip.IsSunk() && advanced40KShips.Contains(searachShip))
                         {
-                            if (UserSettings.Instance.SfxEnabled == true)
-                            {
-                                AudioManager.Instance.Play("trafiony zatopiony");
-                            }
-                            _ai.ClearTargets();
-                            enemySunkCounter++;
-                        }
-                        else if (aiResult == HitResult.Hit)
-                        {
-                            if (UserSettings.Instance.SfxEnabled == true)
-                            {
-                                AudioManager.Instance.Play("trafienie");
-                            }
-                            _ai.AddTargetNeighbors(aiTarget, proxy.GetBattleBoard().width, proxy.GetBattleBoard().height);
-                        }
-                        else if (aiResult == HitResult.Miss && UserSettings.Instance.SfxEnabled == true)
-                        {
-                            AudioManager.Instance.Play("miss");
+                            advanced40KShips.Remove(searachShip);
                         }
                     }
-                    else
+                    nextTurn = true;
+                    if (advanced40KShips.Count == 0)
                     {
-                        nextTurn = true;
+                        Env.Wait(1100);
+                        victory = true; break;
                     }
-
-                    proxy.Display();
-                    if (playerSunkCounter >= playerShipsToSink || enemySunkCounter >= enemyShipsToSink)
-                    {
-                        victory = true;
-
-                        BattleBoard lrawPlayer = new BattleBoard(52, 8, proxy.GetBattleBoard().width, proxy.GetBattleBoard().height);
-                        BattleBoard lrawEnemy = new BattleBoard(88, 8, enemyProxy.GetBattleBoard().width, enemyProxy.GetBattleBoard().height);
-
-                        lrawPlayer.FieldsInitialization();
-                        lrawEnemy.FieldsInitialization();
-
-                        lrawPlayer.Restore(playerMemento);
-                        lrawEnemy.Restore(enemyMemento);
-
-                        var lreplayPlayerProxy = new BattleBoard.BattleBoardProxy(lrawPlayer);
-                        var lreplayEnemyProxy = new BattleBoard.BattleBoardProxy(lrawEnemy);
-
-                        Env.Wait(900);
-
-                        string lwinnerName = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.Nickname : "AI_ENEMY";
-                        int lwinnerId = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.GetHashCode() : "AI_ENEMY".GetHashCode();
-
-                        var lvictoryScen = new VictoryScenario(lwinnerName, lwinnerId, stats, lreplayPlayerProxy, lreplayEnemyProxy, proxy.GetBattleBoard().height, proxy.GetBattleBoard().width);
-
-                        lvictoryScen.ConnectScenario("Main", _mainScenario);
-                        
-                        Env.SetColor();
-                        ActionManager.Instance.Detach(stats);
-                        ActionManager.Instance.Detach(logger);
-                        lvictoryScen.Act();
-                        break;
-                    }
-                    
                 }
             }
             var board = proxy.GetBattleBoard();
