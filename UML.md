@@ -1,5 +1,4 @@
 ```mermaid
----
 classDiagram
     class ICommand {
       <<interface>>
@@ -534,4 +533,3 @@ classDiagram
     Advanced40KShip <|-- EisenhansShip
     Advanced40KShip <|-- RaiderShip
     Advanced40KShip <|-- FirePrismShip
-```markdown
