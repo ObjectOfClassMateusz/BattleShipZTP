@@ -1,17 +1,12 @@
 ﻿using BattleshipZTP.GameAssets;
 using BattleshipZTP.Ship.Turrets;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BattleshipZTP.Ship.DarkEldarShips
 {
     public class RavangerShip : Advanced40KShip
     {
-        static public int RequisitionCost = 375;
-        static public int EnergyCost = 30;
+        static public int RequisitionCost = 505;
+        static public int EnergyCost = 50;
         
         private const int RavangerSize = 13;
         public RavangerShip(List<Point> initialPlacement)

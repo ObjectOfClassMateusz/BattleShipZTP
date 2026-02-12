@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BattleshipZTP.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,15 +13,15 @@ namespace BattleshipZTP.Ship.Turrets
         public TerrorCannon() { }
         public int MinDmg()
         {
-            return 99;
+            return 59;
         }
         public int MaxDmg()
         {
-            return 101;
+            return 60;
         }
         public int ActionCost()
         {
-            return 15;
+            return 18;
         }
         public List<(string text, int offset)> GetAimBody()
         {
@@ -28,6 +29,10 @@ namespace BattleshipZTP.Ship.Turrets
             {
                 ("⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛⇛",0)
             };
+        }
+        public void AfterAudioDelay()
+        {
+            Env.Wait(500);
         }
         public string GetName()
         {

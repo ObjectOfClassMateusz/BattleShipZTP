@@ -1,5 +1,6 @@
 ﻿using BattleshipZTP.GameAssets;
 using BattleshipZTP.Scenarios;
+using BattleshipZTP.Ship.Turrets;
 using BattleshipZTP.Utilities;
 using System.Text;
 
@@ -21,7 +22,6 @@ namespace BattleshipZTP
             {
                 Console.WriteLine("Note: Cannot set a preferred window size.");
             }
-
             Env.SetColor();
             Drawing.SetColors(ConsoleColor.White,ConsoleColor.Black);
             Env.Wait(300);
@@ -29,7 +29,6 @@ namespace BattleshipZTP
             Drawing.SetColors(ConsoleColor.White, ConsoleColor.Black);
             Console.Clear();
             Console.OutputEncoding = Encoding.Unicode;
-
             //Register all ASCII written images
             Drawing.AddASCIIDrawing("mainMenuShip");
             Drawing.AddASCIIDrawing("mainMenuTitle");
@@ -42,7 +41,6 @@ namespace BattleshipZTP
             Drawing.AddASCIIDrawing("bieltan");
 
             //Register all sounds
-
             AudioManager.Instance.Add("2-02 - Dark Calculation");
             AudioManager.Instance.Add("victory_sound");
             AudioManager.Instance.Add("miss");
@@ -54,12 +52,22 @@ namespace BattleshipZTP
             AudioManager.Instance.Add("trafiony zatopiony");
             AudioManager.Instance.Add("2-11 - Blood of Man");
 
-            AudioManager.Instance.Add("ships/shuriken");
-            AudioManager.Instance.Add("ships/build");
             AudioManager.Instance.Add("ships/artillery");
-            AudioManager.Instance.Add("ships/ravanger_shot");
+            AudioManager.Instance.Add("ships/build");
+            AudioManager.Instance.Add("ships/bolt");
             AudioManager.Instance.Add("ships/dair_of_destrc_laser");
-
+            AudioManager.Instance.Add("ships/die");
+            AudioManager.Instance.Add("ships/lead-shot");
+            AudioManager.Instance.Add("ships/fire_prism");
+            AudioManager.Instance.Add("ships/machine-gun");
+            AudioManager.Instance.Add("ships/ravanger_shot");
+            AudioManager.Instance.Add("ships/rilfes");
+            AudioManager.Instance.Add("ships/shooting");
+            AudioManager.Instance.Add("ships/plasma");
+            AudioManager.Instance.Add("ships/fire");
+            AudioManager.Instance.Add("ships/shuriken");
+            AudioManager.Instance.Add("ships/vyper_rocket");
+            
             //https://kingart-games.com/games/7-iron-harvest/
             AudioManager.Instance.Add("085", "ships/Saxony/EisenhansShip");
             AudioManager.Instance.Add("086", "ships/Saxony/EisenhansShip");
@@ -72,7 +80,6 @@ namespace BattleshipZTP
             AudioManager.Instance.Add("011", "ships/Saxony/EisenhansShip/move");
             AudioManager.Instance.Add("012", "ships/Saxony/EisenhansShip/move");
             AudioManager.Instance.Add("013", "ships/Saxony/EisenhansShip/move");
-
             AudioManager.Instance.Add("12", "ships/Saxony/SdKS49Grimbart");
             AudioManager.Instance.Add("13", "ships/Saxony/SdKS49Grimbart");
             AudioManager.Instance.Add("14", "ships/Saxony/SdKS49Grimbart");
@@ -82,6 +89,35 @@ namespace BattleshipZTP
             AudioManager.Instance.Add("111", "ships/Saxony/SdKS49Grimbart/move");
             AudioManager.Instance.Add("112", "ships/Saxony/SdKS49Grimbart/move");
             AudioManager.Instance.Add("113", "ships/Saxony/SdKS49Grimbart/move");
+            AudioManager.Instance.Add("107", "ships/Saxony/SdKS78Isegrim");
+            AudioManager.Instance.Add("108", "ships/Saxony/SdKS78Isegrim");
+            AudioManager.Instance.Add("109", "ships/Saxony/SdKS78Isegrim");
+            AudioManager.Instance.Add("110", "ships/Saxony/SdKS78Isegrim");
+            AudioManager.Instance.Add("599", "ships/Saxony/SdKS78Isegrim/move");
+            AudioManager.Instance.Add("600", "ships/Saxony/SdKS78Isegrim/move");
+            AudioManager.Instance.Add("601", "ships/Saxony/SdKS78Isegrim/move");
+            AudioManager.Instance.Add("602", "ships/Saxony/SdKS78Isegrim/move");
+            AudioManager.Instance.Add("603", "ships/Saxony/SdKS78Isegrim/move");
+            AudioManager.Instance.Add("0333", "ships/Saxony/SdKS78Isegrim/attack");
+            AudioManager.Instance.Add("0334", "ships/Saxony/SdKS78Isegrim/attack");
+            AudioManager.Instance.Add("0335", "ships/Saxony/SdKS78Isegrim/attack");
+            AudioManager.Instance.Add("0336", "ships/Saxony/SdKS78Isegrim/attack");
+            AudioManager.Instance.Add("8q", "ships/Saxony/StormtrooperShip");
+            AudioManager.Instance.Add("8w", "ships/Saxony/StormtrooperShip");
+            AudioManager.Instance.Add("8e", "ships/Saxony/StormtrooperShip");
+            AudioManager.Instance.Add("8r", "ships/Saxony/StormtrooperShip");
+            AudioManager.Instance.Add("8t", "ships/Saxony/StormtrooperShip");
+            AudioManager.Instance.Add("8y", "ships/Saxony/StormtrooperShip");
+            AudioManager.Instance.Add("m60", "ships/Saxony/StormtrooperShip/move");
+            AudioManager.Instance.Add("m61", "ships/Saxony/StormtrooperShip/move");
+            AudioManager.Instance.Add("m62", "ships/Saxony/StormtrooperShip/move");
+            AudioManager.Instance.Add("m63", "ships/Saxony/StormtrooperShip/move");
+            AudioManager.Instance.Add("m64", "ships/Saxony/StormtrooperShip/move");
+            AudioManager.Instance.Add("9011", "ships/Saxony/StormtrooperShip/attack");
+            AudioManager.Instance.Add("9012", "ships/Saxony/StormtrooperShip/attack");
+            AudioManager.Instance.Add("9013", "ships/Saxony/StormtrooperShip/attack");
+            AudioManager.Instance.Add("9014", "ships/Saxony/StormtrooperShip/attack");
+            AudioManager.Instance.Add("9015", "ships/Saxony/StormtrooperShip/attack");
 
             //https://sounds.spriters-resource.com/pc_computer/warhammer40000dawnofwar/
             AudioManager.Instance.Add("5000588", $"ships/DarkEldar/ReaverJetBike");
@@ -122,6 +158,34 @@ namespace BattleshipZTP
             AudioManager.Instance.Add("5000627", $"ships/DarkEldar/DairOfDestruction/attack");
             AudioManager.Instance.Add("5000629", $"ships/DarkEldar/DairOfDestruction/attack");
 
+            AudioManager.Instance.Add("402080", $"ships/Eldar/FirePrism");
+            AudioManager.Instance.Add("402151", $"ships/Eldar/FirePrism");
+            AudioManager.Instance.Add("402212", $"ships/Eldar/FirePrism/move");
+            AudioManager.Instance.Add("402213", $"ships/Eldar/FirePrism/move");
+            AudioManager.Instance.Add("402214", $"ships/Eldar/FirePrism/move");
+            AudioManager.Instance.Add("402217", $"ships/Eldar/FirePrism/move");
+            AudioManager.Instance.Add("402251", $"ships/Eldar/FirePrism/attack");
+            AudioManager.Instance.Add("402254", $"ships/Eldar/FirePrism/attack");
+            AudioManager.Instance.Add("402160", $"ships/Eldar/Vyper");
+            AudioManager.Instance.Add("402161", $"ships/Eldar/Vyper");
+            AudioManager.Instance.Add("402162", $"ships/Eldar/Vyper");
+            AudioManager.Instance.Add("402212", $"ships/Eldar/Vyper/move");
+            AudioManager.Instance.Add("402213", $"ships/Eldar/Vyper/move");
+            AudioManager.Instance.Add("402214", $"ships/Eldar/Vyper/move");
+            AudioManager.Instance.Add("402217", $"ships/Eldar/Vyper/move");
+            AudioManager.Instance.Add("402251", $"ships/Eldar/Vyper/attack");
+            AudioManager.Instance.Add("402252", $"ships/Eldar/Vyper/attack");
+            AudioManager.Instance.Add("402255", $"ships/Eldar/Vyper/attack");
+            AudioManager.Instance.Add("402140", $"ships/Eldar/Falcon");
+            AudioManager.Instance.Add("402141", $"ships/Eldar/Falcon");
+            AudioManager.Instance.Add("402212", $"ships/Eldar/Falcon/move");
+            AudioManager.Instance.Add("402213", $"ships/Eldar/Falcon/move");
+            AudioManager.Instance.Add("402214", $"ships/Eldar/Falcon/move");
+            AudioManager.Instance.Add("402217", $"ships/Eldar/Falcon/move");
+            AudioManager.Instance.Add("402251", $"ships/Eldar/Falcon/attack");
+            AudioManager.Instance.Add("402252", $"ships/Eldar/Falcon/attack");
+            AudioManager.Instance.Add("402255", $"ships/Eldar/Falcon/attack");
+
             //Declare Scenarios
             IScenario main = new MainMenuScenario();
             IScenario options = new OptionsScenario();
@@ -141,16 +205,6 @@ namespace BattleshipZTP
             authors.ConnectScenario("Main",main);
 
             await main.AsyncAct();
-            /*try
-            {
-                await main.AsyncAct();
-            }
-            catch (Exception ex) 
-            {
-                Env.CursorPos(10, 10);
-                Env.SetColor(ConsoleColor.Red, ConsoleColor.White);
-                Console.WriteLine(ex);            
-            }*/
         }
     }
 }

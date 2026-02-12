@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BattleshipZTP.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,11 +13,11 @@ namespace BattleshipZTP.Ship.Turrets
         public EisenhansArtyllery() { }
         public int MinDmg()
         {
-            return 33;
+            return 13;
         }
         public int MaxDmg()
         {
-            return 55;
+            return 35;
         }
         public int ActionCost()
         {
@@ -49,5 +50,9 @@ namespace BattleshipZTP.Ship.Turrets
             _ready = true;
         }
         public bool IsReady() => _ready;
+        public void AfterAudioDelay()
+        {
+            Env.Wait(100);
+        }
     }
 }

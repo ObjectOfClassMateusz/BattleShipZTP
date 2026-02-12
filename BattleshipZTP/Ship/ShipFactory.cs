@@ -1,4 +1,5 @@
 ﻿using BattleshipZTP.Ship.DarkEldarShips;
+using BattleshipZTP.Ship.EldarShips;
 using BattleshipZTP.Ship.SaxonyShips;
 
 namespace BattleshipZTP;
@@ -25,6 +26,10 @@ public class ShipFactory
             ShipType.Sax_ship => new StormtroopersShip(emptyPlacement),
             ShipType.Sax_sdksGrim => new GrimbartShip(emptyPlacement),
             ShipType.Sax_sdksIse => new IsegrimShip(emptyPlacement),
+
+            ShipType.El_Falcon => new FalconShip(emptyPlacement),
+            ShipType.El_Vyper => new VyperShip(emptyPlacement),
+            ShipType.El_Prism => new FirePrismShip(emptyPlacement),
 
             _ => throw new ArgumentException("Invalid ship type")
         };

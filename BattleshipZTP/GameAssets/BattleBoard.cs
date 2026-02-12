@@ -398,6 +398,12 @@ namespace BattleshipZTP.GameAssets
                 else if (key.Key == ConsoleKey.DownArrow && localY < height - 1) localY++;
                 else if (key.Key == ConsoleKey.LeftArrow && localX > 0) localX--;
                 else if (key.Key == ConsoleKey.RightArrow && localX < width - 1) localX++;
+                else if (key.Key == ConsoleKey.Tab)
+                {
+                    return new Point(-1, -1);
+                }
+
+                //tab -> window resume exit
             }
         }
 

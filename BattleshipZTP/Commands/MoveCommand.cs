@@ -9,8 +9,8 @@ namespace BattleshipZTP.Commands
 {
     public class MoveCommand : ICommand
     {
-        private readonly BattleBoard _board;
-        private readonly Advanced40KShip _ship;
+        private BattleBoard _board;
+        private Advanced40KShip _ship;
         private readonly int _playerId;
         private readonly string _nickname;
 
@@ -48,6 +48,7 @@ namespace BattleshipZTP.Commands
                 _board.DisplayField(localX, localY);
                 shipIterator++;
             }
+            _ship.Locate(boardCoords);
 
             var details = new GameActionDetails
             {

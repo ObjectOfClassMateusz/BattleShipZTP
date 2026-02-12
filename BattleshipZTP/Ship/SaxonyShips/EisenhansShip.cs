@@ -5,6 +5,9 @@ namespace BattleshipZTP.Ship.SaxonyShips
 {
     public class EisenhansShip : Advanced40KShip
     {
+        static public int RequisitionCost = 500;
+        static public int EnergyCost = 150;
+
         private const int EisanhansSize = 9;
         public EisenhansShip(List<Point> initialPlacement)
             : base(EisanhansSize, initialPlacement)

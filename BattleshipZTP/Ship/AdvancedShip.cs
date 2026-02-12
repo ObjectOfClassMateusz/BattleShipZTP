@@ -11,12 +11,15 @@ namespace BattleshipZTP.Ship
         protected int _maxHealth;
         protected readonly List<ITurret> _turrets;
 
+        protected readonly Guid _guid;
+
         protected readonly List<string> _audioReady = new List<string>();
         protected readonly List<string> _audioAttack = new List<string>();
         protected readonly List<string> _audioMove = new List<string>();
         
         public Advanced40KShip(int size, List<Point> initialPlacement) : base(size, initialPlacement)
         {
+            _guid = Guid.NewGuid();
             _turrets = new List<ITurret>();
         }
         public void ShowHealthBar()

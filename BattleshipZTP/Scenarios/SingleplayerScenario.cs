@@ -7,8 +7,6 @@ using BattleshipZTP.Ship;
 using BattleshipZTP.Ship.Turrets;
 using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
-using NAudio.Codecs;
-using System.Collections.Generic;
 
 namespace BattleshipZTP.Scenarios
 {
@@ -217,6 +215,7 @@ namespace BattleshipZTP.Scenarios
             int aiSunkCounter = 0;
             bool nextTurn = true;
             bool victory = false;
+            bool leave = false;
 
             while (victory == false)
             {
@@ -224,12 +223,16 @@ namespace BattleshipZTP.Scenarios
                 while (nextTurn == true)
                 {
                     Point playerTarget = enemyProxy.ChooseAttackPoint();
+                    if(playerTarget.X < 0)
+                    {
+                        leave = true;
+                        victory = true;
+                        break;
+                    }
 
                     AttackCommand playerAttack = new AttackCommand(enemyProxy, playerTarget, UserSettings.Instance.GetHashCode(),UserSettings.Instance.Nickname);
                     playerAttack.Execute(new List<(int x, int y)>());
-                    
                     var fieldAtTarget = enemyProxy.GetField(playerTarget.X, playerTarget.Y);
-                    
                     if (fieldAtTarget.ShipReference != null) 
                     {
                         HitResult playerResult = fieldAtTarget.ShipReference.IsSunk() ? HitResult.HitAndSunk : HitResult.Hit;
@@ -242,32 +245,6 @@ namespace BattleshipZTP.Scenarios
                     if (playerSunkCounter >= totalShipsToSink || aiSunkCounter >= totalShipsToSink) 
                     {
                         victory = true;
-                        
-                        BattleBoard rawPlayer = new BattleBoard(52, 8, board.width, board.height);
-                        BattleBoard rawEnemy = new BattleBoard(88, 8, enemyBoard.width, enemyBoard.height);
-    
-                        rawPlayer.FieldsInitialization();
-                        rawEnemy.FieldsInitialization();
-
-                        rawPlayer.Restore(playerMemento); 
-                        rawEnemy.Restore(enemyMemento);
-
-                        var replayPlayerProxy = new BattleBoard.BattleBoardProxy(rawPlayer);
-                        var replayEnemyProxy = new BattleBoard.BattleBoardProxy(rawEnemy);
-
-                        Env.Wait(900);
-    
-                        string winnerName = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.Nickname : "AI_ENEMY";
-                        int winnerId = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.GetHashCode() : "AI_ENEMY".GetHashCode();
-
-                        var victoryScen = new VictoryScenario(winnerName, winnerId, stats, replayPlayerProxy, replayEnemyProxy, board.height, board.width);
-    
-                        victoryScen.ConnectScenario("Main", _mainScenario);
-                        
-                        Env.SetColor();
-                        ActionManager.Instance.Detach(stats);
-                        ActionManager.Instance.Detach(logger);
-                        victoryScen.Act();
                         break;
                     }               
                 }
@@ -276,19 +253,14 @@ namespace BattleshipZTP.Scenarios
                 while (nextTurn == false)
                 {
                     Env.Wait(900);
-    
                     Point aiTarget = _ai.GetNextMove(board.width, board.height, board);
                     AttackCommand aiAttack = new AttackCommand(proxy, aiTarget, _aiDifficultyName.GetHashCode(),_aiDifficultyName);
-    
                     aiAttack.Execute(new List<(int x, int y)>());
-    
                     var aiField = proxy.GetField(aiTarget.X, aiTarget.Y);
                     HitResult aiResult = HitResult.Miss;
-
                     if (aiField != null && aiField.ShipReference != null)
                     {
                         aiResult = aiField.ShipReference.IsSunk() ? HitResult.HitAndSunk : HitResult.Hit;
-
                         if (aiResult == HitResult.HitAndSunk)
                         {
                             if (UserSettings.Instance.SfxEnabled == true)
@@ -318,36 +290,32 @@ namespace BattleshipZTP.Scenarios
                     if (playerSunkCounter >= totalShipsToSink || aiSunkCounter >= totalShipsToSink) 
                     {
                         victory = true;
-                        
-                        BattleBoard rawPlayer = new BattleBoard(52, 8, board.width, board.height);
-                        BattleBoard rawEnemy = new BattleBoard(88, 8, enemyBoard.width, enemyBoard.height);
-    
-                        rawPlayer.FieldsInitialization();
-                        rawEnemy.FieldsInitialization();
-
-                        rawPlayer.Restore(playerMemento); 
-                        rawEnemy.Restore(enemyMemento);
-
-                        var replayPlayerProxy = new BattleBoard.BattleBoardProxy(rawPlayer);
-                        var replayEnemyProxy = new BattleBoard.BattleBoardProxy(rawEnemy);
-
-                        Env.Wait(900);
-    
-                        string winnerName = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.Nickname : _aiDifficultyName;
-                        int winnerId = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.GetHashCode() : _aiDifficultyName.GetHashCode();
-
-                        var victoryScen = new VictoryScenario(winnerName, winnerId, stats, replayPlayerProxy, replayEnemyProxy, board.height, board.width);
-
-                        victoryScen.ConnectScenario("Main", _mainScenario);
-                        
-                        Env.SetColor();
-                        ActionManager.Instance.Detach(stats);
-                        ActionManager.Instance.Detach(logger);
-                        victoryScen.Act();
                         break;
                     }
                 }
             }
+            if (leave)
+            {
+                _mainScenario.AsyncAct();
+                return;
+            }
+            BattleBoard rawPlayer = new BattleBoard(52, 8, board.width, board.height);
+            BattleBoard rawEnemy = new BattleBoard(88, 8, enemyBoard.width, enemyBoard.height);
+            rawPlayer.FieldsInitialization();
+            rawEnemy.FieldsInitialization();
+            rawPlayer.Restore(playerMemento);
+            rawEnemy.Restore(enemyMemento);
+            var replayPlayerProxy = new BattleBoard.BattleBoardProxy(rawPlayer);
+            var replayEnemyProxy = new BattleBoard.BattleBoardProxy(rawEnemy);
+            Env.Wait(900);
+            string winnerName = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.Nickname : _aiDifficultyName;
+            int winnerId = (playerSunkCounter >= totalShipsToSink) ? UserSettings.Instance.GetHashCode() : _aiDifficultyName.GetHashCode();
+            var victoryScen = new VictoryScenario(winnerName, winnerId, stats, replayPlayerProxy, replayEnemyProxy, board.height, board.width);
+            victoryScen.ConnectScenario("Main", _mainScenario);
+            Env.SetColor();
+            ActionManager.Instance.Detach(stats);
+            ActionManager.Instance.Detach(logger);
+            victoryScen.Act();
         }
 
         void RenewAllTurrets(List<Advanced40KShip> advanced40KShips)
@@ -610,7 +578,8 @@ namespace BattleshipZTP.Scenarios
 
                     Advanced40KShip enemyShip = enemyAdvanced40KShips.FirstOrDefault();
                     ITurret enemyTurret = enemyShip.GetTurrets().FirstOrDefault();
-                    Point aiTarget = _ai.GetNextMove(proxy.GetBattleBoard().width, proxy.GetBattleBoard().height, proxy.GetBattleBoard());
+                    Point aiTarget = new Point(15, 3);
+                        //_ai.GetNextMove(proxy.GetBattleBoard().width, proxy.GetBattleBoard().height, proxy.GetBattleBoard());
                     TurretAttackCommand command = new TurretAttackCommand(
                        enemyTurret,
                        proxy.GetBattleBoard(),
@@ -658,8 +627,6 @@ namespace BattleshipZTP.Scenarios
             ActionManager.Instance.Detach(stats);
             ActionManager.Instance.Detach(logger);
             victoryScen.Act();
-
-            //koniec xd
         }
     }
 }

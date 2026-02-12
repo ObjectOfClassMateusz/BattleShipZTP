@@ -25,6 +25,7 @@ namespace BattleshipZTP.Commands
                 AudioManager.Instance.Play("ships/"+_turret.AudioFileName());
 
             HitResult overallResult = HitResult.Miss;
+            _turret.AfterAudioDelay();
 
             Random random = new Random();
             foreach ((int x, int y) h in coords)

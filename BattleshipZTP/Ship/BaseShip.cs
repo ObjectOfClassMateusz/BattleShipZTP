@@ -45,14 +45,14 @@ public abstract class BaseShip : IShip
 
     public void Locate(List<(int x, int y)> coords)
     {
-        List<Point> points = new List<Point>();
-        foreach (var c in coords) {
+        placement.Clear();
+        foreach (var c in coords)
+        {
             Point point = new Point();
             point.X = c.x;
             point.Y = c.y;
-            points.Add(point);
+            placement.Add(point);
         }
-        placement = points;
     }
     
     public virtual HitResult TakeHit(Point coords, int damage=0)

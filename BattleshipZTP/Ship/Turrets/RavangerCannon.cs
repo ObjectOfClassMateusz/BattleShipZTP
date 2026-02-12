@@ -1,4 +1,4 @@
-﻿using System;
+﻿using BattleshipZTP.Utilities;
 
 namespace BattleshipZTP.Ship.Turrets
 {
@@ -8,11 +8,11 @@ namespace BattleshipZTP.Ship.Turrets
         public RavangerCannon() { }
         public int MinDmg()
         {
-            return 50;
+            return 21;
         }
         public int MaxDmg()
         {
-            return 61;
+            return 34;
         }
         public int ActionCost()
         {
@@ -25,6 +25,10 @@ namespace BattleshipZTP.Ship.Turrets
                 ("+",1),
                 ("+++",0)
             };
+        }
+        public void AfterAudioDelay()
+        {
+            Env.Wait(130);
         }
         public string GetName()
         {

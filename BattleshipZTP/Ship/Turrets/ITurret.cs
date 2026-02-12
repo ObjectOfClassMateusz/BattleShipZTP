@@ -12,6 +12,7 @@ namespace BattleshipZTP.Ship.Turrets
         int MinDmg();
         int MaxDmg();
         string AudioFileName();
+        void AfterAudioDelay();
         string GetName();
         int ActionCost();
 

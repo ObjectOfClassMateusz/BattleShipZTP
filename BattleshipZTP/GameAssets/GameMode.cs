@@ -159,7 +159,7 @@ namespace BattleshipZTP.GameAssets
         public WarhammerGameMode(Fraction fr) 
         {
             _resources = new Dictionary<string, int>();
-            _resources.Add("Energy", 210);
+            _resources.Add("Energy", 410);
             _resources.Add("Requisition", 1750);
             _resources.Add("Action Points", 2);
             _playerFraction = fr;
@@ -337,6 +337,8 @@ namespace BattleshipZTP.GameAssets
             return new List<int> { 3};
         }
         
+
+
         public List<IShip> BuyShip(Dictionary<string, int> wallet)
         {
             IWindowBuilder windowBuilder = new WindowBuilder();

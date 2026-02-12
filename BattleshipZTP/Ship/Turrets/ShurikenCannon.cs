@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using BattleshipZTP.Utilities;
 
 namespace BattleshipZTP.Ship.Turrets
 {
@@ -12,11 +9,11 @@ namespace BattleshipZTP.Ship.Turrets
         public ShurikenCannon() { }
         public int MinDmg()
         {
-            return 18;
+            return 10;
         }
         public int MaxDmg()
         {
-            return 35;
+            return 20;
         }
         public int ActionCost()
         {
@@ -25,7 +22,7 @@ namespace BattleshipZTP.Ship.Turrets
         public List<(string text, int offset)> GetAimBody()
         {
             return new List<(string text, int offset)>() 
-            { 
+            {
                 ("+",0),
                 ("+",0)
             };
@@ -48,5 +45,10 @@ namespace BattleshipZTP.Ship.Turrets
             _ready = true;
         }
         public bool IsReady() => _ready;
+
+        public void AfterAudioDelay()
+        {
+            Env.Wait(0);
+        }
     }
 }

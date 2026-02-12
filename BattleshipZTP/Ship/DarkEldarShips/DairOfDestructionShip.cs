@@ -1,17 +1,12 @@
 ﻿using BattleshipZTP.GameAssets;
 using BattleshipZTP.Ship.Turrets;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BattleshipZTP.Ship.DarkEldarShips
 {
     public class DairOfDestructionShip : Advanced40KShip
     {
-        static public int RequisitionCost = 720;
-        static public int EnergyCost = 120;
+        static public int RequisitionCost = 920;
+        static public int EnergyCost = 210;
         
         private const int DairOfDestructionSize = 29;
         public DairOfDestructionShip( List<Point> initialPlacement)

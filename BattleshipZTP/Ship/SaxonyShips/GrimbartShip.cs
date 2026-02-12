@@ -10,6 +10,9 @@ namespace BattleshipZTP.Ship.SaxonyShips
 {
     public class GrimbartShip : Advanced40KShip
     {
+        static public int RequisitionCost = 350;
+        static public int EnergyCost = 70;
+
         private const int GrimbartSize = 8;
         public GrimbartShip(List<Point> initialPlacement)
             : base(GrimbartSize, initialPlacement)
@@ -37,8 +40,8 @@ namespace BattleshipZTP.Ship.SaxonyShips
             _audioMove.Add("112");
             _audioMove.Add("113");
 
-            //_turrets.Add(new MachineGun());
-            _turrets.Add(new ShurikenCannon());
+            _turrets.Add(new MachineCannon());
+
         }
     }
 }
