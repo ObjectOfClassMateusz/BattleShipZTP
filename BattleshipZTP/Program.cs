@@ -186,6 +186,32 @@ namespace BattleshipZTP
             AudioManager.Instance.Add("402252", $"ships/Eldar/Falcon/attack");
             AudioManager.Instance.Add("402255", $"ships/Eldar/Falcon/attack");
 
+            AudioManager.Instance.Add("404570", $"ships/SpaceMarines/LandSpeeder");
+            AudioManager.Instance.Add("404671", $"ships/SpaceMarines/LandSpeeder");
+            AudioManager.Instance.Add("404700", $"ships/SpaceMarines/LandSpeeder/move");
+            AudioManager.Instance.Add("404701", $"ships/SpaceMarines/LandSpeeder/move");
+            AudioManager.Instance.Add("404702", $"ships/SpaceMarines/LandSpeeder/move");
+            AudioManager.Instance.Add("404720", $"ships/SpaceMarines/LandSpeeder/attack");
+            AudioManager.Instance.Add("404722", $"ships/SpaceMarines/LandSpeeder/attack");
+            AudioManager.Instance.Add("404680", $"ships/SpaceMarines/LandRaider");
+            AudioManager.Instance.Add("404681", $"ships/SpaceMarines/LandRaider");
+            AudioManager.Instance.Add("404700", $"ships/SpaceMarines/LandRaider/move");
+            AudioManager.Instance.Add("404701", $"ships/SpaceMarines/LandRaider/move");
+            AudioManager.Instance.Add("404702", $"ships/SpaceMarines/LandRaider/move");
+            AudioManager.Instance.Add("404720", $"ships/SpaceMarines/LandRaider/attack");
+            AudioManager.Instance.Add("404722", $"ships/SpaceMarines/LandRaider/attack");
+            AudioManager.Instance.Add("404350", $"ships/SpaceMarines/Dreadnought");
+            AudioManager.Instance.Add("404351", $"ships/SpaceMarines/Dreadnought");
+            AudioManager.Instance.Add("404353", $"ships/SpaceMarines/Dreadnought");
+            AudioManager.Instance.Add("404355", $"ships/SpaceMarines/Dreadnought");
+            AudioManager.Instance.Add("404362", $"ships/SpaceMarines/Dreadnought/move");
+            AudioManager.Instance.Add("404363", $"ships/SpaceMarines/Dreadnought/move");
+            AudioManager.Instance.Add("404365", $"ships/SpaceMarines/Dreadnought/move");
+            AudioManager.Instance.Add("404370", $"ships/SpaceMarines/Dreadnought/attack");
+            AudioManager.Instance.Add("404372", $"ships/SpaceMarines/Dreadnought/attack");
+            AudioManager.Instance.Add("404431", $"ships/SpaceMarines/Dreadnought/attack");
+            AudioManager.Instance.Add("404440", $"ships/SpaceMarines/Dreadnought/attack");
+
             //Declare Scenarios
             IScenario main = new MainMenuScenario();
             IScenario options = new OptionsScenario();

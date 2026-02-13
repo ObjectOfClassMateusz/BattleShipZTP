@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace BattleshipZTP.Utilities
 {
-    /**Interfejs środowiska i implementacja dla aplikacji konsolowych
-     * @brief Ten interfejs definiuje metody interakcji ze środowiskiem, takie jak ustawianie kolorów konsoli, pozycjonowanie kursora i wprowadzanie opóźnień.
+    /**Enviroment Interface and implementation for console applications
+     * @brief This interface defines methods for interacting with 
+     * the environment,such as setting console colors, positioning 
+     * the cursor, and introducing delays
      */
     public interface IEnv//Enviroment Interface
     {
         /*Methods can be different for other software enviroment:
          * ConsoleApp
          * Unix Terminal
-         * Unity
-         * Godot C#
          * etc...
         */
         static abstract void SetColor(

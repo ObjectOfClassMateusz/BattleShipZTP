@@ -20,8 +20,8 @@ namespace BattleshipZTP.Scenarios
             .AddComponent(new TextOutput("Enter you nickname below:"))
             .AddComponent(new TextBox("Nickname", 12,UserSettings.Instance.Nickname))
             .AddComponent(new IntegerSideBar("Music volume",UserSettings.Instance.MusicVolume))
-            .AddComponent(new CheckBox("Turn off Music"))
-            .AddComponent(new CheckBox("Turn off SFX"))
+            .AddComponent(new CheckBox("Turn off Music",!UserSettings.Instance.MusicEnabled))
+            .AddComponent(new CheckBox("Turn off SFX",!UserSettings.Instance.SfxEnabled))
             .AddComponent(new Button("Save and Return"));
 
             _window = _builder.Build();

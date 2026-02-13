@@ -29,7 +29,7 @@ namespace BattleshipZTP.Scenarios
             Env.CursorPos();
 
             AudioManager.Instance.ChangeVolume("2-02 - Dark Calculation", UserSettings.Instance.MusicVolume);
-            if (UserSettings.Instance.MusicEnabled == true)
+            if (UserSettings.Instance.MusicEnabled)
             {
                 AudioManager.Instance.Play("2-02 - Dark Calculation", true);
             }

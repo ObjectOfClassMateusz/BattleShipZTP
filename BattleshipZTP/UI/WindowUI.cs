@@ -1,6 +1,4 @@
 ﻿using BattleshipZTP.Utilities;
-using Microsoft.VisualBasic.FileIO;
-using System.Linq;
 using BattleshipZTP.GameAssets;
 using BattleshipZTP.Settings;
 
@@ -120,9 +118,11 @@ namespace BattleshipZTP.UI
         bool _value = false;
         int _margin = 0;
         string _booleanName;
-        public CheckBox(string boolName)
+        public CheckBox(string boolName,bool value=true)
         {
             _booleanName = boolName;
+            _value = value;
+            _booleanBody = !value ? "[ ]" : "[✓]";
         }
 
         public void SetMargin(int width)
@@ -252,6 +252,7 @@ namespace BattleshipZTP.UI
                 _value += (char)('0' + (key - ConsoleKey.D0));
                 return $"input-{_option}#:{_value}";
             }
+            // Dots
             else if (key == ConsoleKey.OemPeriod)
             {
                 _value += ".";

@@ -1,6 +1,7 @@
 ﻿using BattleshipZTP.Ship.DarkEldarShips;
 using BattleshipZTP.Ship.EldarShips;
 using BattleshipZTP.Ship.SaxonyShips;
+using BattleshipZTP.Ship.SpaceShips;
 
 namespace BattleshipZTP;
 
@@ -31,6 +32,10 @@ public class ShipFactory
             ShipType.El_Vyper => new VyperShip(emptyPlacement),
             ShipType.El_Prism => new FirePrismShip(emptyPlacement),
 
+            ShipType.SM_Raider => new LandRaiderShip(emptyPlacement),
+            ShipType.SM_Dreadnought => new DreadnoughtShip(emptyPlacement),
+            ShipType.SM_Speeder => new LandSpeederShip(emptyPlacement),
+
             _ => throw new ArgumentException("Invalid ship type")
         };
     }
@@ -55,6 +60,14 @@ public class ShipFactory
             "Stormstrooper" => new StormtroopersShip(emptyPlacement),
             "Grimbart" => new GrimbartShip(emptyPlacement),
             "Isegrim" => new IsegrimShip(emptyPlacement),
+
+            "Falcon" => new FalconShip(emptyPlacement),
+            "FirePrism" => new FirePrismShip(emptyPlacement),
+            "Vyper" => new VyperShip(emptyPlacement),
+
+            "LandSpeeder" => new LandSpeederShip(emptyPlacement),
+            "LandRaider" => new LandRaiderShip(emptyPlacement),
+            "Dreadnought" => new DreadnoughtShip(emptyPlacement),
 
             _ => throw new ArgumentException("Invalid ship type")
         };

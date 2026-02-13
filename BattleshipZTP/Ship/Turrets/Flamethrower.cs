@@ -27,9 +27,9 @@ namespace BattleshipZTP.Ship.Turrets
         {
             return new List<(string text, int offset)>()
             {
-                (  "≋≋≋≋≋≋≋≋≋≋≋≋",2),
-                ( "≋≋≋≋≋≋≋≋≋≋≋≋≋≋≋",1),
-                ("≋≋≋≋≋≋≋≋≋≋≋≋≋≋≋≋≋≋",0),
+                ("≋≋≋≋≋≋≋≋≋≋≋≋",2),
+                ("≋≋≋≋≋≋≋≋≋≋≋≋≋≋",1),
+                ("≋≋≋≋≋≋≋≋≋≋≋≋≋≋≋≋≋",0),
             };
         }
         public string GetName()
