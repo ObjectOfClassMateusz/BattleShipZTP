@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace BattleshipZTP.UI
 {
+    /**
+     * @brief Class that shares ready to use UI complete set of components
+     */
     public class UIDirector
     {
         private IWindowBuilder _builder;
@@ -13,6 +16,13 @@ namespace BattleshipZTP.UI
         {
             _builder = builder;
         }
+        /**
+         * @brief creates an standard window at (X,Y) point with
+         * multiple options as standard buttons
+         * @param whereX X-position
+         * @param whereY Y-position
+         * @param options many strings related to make an buttons for window
+         */
         public void StandardWindowInit(int whereX , int whereY,params string[] options)
         {
             _builder.SetPosition(whereX, whereY)
@@ -24,6 +34,9 @@ namespace BattleshipZTP.UI
                 _builder.AddComponent(new Button(op));
             }
         }
+        /**
+         * @brief creates an main menu at the start of program
+         */
         public void MainMenuInit()
         {
             _builder.SetPosition(65, 30)
@@ -45,10 +58,12 @@ namespace BattleshipZTP.UI
             exit.SetMargin(11);
             _builder.AddComponent(exit);
         }
-        
+        /**
+         * @brief setting an position and colors for authors list
+         */
         public void AuthorsInit()
         {
-            _builder.SetPosition(20, 2)
+            _builder.SetPosition(66, 2)
                 .ColorBorders(ConsoleColor.Black, ConsoleColor.DarkGray)
                 .ColorHighlights(ConsoleColor.White, ConsoleColor.Green);
         }

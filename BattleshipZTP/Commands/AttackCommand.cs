@@ -1,9 +1,13 @@
 ﻿using BattleshipZTP.GameAssets;
 using BattleshipZTP.Observers;
 using BattleshipZTP.Settings;
+using BattleshipZTP.Ship;
 
 namespace BattleshipZTP.Commands;
 
+/**
+ * @brief Command order to attack an specific place
+ */
 public class AttackCommand : ICommand
 {
     public IBattleBoard Board { get; }

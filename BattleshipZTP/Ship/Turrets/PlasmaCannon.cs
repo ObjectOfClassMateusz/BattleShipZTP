@@ -33,7 +33,6 @@ namespace BattleshipZTP.Ship.Turrets
         {
             return "plasma";
         }
-
         public void Use()
         {
             _ready = false;

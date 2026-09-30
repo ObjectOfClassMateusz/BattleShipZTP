@@ -3,7 +3,7 @@ using BattleshipZTP.Ship.EldarShips;
 using BattleshipZTP.Ship.SaxonyShips;
 using BattleshipZTP.Ship.SpaceShips;
 
-namespace BattleshipZTP;
+namespace BattleshipZTP.Ship;
 
 public class ShipFactory
 {

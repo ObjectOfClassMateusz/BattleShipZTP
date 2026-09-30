@@ -10,6 +10,9 @@ using BattleshipZTP.Utilities;
 
 namespace BattleshipZTP.Scenarios
 {
+    /**
+     * @brief An scenario when player plays versus computer
+     * */
     public class SingleplayerScenario : Scenario
     {
         IGameMode _gameMode;
@@ -123,7 +126,6 @@ namespace BattleshipZTP.Scenarios
             }
             base.Act();
             CoordsToDrawBoard boardCoords = _gameMode.BoardCoords();
-            
             string name = $"AI_1 ({_aiDifficultyName})";
 
             WriteNickNameOnConsole(boardCoords.XAxis_Player1, boardCoords.YAxis_Player1,UserSettings.Instance.Nickname);
@@ -159,7 +161,7 @@ namespace BattleshipZTP.Scenarios
                 Drawing.DrawRectangleArea(tablePos.x, tablePos.y + 2, _windowShipmentList.Width , _windowShipmentList.Height);
                 _windowShipmentList.Remove(0);
             }
-            Drawing.DrawRectangleArea(tablePos.x-1, tablePos.y , _windowShipmentList.Width+6, _windowShipmentList.Height+3);
+            Drawing.DrawRectangleArea(tablePos.x-1, tablePos.y , _windowShipmentList.Width+9, _windowShipmentList.Height+4);
             Env.SetColor();
             
             List<IShip> enemyShips = _gameMode.ShipmentDelivery(true);

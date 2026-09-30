@@ -8,7 +8,7 @@ using BattleshipZTP.Utilities;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Xml.Linq;
+using BattleshipZTP.Ship;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BattleshipZTP.Scenarios

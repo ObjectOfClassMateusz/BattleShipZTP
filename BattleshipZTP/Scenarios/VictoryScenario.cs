@@ -82,7 +82,6 @@ namespace BattleshipZTP.Scenarios
             Window winWindow = winBuilder.Build();
             UIController winUI = new UIController();
             winUI.AddWindow(winWindow);
-            //winUI.DrawAndStart();
             
             List<string> results = winUI.DrawAndStart();
             string choice = results.LastOrDefault();

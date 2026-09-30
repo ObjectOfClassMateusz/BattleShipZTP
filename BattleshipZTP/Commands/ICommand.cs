@@ -1,5 +1,8 @@
 ﻿namespace BattleshipZTP.Commands;
 
+/**
+ * @brief Interface for creating commands for ships
+ */
 public interface ICommand
 {
     void Execute(List<(int x, int y)> coords);

@@ -39,7 +39,6 @@ namespace BattleshipZTP.Ship.Turrets
         {
             return "rilfes";
         }
-
         public void Use()
         {
             _ready = false;

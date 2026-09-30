@@ -3,6 +3,7 @@ using BattleshipZTP.Observers;
 using BattleshipZTP.Settings;
 using BattleshipZTP.Utilities;
 using BattleshipZTP.UI;
+using BattleshipZTP.Ship;
 
 namespace BattleshipZTP.Scenarios;
 

@@ -9,46 +9,43 @@ using System.Threading.Tasks;
 namespace BattleshipZTP.Utilities
 {
     /**
-    * @brief Klasa pomocnicza do przechowywania współrzędnych do rysowania planszy do gry
-    * @details Ta klasa zawiera współrzędne X i Y dla pozycji na planszy dwóch graczy.
-    * Zapewnia możliwości serializacji i deserializacji w celu przechowywania i pobierania współrzędnych podczas rozgrywki w trybie wieloosobowym.
-    */
+     * @brief Auxiliary class for storing coordinates for drawing the game board
+     * @details This class contains X and Y coordinates for positions on the board of two players.
+     * It provides serialization and deserialization capabilities for storing
+     * and retrieving coordinates during multiplayer gameplay.
+     */
     public class CoordsToDrawBoard
     {
         public readonly int XAxis_Player1;
         public readonly int YAxis_Player1;
         public readonly int XAxis_Player2;
         public readonly int YAxis_Player2;
-
         /**
-        * @brief Konstruktor inicjalizujący współrzędne planszy dla obu graczy
-        * @param Pl1x Współrzędna X gracza 1
-        * @param Pl1y Współrzędna Y gracza 1
-        * @param Pl2x Współrzędna X gracza 2
-        * @param Pl2y Współrzędna Y gracza 2
-        */
+         * @brief Constructor initializing board coordinates for both players
+         * @param Pl1x X coordinate of player 1
+         * @param Pl1y Y coordinate of player 1
+         * @param Pl2x X coordinate of player 2
+         * @param Pl2y Y coordinate of player 2 
+         */
         public CoordsToDrawBoard(int Pl1x ,int Pl1y ,int Pl2x , int Pl2y)
         {
             XAxis_Player1 = Pl1x; YAxis_Player1 = Pl1y;
             XAxis_Player2 = Pl2x; YAxis_Player2 = Pl2y;
         }
-        
         /**
-        * @brief Serializuje kordynaty na pipe-delimited format napisu
-        * @return Napisowa reprezentacja w formatcie "X1|Y1|X2|Y2"
-        */
+         * @brief Serializes coordinates into a pipe-delimited string format
+         * @return String representation in the format "X1|Y1|X2|Y2" 
+         */
         public override string ToString()
         {
             return $"{XAxis_Player1}|{YAxis_Player1}|{XAxis_Player2}|{YAxis_Player2}";
         }
-
         /**
-* @brief Deserializuje współrzędne z formatu tekstowego rozdzielonego pionową kreską
-* @param data Ciąg w formacie "X1|Y1|X2|Y2"
-* @return Obiekt CoordsToDrawBoard z sparsowanymi współrzędnymi
-* @throws ArgumentException jeśli dane nie zawierają dokładnie 4 wartości rozdzielonych pionową kreską
-*/
-
+        * @brief Deserializes coordinates from a pipe-delimited text format
+        * @paramdata String in the format "X1|Y1|X2|Y2"
+        * @return CoordsToDrawBoard object with compressed coordinates
+        * @throws ArgumentException if the data does not contain exactly 4 values separated by a vertical bar
+        */
         public static CoordsToDrawBoard FromString(string data)
         {
             var parts = data.Split('|');
@@ -66,35 +63,33 @@ namespace BattleshipZTP.Utilities
     }
 
     /**
-    * @brief Klasa narzędziowa do renderowania grafiki w konsoli
-    * @details Udostępnia metody statyczne do rysowania prymitywnych kształtów, kolorowego tekstu
-    * oraz obrazów ASCII w konsoli z możliwością dostosowania kolorów i pozycji.
-    * Utrzymuje pamięć podręczną obrazów ASCII dla wydajnego renderowania.
-*/
+    * @brief Utility class for rendering graphics in the console
+    * @details Provides static methods for drawing primitive shapes, colored text, and ASCII images in the console with customizable colors and positions.
+    * Maintains a cache of ASCII images for efficient rendering.
+    */
     public class Drawing
     {
-        /// @brief Przechowuje bieżące kolory pierwszego planu i tła dla operacji rysowania
+        /// @brief Stores the current foreground and background colors for drawing operations.
         static (ConsoleColor foreground, ConsoleColor background) _colors;
 
-        /// @brief Słownik pamięci podręcznej dla wczytanych obrazów ASCII, indeksowany według nazwy pliku
+        /// @brief A dictionary cache for loaded ASCII images, indexed by filename.
         static readonly Dictionary<string, ASCIIImage> _images = new Dictionary<string, ASCIIImage>();
         /**
-        * @brief Ustawia domyślne kolory pierwszego planu i tła dla kolejnych operacji rysowania
-        * @param foreground Kolor pierwszego planu do zastosowania
-        * @param background Kolor tła do zastosowania
+        * @brief Sets the default foreground and background colors for subsequent drawing operations.
+        * @param foreground Foreground color to use
+        * @param background Background color to use
         */
         public static void SetColors(ConsoleColor foreground, ConsoleColor background)
         {
             _colors.foreground = foreground;
             _colors.background = background;
         }
-
         /**
-        * @brief Rysuje znak poziomo (od lewej do prawej) w określonej pozycji
-        * @param character Znak do narysowania
-        * @param count Liczba powtórzeń znaku
-        * @param x Pozycja początkowa na osi X
-        * @param y Pozycja na osi Y
+        * @brief Draws a character horizontally (left to right) at the specified position
+        * @param character char to draw
+        * @param count Number of times a character is repeated
+        * @param x Starting position on the X-axis
+        * @param y Y-axis position
         */
         public static void DrawRight(char character, int count , int x , int y)
         {
@@ -106,15 +101,13 @@ namespace BattleshipZTP.Utilities
             }
             Env.SetColor();
         }
-
         /**
-  * @brief Rysuje znak pionowo (od góry do dołu) w określonej pozycji
-  * @param character Znak do narysowania
-  * @param count Liczba powtórzeń znaku (tworzy pionową linię)
-  * @param x Pozycja na osi X
-  * @param y Pozycja początkowa na osi Y
-  */
-
+          * @brief Draws a character vertically (top to bottom) at the specified position
+          * @param character char to draw
+          * @param count Number of times a character is repeated (creates a vertical line)
+          * @param x X-axis position
+          * @param y Starting position on the Y-axis
+          */
         public static void DrawDown(char character, int count, int x, int y)
         {
             Env.SetColor(_colors.foreground, _colors.background);
@@ -125,15 +118,13 @@ namespace BattleshipZTP.Utilities
             }
             Env.SetColor();
         }
-
         /**
-  * @brief Wypełnia prostokątny obszar spacjami (tworzy kolorowy prostokąt)
-  * @param x Pozycja początkowa prostokąta na osi X
-  * @param y Pozycja początkowa prostokąta na osi Y
-  * @param w Szerokość prostokąta w znakach
-  * @param h Wysokość prostokąta w znakach
-  */
-
+        * @brief Fills a rectangular area with spaces (creates a colored rectangle)
+        * @param x Starting position of the rectangle on the X axis
+        * @param y Starting position of the rectangle on the Y axis
+        * @param w Width of the rectangle in characters
+        * @param h Height of the rectangle in characters
+        */
         public static void DrawRectangleArea(int x, int y, int w, int h)
         {
             StringBuilder b = new StringBuilder();
@@ -147,21 +138,19 @@ namespace BattleshipZTP.Utilities
             }
             Env.SetColor();
         }
-
         /**
-    * @brief Prywatna klasa wewnętrzna do wczytywania i przechowywania obrazów ASCII
-    * @details Wczytuje obrazy ASCII z plików tekstowych w katalogu img z obsługą awaryjnego fallbacku
-    */
+        * @brief Private inner class for loading and storing ASCII images
+        * @details Loads ASCII images from text files in the img directory with fallback support
+        */
         class ASCIIImage
         {
-            /// @brief Lista zawierająca każdą linie obrazu ASCII
+            /// @brief A list containing each line of the ASCII image
             public List<string> pixels;
-
             /**
-            * @brief Konstruktor, który wczytuje obraz ASCII z pliku
-            * @param filename Nazwa pliku obrazu (bez rozszerzenia)
-            * @details Wczytuje z "img/{filename}/{filename}.txt". Jeśli wczytywanie się nie powiedzie, używa pliku error.txt
-            * i dodaje komunikat wyjątku do listy pikseli.
+            * @brief Constructor that loads an ASCII image from a file
+            * @param filename The image filename (without extension)
+            * @details Loads from "img/{filename}/{filename}.txt". If loading fails, it uses the error.txt file
+            * and adds an exception message to the pixel list.
             */
             public ASCIIImage(string filename)
             {
@@ -189,28 +178,26 @@ namespace BattleshipZTP.Utilities
                 }
             }
         }
-
         /**
-          * @brief Wczytuje i zapisuje w pamięci podręcznej obraz ASCII z katalogu img
-          * @param filename Nazwa pliku obrazu do wczytania (bez rozszerzenia)
-          * @details Tworzy nową instancję ASCIIImage i przechowuje ją w pamięci podręcznej _images.
-          * Obrazy są buforowane w celu wydajnego renderowania przy kolejnych wywołaniach.
-          */
+        * @brief Loads and caches an ASCII image from the img directory.
+        * @param filename The filename of the image to load (without extension).
+        * @details Creates a new ASCIIImage instance and stores it in the _images cache.
+        * Images are cached for efficient rendering on subsequent calls.
+        */
         public static void AddASCIIDrawing(string filename)
         {
             _images [filename] = new ASCIIImage(filename);
         }
-
         /**
-        * @brief Renderuje zbuforowany obraz ASCII w określonej pozycji z opcjonalnym kolorowaniem
-        * @param key Klucz pamięci podręcznej / nazwa pliku obrazu ASCII do wyrenderowania
-        * @param x Pozycja na osi X, w której zostanie narysowany obraz
-        * @param y Pozycja na osi Y, w której zostanie narysowany obraz
-        * @param foreground Kolor pierwszego planu obrazu (domyślnie: biały)
-        * @param background Kolor tła obrazu (domyślnie: czarny)
-        * @details Jeśli dla obrazu istnieje plik maski (colorDoesntCount.txt), zostanie on zastosowany.
-        * Maska używa znaków '!' do wskazania obszarów, w których spacje powinny nadpisywać obraz.
-        * @throws KeyNotFoundException jeśli klucz obrazu nie zostanie znaleziony w pamięci podręcznej
+        * @brief Renders a cached ASCII image at the specified position, with optional coloring.
+        * @param key Cache key/filename of the ASCII image to render.
+        * @param x X-axis position at which the image will be drawn.
+        * @param y Y-axis position at which the image will be drawn.
+        * @param foreground Foreground color of the image (default: white).
+        * @param background Background color of the image (default: black).
+        * @details If a mask file (colorDoesntCount.txt) exists for the image, it will be applied.
+        * The mask uses '!' characters to indicate areas where spaces should overwrite the image.
+        * @throws KeyNotFoundException if the image key is not found in the cache.
         */
         public static void DrawASCII(string key,int x,int y,
         ConsoleColor foreground = ConsoleColor.White,
@@ -224,7 +211,6 @@ namespace BattleshipZTP.Utilities
                 Console.Write(_images[key].pixels[i]);
             }
             Env.SetColor();
-
             if (!File.Exists($"img/{key}/colorDoesntCount.txt"))
             {
                 //if mask doesnt exist

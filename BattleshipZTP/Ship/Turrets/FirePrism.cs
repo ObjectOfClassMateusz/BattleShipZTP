@@ -5,7 +5,7 @@ namespace BattleshipZTP.Ship.Turrets
     public class FirePrism : ITurret
     {
         bool _ready = true;
-        public FirePrism() { }
+        public FirePrism(){ }
         public int MinDmg()
         {
             return 35;

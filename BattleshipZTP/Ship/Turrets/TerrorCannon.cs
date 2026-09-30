@@ -1,9 +1,4 @@
 ﻿using BattleshipZTP.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BattleshipZTP.Ship.Turrets
 {
@@ -42,7 +37,6 @@ namespace BattleshipZTP.Ship.Turrets
         {
             return "dair_of_destrc_laser";
         }
-
         public void Use()
         {
             _ready = false;

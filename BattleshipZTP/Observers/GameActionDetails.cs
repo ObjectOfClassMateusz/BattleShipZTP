@@ -1,4 +1,5 @@
 ﻿namespace BattleshipZTP.Observers;
+using BattleshipZTP.Ship;
 
 public class GameActionDetails
 {

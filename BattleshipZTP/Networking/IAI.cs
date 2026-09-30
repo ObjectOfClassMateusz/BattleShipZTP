@@ -1,5 +1,5 @@
 ﻿using BattleshipZTP.GameAssets;
-
+using BattleshipZTP.Ship;
 namespace BattleshipZTP.Networking;
 
 public interface IAI

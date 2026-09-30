@@ -1,4 +1,6 @@
-﻿namespace BattleshipZTP.Utilities
+﻿using BattleshipZTP.Ship;
+
+namespace BattleshipZTP.Utilities
 {
     /**
      * @brief Utility class for applying visual modifications to ships
@@ -20,7 +22,7 @@
          */
         public static void ApplyFancyBodies(List<IShip> ships)
         {
-            char shipChar = '●'; // can be replaced to #, O, ●, ▓
+            char shipChar = '●'; // can be replaced to @, #, O, ●, ▓
             foreach (var ship in ships)
             {
                 int size = ship.GetSize();

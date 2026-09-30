@@ -38,7 +38,6 @@ namespace BattleshipZTP.Ship.Turrets
         {
             return "machine-gun";
         }
-
         public void Use()
         {
             _ready = false;

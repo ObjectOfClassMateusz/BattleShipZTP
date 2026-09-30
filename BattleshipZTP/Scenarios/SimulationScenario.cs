@@ -3,8 +3,7 @@ using BattleshipZTP.GameAssets;
 using BattleshipZTP.Networking;
 using BattleshipZTP.Scenarios;
 using BattleshipZTP.Utilities;
-using System.Collections.Generic;
-using BattleshipZTP;
+using BattleshipZTP.Ship;
 using BattleshipZTP.Observers;
 using BattleshipZTP.UI;
 

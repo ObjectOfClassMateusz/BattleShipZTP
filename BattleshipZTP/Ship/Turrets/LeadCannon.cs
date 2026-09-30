@@ -1,9 +1,4 @@
 ﻿using BattleshipZTP.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BattleshipZTP.Ship.Turrets
 {
@@ -39,7 +34,6 @@ namespace BattleshipZTP.Ship.Turrets
         {
             return "lead-shot";
         }
-
         public void Use()
         {
             _ready = false;

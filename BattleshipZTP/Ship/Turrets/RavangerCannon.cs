@@ -38,7 +38,6 @@ namespace BattleshipZTP.Ship.Turrets
         {
             return "ravanger_shot";
         }
-
         public void Use()
         {
             _ready = false;

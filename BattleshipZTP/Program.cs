@@ -6,6 +6,12 @@ using System.Text;
 
 namespace BattleshipZTP
 {
+    /**
+     * @brief Main function where program initializes ASCII Drawind, sound and Scenarios.
+     * @author - Mateusz Tręda
+     * @author - Oliwia Sieradzka
+     * @warning Recommended and only tested enviroment is cmd/powershell like terminals. In other type of consoles, graphics may not be shown properly.
+     */
     class Program
     {
         public static async Task Main(string[] args)
@@ -14,12 +20,14 @@ namespace BattleshipZTP
             {
                 if (OperatingSystem.IsWindows())
                 {
+                    //Setting window size
                     Console.SetWindowSize(152, 45);
                     Console.SetBufferSize(152, 45);
                 }
             }
             catch
             {
+                //may happen when final .exe wont resize window
                 Console.WriteLine("Note: Cannot set a preferred window size.");
             }
             Env.SetColor();
@@ -224,12 +232,11 @@ namespace BattleshipZTP
             main.ConnectScenario("Exit",exit);
             main.ConnectScenario("Authors", authors);
             main.ConnectScenario("Singleplayer", singleplayer);
-            singleplayer.ConnectScenario("Main", main);
             main.ConnectScenario("Multiplayer", multiplayer);
+            singleplayer.ConnectScenario("Main", main);
             multiplayer.ConnectScenario("Main", main);
             options.ConnectScenario("Main",main);
             authors.ConnectScenario("Main",main);
-
             await main.AsyncAct();
         }
     }

@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 namespace BattleshipZTP.GameAssets
 {
     //Statictic Bar
+    /**
+     * @brief A visual bar showing the current status of the selected statistic
+     * @details It is used t display health values for ships in the form of a proportionally filled bar.
+     */
     public class StatBar
     {
         protected int value { get; set; }
@@ -22,6 +26,9 @@ namespace BattleshipZTP.GameAssets
             this.length = length;
             this.currentValue = value;
         }
+        /**
+         * @brief printing and colorfull bar on console stream
+         */
         public void Show()
         {
             Func<int, short> num = (a) =>
@@ -65,6 +72,9 @@ namespace BattleshipZTP.GameAssets
             }
             Console.ResetColor();
         }
+        /**
+         * @brief Decrease value
+         */
         public int Decrease(int decrease)
         {
             this.currentValue -= decrease;
@@ -74,6 +84,9 @@ namespace BattleshipZTP.GameAssets
             }
             return decrease;
         }
+        /**
+         * @brief Increase value
+         */
         public int Increase(int increase)
         {
             this.currentValue += increase;

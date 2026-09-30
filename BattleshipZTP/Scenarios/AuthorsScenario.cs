@@ -1,7 +1,9 @@
 ﻿using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
 namespace BattleshipZTP.Scenarios;
-
+/**
+ * @brief scenario displays an ASCII Skull below and the list of authors
+ */
 public class AuthorsScenario : Scenario
 {
     private List<string> _authors = new List<string> {"Mateusz Tręda", "Oliwia Sieradzka"};
@@ -9,7 +11,7 @@ public class AuthorsScenario : Scenario
     public override async Task AsyncAct()
     {
         base.Act();
-        Drawing.DrawASCII("skull", 15, 9,ConsoleColor.DarkGray);
+        Drawing.DrawASCII("skull", 65, 25,ConsoleColor.DarkGray);
         IWindowBuilder builder = new WindowBuilder();
         UIDirector director = new UIDirector(builder);
 

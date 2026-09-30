@@ -14,7 +14,7 @@ namespace BattleshipZTP.Scenarios
         public OptionsScenario() : base() 
         {
             _builder = new WindowBuilder();
-            _builder.SetPosition(20, 2)
+            _builder.SetPosition(61, 2)
             .ColorBorders(ConsoleColor.Black, ConsoleColor.DarkGray)
             .ColorHighlights(ConsoleColor.White, ConsoleColor.Green)
             .AddComponent(new TextOutput("Enter you nickname below:"))

@@ -1,4 +1,4 @@
-﻿namespace BattleshipZTP;
+﻿namespace BattleshipZTP.Ship;
 
 public class BattleshipShip : BaseShip
 {

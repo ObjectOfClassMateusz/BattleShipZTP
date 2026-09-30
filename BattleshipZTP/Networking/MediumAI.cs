@@ -1,5 +1,5 @@
-﻿using System;
-using BattleshipZTP.GameAssets;
+﻿using BattleshipZTP.GameAssets;
+using BattleshipZTP.Ship;
 
 namespace BattleshipZTP.Networking;
 

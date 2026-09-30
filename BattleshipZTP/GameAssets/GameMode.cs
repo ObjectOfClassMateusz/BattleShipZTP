@@ -1,35 +1,69 @@
 ﻿using BattleshipZTP.Settings;
 using BattleshipZTP.Ship;
 using BattleshipZTP.Ship.DarkEldarShips;
+using BattleshipZTP.Ship.EldarShips;
+using BattleshipZTP.Ship.SaxonyShips;
+using BattleshipZTP.Ship.SpaceShips;
 using BattleshipZTP.UI;
 using BattleshipZTP.Utilities;
-using System.Resources;
 
 namespace BattleshipZTP.GameAssets
 {
+    /**
+     * @brief interface for gamemodes avaible in program
+     */
     public interface IGameMode
     {
         int Id();
         BattleBoard CreateBoard(int x , int y);
+        /**
+         * @brief ask if the missed shots should be displayed again after the users cursor moved through it
+         * @details blue dots
+         */
         bool RemeberArrowHit();
+        /**
+         * @brief only used in WarhammerGame
+         * @details defines resources such an:
+         * - Requisition = pay for the ships with this
+         * - Energy = pay for the ships with this
+         * - Actions Points = costs of any players actions
+         */
         Dictionary<string, int> AssignResources();
-
+        /**
+         * @brief coords where should be printed two boards
+         */
         CoordsToDrawBoard BoardCoords();
+        /**
+         * @brief name of audio file that will be playing during gameplay
+         */
         string GameThemeAudio();
+        /**
+         * @return ships
+         */
         List<IShip> ShipmentDelivery(bool automatic=false);
+        /**
+         * @return all coords of every ship delivered earlier
+         */
         List<(int x , int y)> GetShipmentPlacementCoords();
         List<int> GetShipSizes();
+        /**
+         * @brief an interactive procedure of buying ships
+         * @return an list of ships
+         */
         List<IShip> BuyShip(Dictionary<string, int> wallet);
     }
 
+    /**
+     * @brief initializes classic battle ship game
+     */
     public class ClassicGameMode : IGameMode
     {
         public int Id() => 66011;
         readonly List<(int x, int y)> _coords = new List<(int x, int y)>();
-        public CoordsToDrawBoard BoardCoords() => new CoordsToDrawBoard(52, 7, 88, 7);
+        public CoordsToDrawBoard BoardCoords() => new CoordsToDrawBoard(52, 7, 90, 7);
         public string GameThemeAudio() => "Pixel War Overlord";
         public BattleBoard CreateBoard(int x , int y) 
-            => new BattleBoard(x,y,12,12);
+            => new BattleBoard(x,y,10,10);
         public bool RemeberArrowHit() 
             => true;
         public Dictionary<string, int> AssignResources() 
@@ -159,12 +193,11 @@ namespace BattleshipZTP.GameAssets
         public WarhammerGameMode(Fraction fr) 
         {
             _resources = new Dictionary<string, int>();
-            _resources.Add("Energy", 410);
-            _resources.Add("Requisition", 1750);
+            _resources.Add("Energy", 200);
+            _resources.Add("Requisition", 2000);
             _resources.Add("Action Points", 2);
             _playerFraction = fr;
         }
-
         public string GameThemeAudio() => "2-11 - Blood of Man";
         public CoordsToDrawBoard BoardCoords() => new CoordsToDrawBoard(2, 20, 2, 1);
         public BattleBoard CreateBoard(int x , int y)
@@ -177,7 +210,6 @@ namespace BattleshipZTP.GameAssets
         {
             return false;
         }
-
         public Dictionary<string, int> AssignResources()
         {
             return _resources;
@@ -209,9 +241,12 @@ namespace BattleshipZTP.GameAssets
         }
         void InsertEldarPrices(IWindowBuilder windowBuilder)
         {
-            windowBuilder.AddComponent(new TextOutput("Req: 300  En: 40"));
-            windowBuilder.AddComponent(new TextOutput("Req: 200  En: 30"));
-            windowBuilder.AddComponent(new TextOutput("Req: 600  En: 70"));
+            windowBuilder.AddComponent(new TextOutput(
+                $"Req: {FalconShip.RequisitionCost}  En: {FalconShip.EnergyCost}"));
+            windowBuilder.AddComponent(new TextOutput(
+                $"Req: {VyperShip.RequisitionCost}  En: {VyperShip.EnergyCost}"));
+            windowBuilder.AddComponent(new TextOutput(
+                $"Req: {FirePrismShip.RequisitionCost}  En: {FirePrismShip.EnergyCost}"));
         }
         void InsertSpaceShipNames(IWindowBuilder windowBuilder)
         {
@@ -221,9 +256,12 @@ namespace BattleshipZTP.GameAssets
         }
         void InsertSpacePrices(IWindowBuilder windowBuilder)
         {
-            windowBuilder.AddComponent(new TextOutput("Req: 270  En: 40"));
-            windowBuilder.AddComponent(new TextOutput("Req: 380  En: 50"));
-            windowBuilder.AddComponent(new TextOutput("Req: 850  En: 80"));
+            windowBuilder.AddComponent(new TextOutput(
+                $"Req: {LandSpeederShip.RequisitionCost}  En: {LandSpeederShip.EnergyCost}"));
+            windowBuilder.AddComponent(new TextOutput(
+                $"Req: {DreadnoughtShip.RequisitionCost}  En: {DreadnoughtShip.EnergyCost}"));
+            windowBuilder.AddComponent(new TextOutput(
+                $"Req: {LandRaiderShip.RequisitionCost}  En: {LandRaiderShip.EnergyCost}"));
         }
         void InsertSaxonyShipNames(IWindowBuilder windowBuilder)
         {
@@ -234,10 +272,14 @@ namespace BattleshipZTP.GameAssets
         }
         void InsertSaxonyPrices(IWindowBuilder windowBuilder)
         {
-            windowBuilder.AddComponent(new TextOutput("Req: 450  En: 60"));
-            windowBuilder.AddComponent(new TextOutput("Req: 480  En: 40"));
-            windowBuilder.AddComponent(new TextOutput("Req: 475  En: 50"));
-            windowBuilder.AddComponent(new TextOutput("Req: 160  En: 20"));
+            windowBuilder.AddComponent(new TextOutput(
+                $"Req: {EisenhansShip.RequisitionCost}  En: {EisenhansShip.EnergyCost}"));
+            windowBuilder.AddComponent(new TextOutput(
+                $"Req: {GrimbartShip.RequisitionCost}  En: {GrimbartShip.EnergyCost}"));
+            windowBuilder.AddComponent(new TextOutput(
+                $"Req: {IsegrimShip.RequisitionCost}   En: {IsegrimShip.EnergyCost}"));
+            windowBuilder.AddComponent(new TextOutput(
+                $"Req: {StormtroopersShip.RequisitionCost}  En: {StormtroopersShip.EnergyCost}"));
         }
 
         public List<IShip> ShipmentDelivery(bool automatic = false)
@@ -274,13 +316,13 @@ namespace BattleshipZTP.GameAssets
                     },
                 };
             }
-            var resources = AssignResources();
+            Dictionary<string,int> resources = AssignResources();
             List<IShip> shipmentDelivery = new List<IShip>();
             int boughtShips = 0;//how much ships does user bought
             short paymentResult = 1;
             while (boughtShips == 0 || paymentResult == 1) 
             {
-                var action = BuyShip(resources);
+                List<IShip> action = BuyShip(resources);
                 paymentResult = (short)action.Count;
                 if (paymentResult == 1)
                 {
@@ -313,20 +355,30 @@ namespace BattleshipZTP.GameAssets
                 (DairOfDestructionShip.RequisitionCost, DairOfDestructionShip.EnergyCost, ShipType.Dr_Dair),
 
                 // Saxony
-                "Eisenhans" => (450, 60, ShipType.Sax_Eisen),
-                "SdKS Grimbart" => (480, 40, ShipType.Sax_sdksGrim), 
-                "SdKS Isegrim" => (475, 50, ShipType.Sax_sdksIse),
-                "Stormtrooper ship" => (160, 20, ShipType.Sax_ship),
+                "Eisenhans" => 
+                (EisenhansShip.RequisitionCost, EisenhansShip.EnergyCost, ShipType.Sax_Eisen),
+                "SdKS Grimbart" => 
+                (GrimbartShip.RequisitionCost, GrimbartShip.EnergyCost, ShipType.Sax_sdksGrim), 
+                "SdKS Isegrim" => 
+                (IsegrimShip.RequisitionCost, IsegrimShip.EnergyCost, ShipType.Sax_sdksIse),
+                "Stormtrooper ship" => 
+                (StormtroopersShip.RequisitionCost, StormtroopersShip.EnergyCost, ShipType.Sax_ship),
 
                 // Blood Ravens
-                "Land Speeder" => (270, 40, ShipType.SM_Speeder),
-                "Dreadnought" => (380, 50, ShipType.SM_Dreadnought),
-                "Land Raider" => (850, 80, ShipType.SM_Raider),
+                "Land Speeder" => 
+                (LandSpeederShip.RequisitionCost, LandSpeederShip.EnergyCost, ShipType.SM_Speeder),
+                "Dreadnought" => 
+                (DreadnoughtShip.RequisitionCost, DreadnoughtShip.EnergyCost, ShipType.SM_Dreadnought),
+                "Land Raider" => 
+                (LandRaiderShip.RequisitionCost, LandRaiderShip.EnergyCost, ShipType.SM_Raider),
 
                 // BielTan
-                "Falcon" => (300, 40, ShipType.El_Falcon),
-                "Vyper" => (200, 30, ShipType.El_Vyper),
-                "Fire Prism" => (600, 70, ShipType.El_Prism),
+                "Falcon" => 
+                (FalconShip.RequisitionCost, FalconShip.EnergyCost, ShipType.El_Falcon),
+                "Vyper" => 
+                (VyperShip.RequisitionCost, VyperShip.EnergyCost, ShipType.El_Vyper),
+                "Fire Prism" => 
+                (FirePrismShip.RequisitionCost, FirePrismShip.EnergyCost, ShipType.El_Prism),
 
                 _ => (0, 0, ShipType.Submarine) // jeśli nie znajdzie nazwy
             };
@@ -337,8 +389,6 @@ namespace BattleshipZTP.GameAssets
             return new List<int> { 3};
         }
         
-
-
         public List<IShip> BuyShip(Dictionary<string, int> wallet)
         {
             IWindowBuilder windowBuilder = new WindowBuilder();
@@ -360,7 +410,7 @@ namespace BattleshipZTP.GameAssets
                     InsertSpaceShipNames(windowBuilder); 
                     break;
             }
-            windowBuilder.AddComponent(new Button("POWROT"));
+            windowBuilder.AddComponent(new Button("Return"));
             Window shipsWindow = windowBuilder.Build();
             
             windowBuilder.ResetBuilder();
@@ -376,23 +426,26 @@ namespace BattleshipZTP.GameAssets
             }
             
             Window costsWindow = windowBuilder.Build();
-
             UIController controller = new UIController();
             controller.AddWindow(shipsWindow);
             controller.AddWindow(costsWindow);
 
             List<IShip> boughtShips = new List<IShip>();
             string option = "";
+            Env.CursorPos(107, 17);
+            Env.SetColor(ConsoleColor.DarkRed);
+            Console.WriteLine("Purchase ships");
+            Env.SetColor();
             Env.CursorPos(96, 19);
-            Console.Write($"PORTFEL - Req: {wallet["Requisition"]} | En: {wallet["Energy"]}      ");
+            Console.Write($"Resources - Req: {wallet["Requisition"]} | En: {wallet["Energy"]}      ");
 
             //zakupy
-            while (option != "POWROT")
+            while (option != "Return")
             {
                 option = controller.DrawAndStart().FirstOrDefault() ?? "";
 
                 // PRZYPADEK 1: Gracz wybrał konkretny statek
-                if (option != "POWROT" && option != "")
+                if (option != "Return" && option != "")
                 {
                     var (req, en, type) = GetShipPrice(option);
 
@@ -414,17 +467,19 @@ namespace BattleshipZTP.GameAssets
                     }
                 }
 
-                if (option == "POWROT")
+                if (option == "Return")
                 {
                     break;
                 }
             }
             Drawing.SetColors(ConsoleColor.Black, ConsoleColor.Black);
-            Drawing.DrawRectangleArea(96, 19, 43, 20);
+            Drawing.DrawRectangleArea(96, 17, 43, 20);
             return boughtShips;
         }
     }
-
+    /**
+     * @brief design pattern thats produces gamemodes
+     */
     public abstract class GameModeFactory
     {
         public abstract IGameMode GetGameMode();
@@ -458,7 +513,6 @@ namespace BattleshipZTP.GameAssets
             return new WarhammerGameMode(_fraction);
         }
     }
-
     public class SimulationModeFactory : GameModeFactory
     {
         public override IGameMode GetGameMode()

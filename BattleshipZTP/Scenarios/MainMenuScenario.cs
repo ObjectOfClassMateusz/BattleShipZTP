@@ -8,8 +8,10 @@ namespace BattleshipZTP.Scenarios
     public class MainMenuScenario : Scenario
     {
         public MainMenuScenario() : base() 
-        { 
+        {
+        
         }
+
         public override async Task AsyncAct()
         {
             await base.AsyncAct();

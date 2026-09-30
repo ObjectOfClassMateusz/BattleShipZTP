@@ -4,6 +4,11 @@ using BattleshipZTP.Settings;
 
 namespace BattleshipZTP.UI
 {
+    /**
+    * @brief Interface that shares properties to be and part of user interface
+    * @details An component does have information about his margin, option, method how to handle an key from user
+    * and how should it be printed
+    */
     public interface IComponentUI
     {
         void   SetMargin(int width);
@@ -12,22 +17,31 @@ namespace BattleshipZTP.UI
         string GetOption();
         string HandleKey(ConsoleKey key);
     }
-
+    /**
+    * @brief component that return option as string value
+    */
     public class Button : IComponentUI
     {
-        //Button component that return an string option result
         string _option { get; set; } = "";
+        /**
+         * @param option string result to be used
+         */
         public Button(string option)
         {
             _option = option;
         }
+        /**
+         * @return option
+         */
         public string GetOption()
         {
             return _option;
         }
         public string HandleKey(ConsoleKey key)
         {
-            //Skip other handlers for other keys
+            /**
+             * @brief Skip other handlers for other keys
+             */
             return "";
         }
         int _margin = 0;
@@ -38,6 +52,9 @@ namespace BattleshipZTP.UI
         public int GetMargin() => _margin;
         public void Print(int rigthMarginFullfilment=0)
         {
+            /**
+             * @param rigthMarginFullfilment another spaces for extra margin
+             */
             int k = 0;
             for (int i=0; i< _margin; i++)
             {
@@ -49,23 +66,28 @@ namespace BattleshipZTP.UI
             {
                 Console.Write(' ');k++;
             }
-            int diff = (rigthMarginFullfilment - k)-1;
+            int diff = (rigthMarginFullfilment - k)-1; //extra margin
             for(int i = 0; i < diff; i++)
             {
                 Console.Write(' ');
             }
         }
     }
-
+    /**
+    * @brief component that return option result other than displayed
+    */
     public class MaskedButton : IComponentUI
-    {
-        //Button component that return option result other than displayed
+    { 
         string _option { get; set; } = "";
         string _display { get; set; } = "";
-
         string _backupOption { get; set; } = "";
         public MaskedButton(string option,string display)
         {
+            /**
+             * @param _option option to be returned
+             * @param _display option to be displayed
+             * @param _backupOption option to be cashed
+             */
             _option = option;
             _display = display;
             _backupOption = _option;
@@ -80,7 +102,9 @@ namespace BattleshipZTP.UI
             {
                 _option = _display;
             }
-            //Skip other handlers for other keys
+            /**
+             * @brief Skip other handlers for other keys
+             */
             return "";
         }
         int _margin = 0;
@@ -110,10 +134,11 @@ namespace BattleshipZTP.UI
             }
         }
     }
-
+    /**
+     * @brief component that return boolean result
+     */
     public class CheckBox : IComponentUI
     {
-        //Checkbox component that return boolean result
         string _booleanBody = "[ ]";
         bool _value = false;
         int _margin = 0;
@@ -122,9 +147,12 @@ namespace BattleshipZTP.UI
         {
             _booleanName = boolName;
             _value = value;
+            /**
+             * @if value is set to true
+             * @then check mark on component
+             */
             _booleanBody = !value ? "[ ]" : "[✓]";
         }
-
         public void SetMargin(int width)
         {
             _margin = width;
@@ -150,7 +178,6 @@ namespace BattleshipZTP.UI
                 Console.Write(' ');
             }
         }
-        
         public string HandleKey(ConsoleKey key)
         {
             if (key == ConsoleKey.Enter) 
@@ -168,17 +195,28 @@ namespace BattleshipZTP.UI
                     return $"checkbox-{_booleanName}#:{_value}";
                 }
             }
-            return "";//Skip
+            /**
+            * Skip
+            */
+            return "";
         }
     }
-
+    /**
+     * @brief Editable user input that returns string result
+     */
     public class TextBox : IComponentUI
     {
-        //Editable user input that returns string result
         string _value;
         string _enterTextMark = "➤ ";
         string _option;
         int _charLimit = 5;
+        /**
+         * @brief constructor for textbox
+         * @param option option to be returned and needed to be fullfilled
+         * @param charLimit limit of characters in input
+         * @param initialValue initials string to be displayed on field input
+         * @throw ArgumentOutOfRangeException is charLimit is negavite
+         */
         public TextBox(string option, int charLimit=5 , string initialValue="")
         {
             if(charLimit < 0)
@@ -219,6 +257,11 @@ namespace BattleshipZTP.UI
                 Console.Write(' ');
             }
         }
+        /**
+         * @brief handles users input
+         * @details allowing and letters, digits, dots and spaces to be part of option.
+         * Other keys are skipped.
+         */
         public string HandleKey(ConsoleKey key)
         {
             if (key == ConsoleKey.Enter)
@@ -267,7 +310,9 @@ namespace BattleshipZTP.UI
             return "";//Skip
         }
     }
-
+    /**
+     * @brief interger slider user input
+     */
     public class IntegerSideBar : IComponentUI 
     {
         char _mark = '█';
@@ -315,6 +360,9 @@ namespace BattleshipZTP.UI
                 Console.Write(' ');
             }
         }
+        /**
+         * @brief use side arrows to increase/decrease value
+         */
         public string HandleKey(ConsoleKey key)
         {
             if (key == ConsoleKey.Enter)
@@ -332,7 +380,9 @@ namespace BattleshipZTP.UI
             return "";
         }
     }
-
+    /**
+     * @brief Simple block of text to read
+     */
     public class TextOutput : IComponentUI 
     {
         //Block of text
@@ -349,7 +399,7 @@ namespace BattleshipZTP.UI
         public string HandleKey(ConsoleKey key)
         {
             if (key == ConsoleKey.Enter)
-                return "none";//Do none
+                return "none";//Do none :|
             return "";//Skip
         }
         public void SetMargin(int width)
@@ -377,7 +427,11 @@ namespace BattleshipZTP.UI
             }
         }
     }
-
+    /**
+     * @brief design pattern interface for building UI
+     * @details creates and window with settled position, size, colors and components
+     * @return themself every build action
+     */
     public interface IWindowBuilder
     {
         IWindowBuilder SetPosition(int startPlaceX, int startPlaceY);
@@ -431,7 +485,10 @@ namespace BattleshipZTP.UI
     public class Window
     {
         readonly List<IComponentUI> _components = new List<IComponentUI>();
-
+        /**
+         * @brief may and occur situation when components are langer than window
+         * @details used every time when components are added/removed from the window
+         */
         void ReCalcSize()
         {
             int longest_string = 0;
@@ -449,13 +506,11 @@ namespace BattleshipZTP.UI
                 ? this._components.Count + 1
                 : _height;
         }
-
         public void Remove(int index)
         {
             _components.RemoveAt(index);
             ReCalcSize();
         }
-
         public void Add(IComponentUI component)
         {
             _components.Add(component);
@@ -508,7 +563,9 @@ namespace BattleshipZTP.UI
         public Window(){}
         string _selectedOption;
         public string SelectedOption() => this._selectedOption;
-
+        /**
+         * @brief last remembered position on focus
+         */
         int lastRemembered = 0;
 
         public string DrawAndStart()
@@ -534,7 +591,7 @@ namespace BattleshipZTP.UI
                 if (klawisz.Key == ConsoleKey.UpArrow && Selected != 0)
                 {
                     //downlight previous component
-                    if (UserSettings.Instance.SfxEnabled == true)
+                    if (UserSettings.Instance.SfxEnabled)
                     {
                         AudioManager.Instance.Play("przyciski");
                     }
@@ -546,7 +603,7 @@ namespace BattleshipZTP.UI
                 if (klawisz.Key == ConsoleKey.DownArrow && Selected < _components.Count - 1)
                 {
                     //downlight previous component
-                    if (UserSettings.Instance.SfxEnabled == true)
+                    if (UserSettings.Instance.SfxEnabled)
                     {
                         AudioManager.Instance.Play("przyciski");
                     }
@@ -558,7 +615,7 @@ namespace BattleshipZTP.UI
                 if (klawisz.Key == ConsoleKey.Enter)
                 {
                     _selectedOption = _components[Selected].GetOption();
-                    if (UserSettings.Instance.SfxEnabled == true)
+                    if (UserSettings.Instance.SfxEnabled)
                     {
                         AudioManager.Instance.Play("przyciski");
                     }
@@ -573,7 +630,7 @@ namespace BattleshipZTP.UI
                 {
                     Env.CursorPos(cornerX + 1, cornerY + 1 + Selected);
                     Env.SetColor();
-                    if (UserSettings.Instance.SfxEnabled == true)
+                    if (UserSettings.Instance.SfxEnabled)
                     {
                         AudioManager.Instance.Play("przyciski");
                     }

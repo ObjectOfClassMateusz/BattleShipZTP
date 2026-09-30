@@ -2,6 +2,7 @@
 using BattleshipZTP.Observers;
 using BattleshipZTP.Settings;
 using BattleshipZTP.Ship.Turrets;
+using BattleshipZTP.Ship;
 
 namespace BattleshipZTP.Commands
 {

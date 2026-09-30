@@ -1,5 +1,4 @@
-﻿
-using BattleshipZTP.Utilities;
+﻿using BattleshipZTP.Utilities;
 
 namespace BattleshipZTP.Ship.Turrets
 {
@@ -35,7 +34,6 @@ namespace BattleshipZTP.Ship.Turrets
         {
             return "shuriken";
         }
-
         public void Use()
         {
             _ready = false;

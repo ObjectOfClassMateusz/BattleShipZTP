@@ -1,4 +1,4 @@
-﻿
+﻿using BattleshipZTP.Ship;
 namespace BattleshipZTP.Observers;
 
 public class StatisticTracker : IActionManager

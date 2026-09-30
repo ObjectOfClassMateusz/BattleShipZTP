@@ -25,7 +25,7 @@ public class GameLogger : IActionManager
 
         if (details.ActionType == "Place")
         {
-            logEntry = $"{shooterName} postawił statek";
+            logEntry = $"{shooterName} placed an ship";
         }
         else
         {

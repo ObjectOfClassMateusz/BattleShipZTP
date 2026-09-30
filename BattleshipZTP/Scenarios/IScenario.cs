@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace BattleshipZTP.Scenarios
 {
+    /**Scenario Interface - design pattern for difference events
+     * @brief This interface shares methods to define for unique purpose
+     */
     public interface IScenario
     {
         void Act();

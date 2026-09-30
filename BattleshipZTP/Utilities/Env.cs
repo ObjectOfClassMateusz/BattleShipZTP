@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BattleshipZTP.Utilities
+﻿namespace BattleshipZTP.Utilities
 {
     /**Enviroment Interface and implementation for console applications
      * @brief This interface defines methods for interacting with 
      * the environment,such as setting console colors, positioning 
      * the cursor, and introducing delays
      */
-    public interface IEnv//Enviroment Interface
+    public interface IEnv //Enviroment Interface
     {
         /*Methods can be different for other software enviroment:
          * ConsoleApp
@@ -26,8 +19,9 @@ namespace BattleshipZTP.Utilities
         static abstract void CursorPos(int x = 0, int y = 0);
         static abstract void Wait(int milisecs);
     }
-
-
+    /**
+     * @brief implementation on enviroment, friendly for windows powershell/CMD.exe
+     */
     public class Env : IEnv
     {
         public static void SetColor(ConsoleColor Fcolor = ConsoleColor.White, ConsoleColor Bcolor = ConsoleColor.Black)
@@ -39,7 +33,6 @@ namespace BattleshipZTP.Utilities
         {
             int safeX = Math.Clamp(x, 0, Console.WindowWidth - 1);
             int safeY = Math.Clamp(y, 0, Console.WindowHeight - 1);
-            
             Console.SetCursorPosition(x, y);
         }
         public static void Wait(int milisecs)

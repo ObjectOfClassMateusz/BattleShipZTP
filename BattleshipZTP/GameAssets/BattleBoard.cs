@@ -1,20 +1,25 @@
 ﻿using BattleshipZTP.Commands;
 using BattleshipZTP.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using BattleshipZTP.Settings;
+using BattleshipZTP.Ship;
 using static BattleshipZTP.GameAssets.BattleBoard;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace BattleshipZTP.GameAssets
 {
+    /**
+     * @brief an interface for sets of fields that represents an place for battlefield
+     */
     public interface IBattleBoard
     {
+        /**
+         * @brief display entire battle board
+         */
         void Display();
+        /**
+         * @brief display battleboard character of cordinates[x,y]
+         */
         void DisplayField(int x, int y);
         Field GetField(int x, int y);
         bool IsNeighborHaveShipRef(Field field);
@@ -28,13 +33,15 @@ namespace BattleshipZTP.GameAssets
         void RemoveShip(IShip ship);
     }
 
+    /**
+     * @brief a implementation of coordinates, color and character on battle board
+     */
     public class Field
     {
         public int X { get; set; }
         public int Y { get; set; }
         public char Character { get; set; }
         public (ConsoleColor foreground, ConsoleColor background) colors = (ConsoleColor.White, ConsoleColor.Black);
-
         public bool ArrowHit { get; set; }
         public IShip? ShipReference { get; set; }
 
@@ -175,7 +182,6 @@ namespace BattleshipZTP.GameAssets
                 int spaceCount = k.Count(c => c == ' ');
                 result.Add((k.TrimStart(), spaceCount));
             }
-
             return result;
         }
 
@@ -355,7 +361,6 @@ namespace BattleshipZTP.GameAssets
                     }
                 }
             }
-
             return history;
         }
       

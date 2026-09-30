@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Media;
-using System.Text;
-using System.Threading.Tasks;
-using BattleshipZTP.UI;
-using NAudio.Wave;
+﻿using NAudio.Wave;
 
 namespace BattleshipZTP.GameAssets
 {
+    /**
+     * @brief singleton class that are responsible for playing audio
+     */
     public class AudioManager
     {
         private static AudioManager _instance = new AudioManager();
@@ -16,6 +12,17 @@ namespace BattleshipZTP.GameAssets
         public static AudioManager Instance => _instance;
         private Dictionary<string, AudioFileReader> _audios = new Dictionary<string, AudioFileReader>();
         private Dictionary<string, IWavePlayer> _activePlayers = new Dictionary<string, IWavePlayer>();
+        /**
+         *  @brief Loads and cache named audio file.
+         *  The method searches for a file in the "audio" folder first in .wav format,
+         *  and if it doesn't exist, it tries .mp3. The found file is loaded
+         *  as an AudioFileReader and saved in the internal dictionary under the key
+         *  that is the filename (without the extension).
+         *
+         * @param fileName file name without a extension
+         * @throws FileNotFoundException Thrown when .wav or an .mp3 file with the given name doesn't exists in the "audio" folder.
+         * @note If .wav file exist, takes precedence over mp3 file with the same name
+         */
         public void Add(string fileName)
         {
             var wavPath = Path.Combine("audio", $"{fileName}.wav");
@@ -31,6 +38,10 @@ namespace BattleshipZTP.GameAssets
                     $"Audio file not found. Expected '{wavPath}' or '{mp3Path}'.");
             }
         }
+        /**
+         * @brief variant with deeper directory path
+         * @param path string that represents a path
+         */
         public void Add(string fileName, string path)
         {
             var basePath = Path.Combine("audio", path);
@@ -47,6 +58,10 @@ namespace BattleshipZTP.GameAssets
                     $"Audio file not found. Expected '{wavPath}' or '{mp3Path}'.");
             }
         }
+        /**
+         * @brief plays an sound from cached dictonary
+         * @note method working only on system windows
+         */
         public void Play(string fileName, bool isLooping = false)
         {
             if (OperatingSystem.IsWindows())
@@ -72,6 +87,9 @@ namespace BattleshipZTP.GameAssets
                 outputDevice.Play();
             }
         }
+        /**
+         * @brief stoping an played sound
+         */
         public void Stop(string fileName)
         {
             if (_activePlayers.TryGetValue(fileName, out var player))
@@ -84,6 +102,9 @@ namespace BattleshipZTP.GameAssets
                 }
             }
         }
+        /**
+         * @brief changes volume for sound
+         */
         public void ChangeVolume(string fileName , int v) 
         {
             float volume = v / 100.0f;
